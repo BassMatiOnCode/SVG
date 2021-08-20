@@ -1,0 +1,59 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg viewBox = "0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<style>
+text { 
+	font-family : "Arial Narrow", sans-serif ;
+	font-size : 10px ;
+	text-anchor: middle ;
+	}
+circle {
+	stroke-width : 0.8 ;
+	stroke : black ;
+	fill : white ;
+	}
+line {
+	stroke-width : 0.2 ;
+	stroke : black ;
+	}
+path {
+	stroke-width : 0.2 ;
+	stroke : black ;
+	fill : white ;
+	}
+path.N {
+	fill : #E0FFF0 ;
+	}
+
+</style>
+
+<circle cx="50" cy="50" r="48" />
+<circle cx="50" cy="50" r="28" />
+
+<path class="N" d="M 42.75 22.95 A 28 28 0 0 1 57.25 22.95 L 62.42 03.64 A 48 48 0 0 0 37.58 03.64 Z" />
+<path class=" " d="M 57.25 22.95 A 28 28 0 0 1 69.80 30.20 L 83.94 16.06 A 48 48 0 0 0 62.42 03.64 Z" />
+<path class="N" d="M 69.80 30.20 A 28 28 0 0 1 77.05 42.75 L 96.36 37.58 A 48 48 0 0 0 83.94 16.06 Z" />
+<path class=" " d="M 77.05 42.75 A 28 28 0 0 1 77.05 57.25 L 96.36 62.42 A 48 48 0 0 0 96.36 37.58 Z" />
+<path class="N" d="M 77.05 57.25 A 28 28 0 0 1 69.80 69.80 L 83.94 83.94 A 48 48 0 0 0 96.36 62.42 Z" />
+<path class="N" d="M 69.80 69.80 A 28 28 0 0 1 57.25 77.05 L 62.42 96.36 A 48 48 0 0 0 83.94 83.94 Z" />
+<path class=" " d="M 57.25 77.05 A 28 28 0 0 1 42.75 77.05 L 37.58 96.36 A 48 48 0 0 0 62.42 96.36 Z" />
+<path class="N" d="M 42.75 77.05 A 28 28 0 0 1 30.20 69.80 L 16.06 83.94 A 48 48 0 0 0 37.58 96.36 Z" />
+<path class=" " d="M 30.20 69.80 A 28 28 0 0 1 22.95 57.25 L 03.64 62.42 A 48 48 0 0 0 16.06 83.94 Z" />
+<path class="N" d="M 22.95 57.25 A 28 28 0 0 1 22.95 42.75 L 03.64 37.58 A 48 48 0 0 0 03.64 62.42 Z" />
+<path class=" " d="M 22.95 42.75 A 28 28 0 0 1 30.20 30.20 L 16.06 16.06 A 48 48 0 0 0 03.64 37.58 Z" />
+<path class="N" d="M 30.20 30.20 A 28 28 0 0 1 42.75 22.95 L 37.58 03.64 A 48 48 0 0 0 16.06 16.06 Z" />
+
+<text x="50.00" y="15.00">C</text>
+<text x="69.00" y="20.09">•</text>
+<text x="82.91" y="34.00">D</text>
+<text x="88.00" y="53.00">•</text>
+<text x="82.91" y="72.00">E</text>
+<text x="69.00" y="85.91">F</text>
+<text x="50.00" y="91.00">•</text>
+<text x="31.00" y="85.91">G</text>
+<text x="17.09" y="72.00">•</text>
+<text x="12.00" y="53.00">A</text>
+<text x="17.09" y="34.00">•</text>
+<text x="31.00" y="20.09">B</text>
+
+</svg>

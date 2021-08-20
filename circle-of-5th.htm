@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm"version="2021-08-04" editor-name="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-08-18" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-08-18" />
+<meta name="version" content="1" />
+<meta name="categories" content="Programming > Web Technology > SVG" />
+<meta name="tags" content="Programming, SVG, circular diagram, music" />
+<meta name="description" content="A circle-of-5th diagram in the form of a circle." />
+
+<link rel="stylesheet" href="/inc/page.css" />
+ 
+<title>SVG - Examples - Musical Circle of Fifths</title>
+</head><body><div id="content"><h1>Musical Circle of Fifths</h1>
+
+<p id="page-abstract"></p>
+
+<p>The following image shows a musical scale diagram, the C major scale:</p>
+
+<img src="img/scale-circle-2.svg" width="200" />
+
+<p>The SVG code is as follows:</p>
+
+<pre>
+&lt;svg viewBox = "0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg"&gt;
+&lt;style&gt;
+.noteName { 
+	font-family : "Arial Narrow", sans-serif ;
+	font-size : 10px ;
+	text-anchor: middle ;
+	}
+.lines {
+	stroke-width : 0.8 ;
+	stroke : black ;
+	fill : white ;
+	}
+line.lines {
+	stroke-width : 0.2 ;
+	}
+&lt;/style&gt;
+</pre>
+
+<p>The first part defines some styles for lines, circles and text elements. Then two concentric circles follow, with their center at (50,50):</p>
+
+<pre>
+&lt;circle class="lines" cx="50" cy="50" r="48" /&gt;
+&lt;circle class="lines" cx="50" cy="50" r="28" /&gt;
+</pre>
+
+<p>Then there are twelve radial lines which create the segments:</p>
+
+<pre>
+&lt;line class="lines" x1="57.25" y1="22.95" x2="62.42" y2="3.64" /&gt;
+&lt;line class="lines" x1="69.80" y1="30.20" x2="83.94" y2="16.06" /&gt;
+&lt;line class="lines" x1="77.05" y1="42.75" x2="96.36" y2="37.58" /&gt;
+&lt;line class="lines" x1="77.05" y1="57.25" x2="96.36" y2="62.42" /&gt;
+&lt;line class="lines" x1="69.80" y1="69.80" x2="83.94" y2="83.94" /&gt;
+&lt;line class="lines" x1="57.25" y1="77.05" x2="62.42" y2="96.36" /&gt;
+&lt;line class="lines" x1="42.75" y1="77.05" x2="37.58" y2="96.36" /&gt;
+&lt;line class="lines" x1="30.20" y1="69.80" x2="16.06" y2="83.94" /&gt;
+&lt;line class="lines" x1="22.95" y1="57.25" x2="3.64" y2="62.42" /&gt;
+&lt;line class="lines" x1="22.95" y1="42.75" x2="3.64" y2="37.58" /&gt;
+&lt;line class="lines" x1="30.20" y1="30.20" x2="16.06" y2="16.06" /&gt;
+&lt;line class="lines" x1="42.75" y1="22.95" x2="37.58" y2="3.64" /&gt;
+</pre>
+
+<p>Finally, there are twelve text elements, arranged in a circle:</p>
+
+<pre>
+&lt;text x="50" y="53" dx="0" dy="-38" class="noteName"&gt;C&lt;/text&gt;
+&lt;text x="50" y="53" dx="19.0" dy="-32.91" class="noteName"&gt;•&lt;/text&gt;
+&lt;text x="50" y="53" dx="32.91" dy="-19.0" class="noteName"&gt;D&lt;/text&gt;
+&lt;text x="50" y="53" dx="38" dy="0" class="noteName"&gt;•&lt;/text&gt;
+&lt;text x="50" y="53" dx="32.91" dy="19.0" class="noteName"&gt;E&lt;/text&gt;
+&lt;text x="50" y="53" dx="19.0" dy="32.91" class="noteName"&gt;F&lt;/text&gt;
+&lt;text x="50" y="53" dx="0" dy="38" class="noteName"&gt;•&lt;/text&gt;
+&lt;text x="50" y="53" dx="-19.0" dy="32.91" class="noteName"&gt;G&lt;/text&gt;
+&lt;text x="50" y="53" dx="-32.91" dy="19.0" class="noteName"&gt;•&lt;/text&gt;
+&lt;text x="50" y="53" dx="-38" dy="0" class="noteName"&gt;A&lt;/text&gt;
+&lt;text x="50" y="53" dx="-32.91" dy="-19.0" class="noteName"&gt;•&lt;/text&gt;
+&lt;text x="50" y="53" dx="-19.0" dy="-32.91" class="noteName"&gt;B&lt;/text&gt;
+&lt;/svg&gt;
+</pre>
+
+<p>All text elements have their origin at (50,53). That is 3 units below the center of the circles. This compensates for the text height, so that all elements are evenly arranged between the inner and outer circles.</p>
+
+<p>Calculating the coordinates by and is a little bit tedious, so this page contains a script that spits out the coordinates on the console. The first part calculates the line segments:</p>
+
+<pre>
+let a0 = 15;
+let r0 = 28;
+let r1 = 48;
+let x0 = 50;
+let y0 = 50;
+for ( let i = 0 ; i &lt; 12 ; i++ ) {
+	const a = Math.PI/180*(a0 + i * 30);
+	console.log( `&lt;line x1="${(x0+r0*Math.sin(a)).toLocaleString(undefined,{minimumFractionDigits:2})}" y1="${(y0-r0*Math.cos(a)).toLocaleString(undefined,{minimumFractionDigits:2})}" x2="${(x0+r1*Math.sin(a)).toLocaleString(undefined,{maximumFractionDigits:2})}" y2="${(y0-r1*Math.cos(a)).toLocaleString(undefined,{minimumFractionDigits:2})} /&gt;"` );
+	}
+</pre>
+
+<p>The text can be copied and inserted into the SVG code.</p>
+<p>The second part creates the coordinates for the text elements:</p>
+
+<pre>
+y0 = 53; // Offset 3 units down to compensate line height
+let r3 = 38;
+for ( let i = 0 ; i &lt; 12 ; i++ ) {
+	const a = Math.PI/180*(i * 30);
+	console.log( `&lt;text 
+x="${(x0+r3*Math.sin(a)).toLocaleString(undefined,{minimumFractionDigits:2})}" 
+y="${(y0-r3*Math.cos(a)).toLocaleString(undefined,{minimumFractionDigits:2})}" 
+	&gt;•&lt;/text&gt;` );
+	}
+</pre>
+
+<p>The console output can be directly copied into the SVG document.</p>
+
+
+<script>
+let a0 = 15;
+let r0 = 28;
+let r1 = 48;
+let x0 = 50;
+let y0 = 50;
+for ( let i = 0 ; i < 12 ; i++ ) {
+	const a = Math.PI/180*(a0 + i * 30);
+	console.log( `<line x1="${(x0+r0*Math.sin(a)).toLocaleString(undefined,{minimumFractionDigits:2})}" y1="${(y0-r0*Math.cos(a)).toLocaleString(undefined,{minimumFractionDigits:2})}" x2="${(x0+r1*Math.sin(a)).toLocaleString(undefined,{maximumFractionDigits:2})}" y2="${(y0-r1*Math.cos(a)).toLocaleString(undefined,{minimumFractionDigits:2})} />"` );
+	}
+y0 = 53; // Offset 3 units down to compensate line height
+let r3 = 38;
+for ( let i = 0 ; i < 12 ; i++ ) {
+	const a = Math.PI/180*(i * 30);
+	console.log( `<text x="${(x0+r3*Math.sin(a)).toLocaleString(undefined,{minimumFractionDigits:2})}" y="${(y0-r3*Math.cos(a)).toLocaleString(undefined,{minimumFractionDigits:2})}" >•</text>` );
+	}
+</script>
+</div><script type="module" src="/inc/page.js" ></script></body></html>

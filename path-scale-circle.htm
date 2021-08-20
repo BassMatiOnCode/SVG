@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" content="empty.htm 2021-04-20 usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-06-17" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-06-17" />
+<meta name="categories" content="Programming > Web Technology > SVG" />
+<meta name="tags" content="Programming, SVG, path, text, circle, scale diagram, music" />
+<meta name="description" content="A musical scale circle based on path elements" />
+
+<link rel="stylesheet" href="/inc/page.css" />
+ 
+<title>Path-based Circular Musical Scale</title>
+
+</head><body><div id="content"><h1>Path-based Circular Musical Scale</h1>
+
+<p id="page-abstract"></p>
+
+<p>The following image shows a musical scale diagram, the C major scale:</p>
+
+<img src="img/scale-circle-3.svg" width="200" />
+
+<p>The SVG code is as follows:</p>
+
+<pre>
+&lt;svg viewBox = "0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg"&gt;
+&lt;style&gt;
+text { 
+	font-family : "Arial Narrow", sans-serif ;
+	font-size : 10px ;
+	text-anchor: middle ;
+	}
+circle {
+	stroke-width : 0.8 ;
+	stroke : black ;
+	fill : white ;
+	}
+line {
+	stroke-width : 0.2 ;
+	stroke : black ;
+	}
+path {
+	stroke-width : 0.2 ;
+	stroke : black ;
+	fill : white ;
+	}
+path.N {
+	fill : #E0FFF0 ;
+	}
+
+&lt;/style&gt;
+</pre>
+
+<p>The first part defines some styles for lines, circles and text elements. Then two concentric circles follow, with their center at (50,50):</p>
+
+<pre>
+&lt;circle class="lines" cx="50" cy="50" r="48" /&gt;
+&lt;circle class="lines" cx="50" cy="50" r="28" /&gt;
+</pre>
+
+<p>Then there are twelve path elements which create the segments:</p>
+
+<pre>
+&lt;path class="N" d="M 42.75 22.95 A 28 28 0 0 1 57.25 22.95 L 62.42 03.64 A 48 48 0 0 0 37.58 03.64 Z" /&gt;
+&lt;path class=" " d="M 57.25 22.95 A 28 28 0 0 1 69.80 30.20 L 83.94 16.06 A 48 48 0 0 0 62.42 03.64 Z" /&gt;
+&lt;path class="N" d="M 69.80 30.20 A 28 28 0 0 1 77.05 42.75 L 96.36 37.58 A 48 48 0 0 0 83.94 16.06 Z" /&gt;
+&lt;path class=" " d="M 77.05 42.75 A 28 28 0 0 1 77.05 57.25 L 96.36 62.42 A 48 48 0 0 0 96.36 37.58 Z" /&gt;
+&lt;path class="N" d="M 77.05 57.25 A 28 28 0 0 1 69.80 69.80 L 83.94 83.94 A 48 48 0 0 0 96.36 62.42 Z" /&gt;
+&lt;path class="N" d="M 69.80 69.80 A 28 28 0 0 1 57.25 77.05 L 62.42 96.36 A 48 48 0 0 0 83.94 83.94 Z" /&gt;
+&lt;path class=" " d="M 57.25 77.05 A 28 28 0 0 1 42.75 77.05 L 37.58 96.36 A 48 48 0 0 0 62.42 96.36 Z" /&gt;
+&lt;path class="N" d="M 42.75 77.05 A 28 28 0 0 1 30.20 69.80 L 16.06 83.94 A 48 48 0 0 0 37.58 96.36 Z" /&gt;
+&lt;path class=" " d="M 30.20 69.80 A 28 28 0 0 1 22.95 57.25 L 03.64 62.42 A 48 48 0 0 0 16.06 83.94 Z" /&gt;
+&lt;path class="N" d="M 22.95 57.25 A 28 28 0 0 1 22.95 42.75 L 03.64 37.58 A 48 48 0 0 0 03.64 62.42 Z" /&gt;
+&lt;path class=" " d="M 22.95 42.75 A 28 28 0 0 1 30.20 30.20 L 16.06 16.06 A 48 48 0 0 0 03.64 37.58 Z" /&gt;
+&lt;path class="N" d="M 30.20 30.20 A 28 28 0 0 1 42.75 22.95 L 37.58 03.64 A 48 48 0 0 0 16.06 16.06 Z" /&gt;
+</pre>
+
+<p>The path element needs some explanations. Each path begins with the inner arc going clockwise, a radial line to the outer radius, followed by a counter-clockwise arc on the outer radius. The last line goes back to the starting point on the inner radius.</p>
+
+<p>The class name "N" indicates a note name or non-empty field, otherwise it is a non-scale note field.</p>
+
+<p>The <tt>d</tt> attribute contains the path definition. The path starts with an absolute move (M) command to (x1, y1), followed by an absolute arc (A) command with the radii (r0, r0), zero rotation (0), the large flag (0), the sweep flag (1) and the end coordinates (x2, y2). Then another line (L) follows to the outer coordinates (x3, y3). This is followed by the outer arc with radii (r1, r1), zero rotation (0), the large flag (0), the sweep flag (0) and the end coordinates (x4, y4). The final command (Z) closes the path.</p>
+
+<p>Finally, there are twelve text elements, arranged in a circle:</p>
+
+<pre>
+&lt;text x="50.00" y="15.00"&gt;C&lt;/text&gt;
+&lt;text x="69.00" y="20.09"&gt;•&lt;/text&gt;
+&lt;text x="82.91" y="34.00"&gt;D&lt;/text&gt;
+&lt;text x="88.00" y="53.00"&gt;•&lt;/text&gt;
+&lt;text x="82.91" y="72.00"&gt;E&lt;/text&gt;
+&lt;text x="69.00" y="85.91"&gt;F&lt;/text&gt;
+&lt;text x="50.00" y="91.00"&gt;•&lt;/text&gt;
+&lt;text x="31.00" y="85.91"&gt;G&lt;/text&gt;
+&lt;text x="17.09" y="72.00"&gt;•&lt;/text&gt;
+&lt;text x="12.00" y="53.00"&gt;A&lt;/text&gt;
+&lt;text x="17.09" y="34.00"&gt;•&lt;/text&gt;
+&lt;text x="31.00" y="20.09"&gt;B&lt;/text&gt;
+&lt;/svg&gt;
+</pre>
+
+<p>The coordinates have been calculated by a script that spits out the entire SVG code on the console. </p>
+
+<pre>
+const notes = ["C", "", "D", "", "E", "F", "", "G", "", "A", "", "B"];
+const empty = "•" ; // Fill character
+const x0 = 50, y0 = 50; // Center of diagram
+const yoffsets = [0, 0, 3]; // Vertical center offsets
+const radii = [28, 48, 38]; // Circle radii
+var p = [ ]; // Points array
+for ( let i = 0 ; i &lt; 12 ; i++ ) p[ i ] = [ ];
+let opts = { minimumSignificantDigits: 2, maximumSignificantDigits: 2, minimumFractionDigits: 2, maximumFractionDigits: 2 }; // output formatting
+// Points for the path elements
+for ( let i = 0 ; i &lt; 12 ; i++ ) {
+	const a = Math.PI/180*(i * 30 - 15);
+	p[ i ][ 0 ] = { x : (x0+r0*Math.sin(a)).toLocaleString( undefined, opts ), y : (y0-r0*Math.cos(a)).toLocaleString( undefined, opts ) } ;
+	p[ i ][ 1 ] = { x : (x0+r1*Math.sin(a)).toLocaleString( undefined, opts ), y : (y0-r1*Math.cos(a)).toLocaleString( undefined, opts ) } ;
+	}
+
+// Points for the text elements
+for ( let i = 0 ; i &lt; 12 ; i++ ) {
+	const a = Math.PI/180*(i * 30);
+	p[ i ][ 2 ] = { x : (x0+r2*Math.sin(a)).toLocaleString( undefined, opts ), y : ((y0+y1)-r2*Math.cos(a)).toLocaleString( undefined, opts ) } ;
+	}
+
+// Output the circles
+console.log(`&lt;circle cx="${x0}" cy="${y0}" r="${r0}"/&gt;`);
+console.log(`&lt;circle cx="${x0}" cy="${y0}" r="${r1}"/&gt;`);
+
+// Output path elements
+for ( let i = 0 ; i &lt; 12 ; i++ ) {
+	console.log(`&lt;path class="${notes[i]===""?" ":"N"}" d="M ${p[i][0].x} ${p[i][0].y} A ${r0} ${r0} 0 0 1 ${p[(i+1)%12][0].x} ${p[(i+1)%12][0].y} L ${p[(i+1)%12][1].x} ${p[(i+1)%12][1].y} A ${r1} 48 0 0 0 ${p[i][1].x} ${p[i][1].y} Z" /&gt;`);
+	}
+
+// Output note names
+for ( let i = 0 ; i &lt; 12 ; i++ ) {
+	console.log(`&lt;text x="${p[i][2].x}" y="${p[i][2].y}"&gt;${notes[i]||empty}&lt;/text&gt;`);
+	}
+</pre>
+
+<p>The console output can be directly copied into the SVG document.</p>
+
+<pre id=result>
+</pre>
+
+
+<script>
+	// Scale notes. 
+const notes = ["C", "", "D", "", "E", "F", "", "G", "", "A", "", "B"];
+	// Non-scale note field character
+const empty = "•" ;
+	// Diagram center position (x0, y0)
+const x0 = 50, y0 = 50;
+	// Definition of circles
+const circles = [ 
+	{ r : 28, x: x0, y: y0, da: -15 },  // inner circle 
+	{ r : 48, x: x0, y: y0, da: -15 },  // outer circle
+	{ r : 38, x: x0, y: y0+3, da: 0 }  // text positions
+	 ] ;
+	// Array of points
+var p = [ ];
+	// Output string
+let s = "" ;
+	// Output formatting options
+let opts = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+
+	// Angle increment for 12 tics
+const da = Math.PI / 9 ; 
+	// Points for the circles
+for ( let j = 0 ; j < circles.length ; j ++ ) {
+	p[ j ] = p[ j ] || [ ] ;
+		// Starting angle
+	let a = Math.PI / 180 * circles[ j ].da ;  
+		// Points for a circle	
+	for ( let i = 0 ; i < 12 ; i ++ , a += da ) { 
+			p[j][i] = p[j][i] || [];
+			p[ j ][ i ] = { 
+				x : ( circles[ j ].x + circles[ j ].r * Math.sin( a )).toLocaleString( undefined, opts ), 
+				y : ( circles[ j ].y - circles[ j ].r * Math.cos( a )).toLocaleString( undefined, opts ) 
+				} ; } }
+
+// Output circles
+
+s += `<circle cx="${circles[ 0 ].x}" cy="${circles[ 0 ].y}" r="${circles[ 0 ].r}"/>` + "\r\n" ;
+s += `<circle cx="${circles[ 1 ].x}" cy="${circles[ 1 ].y}" r="${circles[ 1 ].r}"/>` + "\r\n" ;
+
+// Output path elements
+for ( let i = 0 ; i < 12 ; i++ ) {
+	s += `<path class="${notes[ i ] === "" ? " " : "N"}" d="M ${p[ 0 ][ i ].x} ${p[ 0 ][ i ].y} A ${circles[ 0 ].r} ${circles[ 0 ].r} 0 0 1 ${p[ 0 ][ (i+1)%12 ].x} ${p[ 0 ][ (i+1)%12 ].y} L ${p[ 1 ][ (i+1)%12 ].x} ${p[ 1 ][ (i+1)%12 ].y} A ${circles[ 1 ].r} ${circles[ 1 ].r} 0 0 0 ${p[ 1 ][ i ].x} ${p[ 1 ][ i ].y} Z" />` + "\r\n" ;
+	}
+
+// Output note names
+for ( let i = 0 ; i < 12 ; i++ ) {
+	s += `<text x="${p[2][i].x}" y="${p[2][i].y}">${notes[i]||empty}</text>` + "\r\n" ;
+	}
+
+// Log result
+document.getElementById("result").innerText = s;
+</script>
+</div><script type="module" src="/inc/page.js" ></script></body></html>

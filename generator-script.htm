@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm"version="2021-08-04" editor-name="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-06-20" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-06-20" />
+<meta name="version" content="1" />
+<meta name="categories" content="Programming > Web Technology > SVG" />
+<meta name="tags" content="web, development, svg, vector, graphics, programmatic, generate, script, javascript." />
+<meta name="description" content="SVG elements can be created by a script. There are some obstacles to overcome." />
+<title>Web Development - Creating SVG Programmatically</title>
+
+<link rel="stylesheet" href="/inc/page.css" />
+<style>
+svg.test.button>g { stroke : gray }
+svg.test.button:hover>g { stroke : navy }
+svg.test.button:hover path#vertical:hover { stroke : transparent }
+.test.button + .test.button { margin-left : 10px }
+</style>
+</head><body><div id="content"><h1>Creating SVG Programmatically</h1>
+
+<p id="page-abstract"></p>
+
+<figcaption class="figure">Generated navigation buttons</figcaption>
+<div id="button-container"></div>
+
+<p>The following function creates a ready-to-use SVG element:</p>
+
+<figcaption class="listing">SVG element creator function</figcaption><pre>
+function createSVGElement( drawingInstructions ) {
+	const svgNameSpace = "http://www.w3.org/2000/svg" ;
+	const e = document.<hi>createElementNS</hi>( svgNameSpace, "svg" );
+	e.setAttribute( "version", "1.1" );
+	e.setAttribute( "class", "test button" );
+	e.setAttribute( "viewBox", "-50 -50 100 100" );
+	e.setAttribute( "width", "32" );
+	e.setAttribute( "height", "32" );
+	const g = document.<hi>createElementNS</hi>( svgNameSpace, "g" );
+	g.setAttribute( "stroke", "darkorange" );
+	g.setAttribute( "stroke-width", "6" );
+	g.setAttribute( "stroke-linecap", "round" );
+	g.setAttribute( "stroke-linejoin", "round" );
+	g.setAttribute( "fill", "white" );
+	e.appendChild( g );
+	g.innerHTML = <hi>drawingInstructions</hi>;
+	return e ;
+	}
+</pre>
+
+<p>The trick here is to use <tt>createElementNS</tt> instead of the well-known <tt>createElement</tt> method, so that the element is created properly in an SVG namespace.</p>
+
+<p>The code creates the SVG element and then adds a number of attributes. The <tt>viewBox</tt> is a square area with coordinates ranging from minus 50 to plus 50. Additional <tt>width</tt> and <tt>height</tt> properties scale the image down to 32 by 32 screen units.</p>
+
+<p>An additioanl group element is constructed and appended to the SVG parent. Its purpose is to define the common drawing attributes, like stroke and fill colors, width, line cap and joint shapes.</p>
+
+<p>The drawing instructions are passed in first parameter. They are assigned to the <tt>innerHTML</tt> property of the group element.</p>
+
+<p>The elements are created and integrated into button container element with the following instructions:</p>
+
+<figcaption class="listing">Creating the SVG elements</figcaption><pre>
+const c = document.getElementById( "button-container" );
+c.appendChild( createSVGElement( steeringWheel ));
+c.appendChild( createSVGElement( circledArrowUp ));
+</pre>
+
+<p>The code is completed by a few lines of CSS:</p>
+
+<figcaption class="listing">CSS instructions for the tool buttons</figcaption><pre>
+svg.tool.button>g { stroke : gray }
+svg.tool.button:hover>g { stroke : darkorange }
+svg.tool.button:hover path#vertical:hover { stroke : transparent }
+.tool.button + .tool.button { margin-left : 10px }
+</pre>
+
+<p>Note that the stroke color style overrides the stroke color defined in the SVG element. The CSS instructions override it with "gray". The stroke color changes to "darkorange" if the mouse hovers over the element, which gives a nice visual feedback.</p>
+
+<p>Some spacing between buttons is added between adjacent tool buttons to make the row visually appealing.</p>
+
+<p>Note the second-last CSS rule:</p>
+
+<figcaption class="listing">Hiding the vertical bar of the plus figure</figcaption><pre>
+svg.tool.button:hover path#vertical:hover { stroke : transparent }
+</pre>
+
+<p>The drawing instructions for the circled plus-minus button are defined as follows:</p>
+
+<figcaption class="listing">Drawing instructions for the button</figcaption><pre>
+const circledPlusMinus = '&lt;circle cx="0" cy="0" r="46"/&gt; \
+&lt;path d="M -25 0 L 25 0"/&gt; \
+&lt;path <hi>id="vertical"</hi> d="M 0 -25 L 0 25"/&gt;' ;
+</pre>
+
+<p>The last path element has an <tt>id</tt> attribute which is select by that CSS rule. If the mouse overs over the vertical bar, its color changes to transparent.</p>
+
+<p>This feature can be used for the collapsible block controller icons. Instead of loading a different image, an SVG drawing element is made invisible.</p>
+
+<p class="note">NOTE<br/>These CSS tricks are only possible for SVG elements that are part of the HTML document. SVG images, loaded into an IMG, OBJECT or IFRAME or used as HTML element background images, cannot reference or refer to external resources, such as an external stylesheet. Such SVG images must be completely self-contained.</p>
+
+<script type="module">
+function createSVGElement( drawingInstructions ) {
+	const svgNameSpace = "http://www.w3.org/2000/svg" ;
+	const e = document.createElementNS( svgNameSpace, "svg" );
+	e.setAttribute( "version", "1.1" );
+	e.setAttribute( "class", "test button" );
+	e.setAttribute( "viewBox", "-50 -50 100 100" );
+	e.setAttribute( "width", "33" );
+	e.setAttribute( "height", "33" );
+	const g = document.createElementNS( svgNameSpace, "g" );
+	g.setAttribute( "stroke", "darkorange" );
+	g.setAttribute( "stroke-width", "6" );
+	g.setAttribute( "stroke-linecap", "round" );
+	g.setAttribute( "stroke-linejoin", "round" );
+	g.setAttribute( "fill", "white" );
+	e.appendChild( g );
+	g.innerHTML = drawingInstructions;
+	return e ;
+	}
+
+const steeringWheel = '<circle cx="0" cy="0" r="38" /><circle cx="0" cy="0" r="20"/><path d="M 0, -46 L 0, 46 M -46, 0 L 46, 0 M -32.53, -32.53 L 32.53, 32.53 M 32.53, -32.53 L -32.53, 32.53"/>' ;
+const circledArrowUp = '<circle cx="0" cy="0" r="46"/><path d="M 0 25 L 0 -25 M -22 -4 L 0 -25 22 -4"/>' ;
+const circledArrowFirst = '<circle cx="0" cy="0" r="46"/><path d="M -22 0 L 25 0 M 0 -22 L -21 0 0 22 M -25 -20 L -25 20"/>' ;
+const circledArrowLeft = '<circle cx="0" cy="0" r="46"/><path d="M -25 0 L 25 0 M -4 -22 L -25 0 -4 22"/>' ;
+const circledArrowRight = '<circle cx="0" cy="0" r="46"/><path d="M -25 0 L 25 0 M 4 -22 L 25 0 4 22"/>' ;
+const circledArrowLast = '<circle cx="0" cy="0" r="46"/><path d="M -25 0 L 22 0 M 0 -22 L 21 0 0 22 M 25 -20 L 25 20"/>' ;
+const circledPlusMinus = '<circle cx="0" cy="0" r="46"/><path d="M -25 0 L 25 0"/><path id="vertical" d="M 0 -25 L 0 25"/>' ;
+
+const c = document.getElementById( "button-container" );
+c.appendChild( createSVGElement( steeringWheel ));
+c.appendChild( createSVGElement( circledArrowUp ));
+c.appendChild( createSVGElement( circledArrowFirst ));
+c.appendChild( createSVGElement( circledArrowLeft ));
+c.appendChild( createSVGElement( circledArrowRight ));
+c.appendChild( createSVGElement( circledArrowLast ));
+c.appendChild( createSVGElement( circledPlusMinus ));
+
+</script>
+</div><script type="module" src="/inc/page.js" ></script></body></html>

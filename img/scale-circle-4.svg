@@ -1,0 +1,102 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg viewBox = "0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<style>
+text { 
+	font-family : "Arial Narrow", sans-serif ;
+	font-size : 10px ;
+	text-anchor: middle ;
+	}
+g#index text {
+	font-size : 7px ;
+	}
+circle {
+	stroke-width : 0.8 ;
+	stroke : black ;
+	fill : white ;
+	}
+line {
+	stroke-width : 0.2 ;
+	stroke : black ;
+	}
+path {
+	stroke-width : 0.2 ;
+	stroke : black ;
+	fill : white ;
+	}
+path.N {
+	fill : #E0FFF0 ;
+	}
+</style>
+
+<g id="radials">
+	<path d="M 89.65 61.36 L 76.71 13.07" />
+	<path d="M 110.35 61.36 L 123.29 13.07" />
+	<path d="M 128.28 71.72 L 163.64 36.36" />
+	<path d="M 138.64 89.65 L 186.93 76.71" />
+	<path d="M 138.64 110.35 L 186.93 123.29" />
+	<path d="M 128.28 128.28 L 163.64 163.64" />
+	<path d="M 110.35 138.64 L 123.29 186.93" />
+	<path d="M 89.65 138.64 L 76.71 186.93" />
+	<path d="M 71.72 128.28 L 36.36 163.64" />
+	<path d="M 61.36 110.35 L 13.07 123.29" />
+	<path d="M 61.36 89.65 L 13.07 76.71" />
+	<path d="M 71.72 71.72 L 36.36 36.36" />
+</g><g id="segments">
+	<path class="N" d="M 87.06 51.70 A 50 50 0 0 1 112.94 51.70 L 119.41 27.56 A 75 75 0 0 0 80.59 27.56 Z" />
+	<path class="E" d="M 112.94 51.70 A 50 50 0 0 1 135.36 64.64 L 153.03 46.97 A 75 75 0 0 0 119.41 27.56 Z" />
+	<path class="N" d="M 135.36 64.64 A 50 50 0 0 1 148.30 87.06 L 172.44 80.59 A 75 75 0 0 0 153.03 46.97 Z" />
+	<path class="E" d="M 148.30 87.06 A 50 50 0 0 1 148.30 112.94 L 172.44 119.41 A 75 75 0 0 0 172.44 80.59 Z" />
+	<path class="N" d="M 148.30 112.94 A 50 50 0 0 1 135.36 135.36 L 153.03 153.03 A 75 75 0 0 0 172.44 119.41 Z" />
+	<path class="N" d="M 135.36 135.36 A 50 50 0 0 1 112.94 148.30 L 119.41 172.44 A 75 75 0 0 0 153.03 153.03 Z" />
+	<path class="E" d="M 112.94 148.30 A 50 50 0 0 1 87.06 148.30 L 80.59 172.44 A 75 75 0 0 0 119.41 172.44 Z" />
+	<path class="N" d="M 87.06 148.30 A 50 50 0 0 1 64.64 135.36 L 46.97 153.03 A 75 75 0 0 0 80.59 172.44 Z" />
+	<path class="E" d="M 64.64 135.36 A 50 50 0 0 1 51.70 112.94 L 27.56 119.41 A 75 75 0 0 0 46.97 153.03 Z" />
+	<path class="N" d="M 51.70 112.94 A 50 50 0 0 1 51.70 87.06 L 27.56 80.59 A 75 75 0 0 0 27.56 119.41 Z" />
+	<path class="E" d="M 51.70 87.06 A 50 50 0 0 1 64.64 64.64 L 46.97 46.97 A 75 75 0 0 0 27.56 80.59 Z" />
+	<path class="N" d="M 64.64 64.64 A 50 50 0 0 1 87.06 51.70 L 80.59 27.56 A 75 75 0 0 0 46.97 46.97 Z" />
+
+	<circle cx="100" cy="100" r="50" fill-opacity="0"/>
+	<circle cx="100" cy="100" r="75" fill-opacity="0"/>
+</g><g id="index">
+	<text x="100.00" y="62.00">0</text>
+	<text x="120.00" y="67.36">1</text>
+	<text x="134.64" y="82.00">2</text>
+	<text x="140.00" y="102.00">3</text>
+	<text x="134.64" y="122.00">4</text>
+	<text x="120.00" y="136.64">5</text>
+	<text x="100.00" y="142.00">6</text>
+	<text x="80.00" y="136.64">7</text>
+	<text x="65.36" y="122.00">8</text>
+	<text x="60.00" y="102.00">9</text>
+	<text x="65.36" y="82.00">10</text>
+	<text x="80.00" y="67.36">11</text>
+</g><g id="notes">
+	<text x="100.00" y="42.00">C</text>
+	<text x="131.50" y="50.44"></text>
+	<text x="154.56" y="73.50">D</text>
+	<text x="163.00" y="105.00"></text>
+	<text x="154.56" y="136.50">E</text>
+	<text x="131.50" y="159.56">F</text>
+	<text x="100.00" y="168.00"></text>
+	<text x="68.50" y="159.56">G</text>
+	<text x="45.44" y="136.50"></text>
+	<text x="37.00" y="105.00">A</text>
+	<text x="45.44" y="73.50"></text>
+	<text x="68.50" y="50.44">B</text>
+</g><g id="intervals">
+	<text x="100.00" y="15.00">R</text>
+	<text x="145.00" y="27.06"></text>
+	<text x="177.94" y="60.00">M2</text>
+	<text x="190.00" y="105.00"></text>
+	<text x="177.94" y="150.00">M3</text>
+	<text x="145.00" y="182.94">p4</text>
+	<text x="100.00" y="195.00"></text>
+	<text x="55.00" y="182.94">p5</text>
+	<text x="22.06" y="150.00"></text>
+	<text x="10.00" y="105.00">M6</text>
+	<text x="22.06" y="60.00"></text>
+	<text x="55.00" y="27.06">M7</text>
+</g>
+
+</svg>

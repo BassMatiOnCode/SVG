@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm"version="2021-08-04" editor-name="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-06-19" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-06-19" />
+<meta name="version" content="1" />
+<meta name="categories" content="Programming > Web Technology > SVG" />
+<meta name="tags" content="web, development, svg, vector, graphics, introduction." />
+<meta name="description" content="This page illustrates some graphics primitives and their usage." />
+<title>Web Development - SVG Drawing Primitives</title>
+
+<link rel="stylesheet" href="/inc/page.css" />
+ 
+</head><body><div id="content"><h1>SVG Drawing Primitives</h1>
+
+<p id="page-abstract"></p>
+
+<h2>Line</h2><div>
+
+<figcaption class="listing">Lines example code</figcaption><pre>
+&lt;svg  version="1.1" xmlns="http://www.w3.org/2000/svg" 
+    viewBox="-50 -50 100 100" width="32" height="32"&gt;
+&lt;g stroke="darkorange" stroke-width="8" stroke-linecap="round" fill="white"&gt;
+	&lt;line x1="-20" y1="20" x2="20" y2="-20" /&gt;
+	&lt;line x1="-20" y1="-20" x2="20" y2="20" /&gt;
+	&lt;/g&gt;
+&lt;/svg&gt;
+</pre>
+<figcaption class="figure">Lines</figcaption>
+<svg  version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100" width="32" height="32">
+<g stroke="darkorange" stroke-width="8" stroke-linecap="round" fill="white">
+	<line x1="-20" y1="20" x2="20" y2="-20" />
+	<line x1="-20" y1="-20" x2="20" y2="20" />
+	</g>
+</svg>
+
+<!-- Line --></div>
+
+<h2>Circle</h2><div>
+
+<figcaption class="listing">Circles example code</figcaption><pre>
+&lt;svg  version="1.1" xmlns="http://www.w3.org/2000/svg" 
+    viewBox="-50 -50 100 100" width="50" height="50"&gt;
+&lt;g stroke="darkorange" stroke-width="8" stroke-linecap="round" fill="transparent"&gt;
+    &lt;circle cx="-20" cy="-20" r="23" /&gt;
+    &lt;circle cx="20" cy="-20" r="23" /&gt;
+    &lt;circle cx="20" cy="20" r="23" /&gt;
+    &lt;circle cx="-20" cy="20" r="23" /&gt;
+    &lt;/g&gt;
+&lt;/svg&gt;
+</pre>
+<figcaption class="figure">Circles</figcaption>
+<svg  version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100" width="50" height="50">
+<g stroke="darkorange" stroke-width="8" stroke-linecap="round" fill="transparent">
+    <circle cx="-18" cy="-18" r="28" />
+    <circle cx="18" cy="-18" r="28" />
+    <circle cx="18" cy="18" r="28" />
+    <circle cx="-18" cy="18" r="28" />
+	</g>
+</svg>
+
+<!-- Circle --></div>
+
+<h2>Rectangle</h2><div>
+
+<figcaption class="listing">Rectangle example code</figcaption><pre>
+&lt;svg  version="1.1" xmlns="http://www.w3.org/2000/svg" 
+    viewBox="-50 -50 100 100" width="50" height="50"&gt;
+&lt;g stroke="darkorange" stroke-width="8" stroke-linecap="round" 
+    stroke-linejoin="round" fill="#FFD080"&gt;
+    &lt;rect x="-45" y="-45" width="90" height ="50" rx="10" /&gt;
+&lt;/g&gt;
+</pre>
+
+<figcaption class="figure">Rectangle</figcaption>
+<svg  version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100" width="50" height="50">
+<g stroke="darkorange" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="#FFD080">
+	<rect x="-45" y="-45" width="90" height ="50" rx="10" />
+</g>
+</svg>
+
+<!-- Rectangle --></div>
+
+<h2>Path</h2><div>
+
+<figcaption class="listing">House of Nicholas example code</figcaption><pre>
+&lt;svg  version="1.1" xmlns="http://www.w3.org/2000/svg" 
+    viewBox="-50 -50 100 100" width="50" height="50"&gt;
+&lt;g stroke="darkorange" stroke-width="8" stroke-linecap="round" 
+    stroke-linejoin="round" fill="#FFD080"&gt;
+    &lt;path d="M -45,45 L 45,45 -45,-5 45,-5 0,-45 -45,-5 -45,45 45,-5 45,45" /&gt;
+&lt;/g&gt;
+</pre>
+
+<figcaption class="figure">House of Nicholas</figcaption>
+<svg  version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100" width="50" height="50">
+<g stroke="darkorange" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="#FFD080">
+	<path d="M -45,45 L 45,45 -45,-5 45,-5 0,-45 -45,-5 -45,45 45,-5 45,45" />
+</g>
+</svg>
+
+<p>The path segments coordinates are encoded in the <tt>d</tt> attribute. <tt>M</tt> moves the pen to the specified coordinate without drawing a line. <tt>L</tt> draws one or more straight line segment to the specified coordinate(s), and the Z command closes the curve to the starting point.</p>
+
+<p>Note the filled algorithm areas between the lines. The fill algorithm can be tweaked to achieve a different pattern.</p>
+
+<p>Besides of straight lines, bezier curves and elliptical arcs can be drawn:</p>
+
+<figcaption class="listing">House of Nicholas example code</figcaption><pre>
+&lt;svg  version="1.1" xmlns="http://www.w3.org/2000/svg" 
+    viewBox="-50 -50 100 100" width="50" height="50"&gt;
+&lt;g stroke="darkorange" stroke-width="8" stroke-linecap="round" 
+    stroke-linejoin="round" fill="#FFD080"&gt;
+    &lt;path d="<hi>M</hi> -45,45 <hi>L</hi> 45,45 -45,-1 45,-1 <hi>A</hi> 45,45,0,0,0,-45,-1 <hi>L</hi> -45,45 45,-5 45,45" /&gt;
+&lt;/g&gt;
+</pre>
+
+<figcaption class="figure">House of Nicholas</figcaption>
+<svg  version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100" width="50" height="50">
+<g stroke="darkorange" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="#FFD080">
+	<path d="M -45,45 L 45,45 -45,-1 45,-1 A 45,45,0,0,0,-45,-1 L -45,45 45,-5 45,45" />
+</g>
+</svg>
+
+<p>More on the path commands <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#path_commands">here</a>.</p>
+
+
+<!-- Path --></div>
+
+</div><script type="module" src="/inc/page.js" ></script></body></html>

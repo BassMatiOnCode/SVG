@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm"version="2021-08-04" editor-name="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-06-18" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-06-18" />
+<meta name="version" content="1" />
+<meta name="categories" content="Programming > Web Technology > SVG" />
+<meta name="tags" content="" />
+<meta name="description" content="" />
+<meta name="tags" content="Programming, SVG, path, text, circular scale diagram, music" />
+<meta name="description" content="A generator script for circular musical scale diagrams" />
+
+<link rel="stylesheet" href="/inc/page.css" />
+<link rel="stylesheet" href="/inc/music.css" />
+ 
+<title>Generator Script for Path-Based Circular Scale Diagrams</title>
+
+</head><body><div id="content"><h1>Generator Script for Path-Based Circular Scale Diagrams</h1>
+
+<p id="page-abstract"></p>
+
+<p>Calculating coordinates for graphical elements can quickly become a daunting task. So, a <em>generator script</em> must be created.</p>
+
+<p>If we look at the following example, the core images remains the same, only note and interval names change:</p>
+
+<div>
+<div style="display:inline-block"><figcaption>The C Ionian Scale</figcaption>
+	<svg id="fig-001" class="music circular-scale" viewBox = "0 0 200 200" height="300"></svg>
+	</div>
+<div style="display:inline-block">	<figcaption>The D Dorian Scale</figcaption>
+	<svg id="fig-002" class="music circular-scale" viewBox = "0 0 200 200" height="300"></svg>
+	</div>
+	</div>
+
+<p>So we can use a rather simple function call to generate the diagrams:</p>
+
+<pre>
+createCircularScaleDiagram ( "fig-001", 
+    [ "C", "", "D", "", "E", "F", "", "G", "", "A", "", "B" ],
+    [ "R", "", "M2", "", "M3", "p4", "", "p5", "", "M6", "", "M7" ]
+    ) ;
+createCircularScaleDiagram ( "fig-002", 
+    ["D", "", "E", "F", "", "G", "", "A", "", "B", "C", "" ],
+    [ "R", "", "M2", "m3", "", "p4", "", "p5", "", "M6", "m7", ""  ]
+    ) ;</pre>
+
+
+<p>The function is defined as follows:</p>
+
+<pre>
+function createCircularScaleDiagram ( targetElement, noteNames, intervalNames ) {
+        <cc>// Radius defintions</cc>
+    const r = [ 40, 50, 75, 90, 40, 63, 90 ];    
+        <cc>// Create the drawing</cc>
+    s = "&lt;g id=\"radials\"&gt;\r\n" ;
+    radialLines( r[ 0 ], r[ 3 ] );
+    s += "&lt;/g&gt;\r\n" ;
+    s += "&lt;g id=\"segments\"&gt;\r\n" ;
+    segmentCircle( r[ 1 ], r[ 2 ], createClassNames( noteNames, "N", "E" ));
+    s += "&lt;/g&gt;\r\n" ;
+    s += "&lt;g id=\"index\"&gt;\r\n" ;
+    textCircle( r[ 4 ], 3, [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" ] ); 
+    s += "&lt;/g&gt;\r\n" ;
+    s += "&lt;g id=\"notes\"&gt;\r\n" ;
+    textCircle( r[ 5 ], 4, noteNames );
+    s += "&lt;/g&gt;\r\n" ;
+    s += "&lt;g id=\"intervals\"&gt;\r\n" ;
+    textCircle( r[ 6 ], 5, intervalNames ); 
+    s += "&lt;/g&gt;\r\n" ;
+        <cc>// Write result to target element</cc>
+    document.getElementById( targetElement ).innerHTML = s;
+    }
+</pre>
+
+
+<p>The procedure is rather straightforward: Create radial lines, then the segmented circle, followed by three text circles for index numbers, note names and interval names.</p>
+
+<p>Let's have a look at those functions:</p>
+
+<pre>
+function radialLines ( r0, r1, center ) {
+    <cc>// Draws 12 radial lines between radii</cc>
+    let p = [ ] ;
+    p.push( createPoints( r0, -15, center )) ;
+    p.push( createPoints( r1, -15, center )) ;
+    for ( let i = 0 ; i < 12 ; i ++ ) {
+        s += `<path d="M ${p[ 0 ][ i ].x} ${p[ 0 ][ i ].y} L ${p[ 1 ][ i ].x} ${p[ 1 ][ i ].y}" />\r\n` ;
+        } }
+</pre>
+
+<p>The radial lines function creates equidistant points on the inner and outer circle (r0, r1), and then generates linear path elements between each pair of points. The string is SVG code and goes into the result variable s.</p>
+
+<p>A look into createPoints:</p>
+
+<pre>
+function createPoints ( r, a=0, center=diagramCenter ) {
+    <cc>// Calculates the points on a circle</cc>
+    const opts = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+    a = a * Math.PI / 180 ;
+    let points = [ ] ;
+    for ( let i = 0 ; i < 12 ; i ++ , a += Math.PI / 6 ) {
+        points[ i ] = { 
+            x : ( center.x + r * Math.sin( a )).toLocaleString( undefined, opts ), 
+            y : ( center.y - r * Math.cos( a )).toLocaleString( undefined, opts ) 
+            } ; } 
+    return points ; 
+    }
+</pre>
+
+<p>The function creates and returns an array of 12 points in a loop, beginning at the starting angle as passed in the argument a. The angles are expected in degrees, but the sine and cosine functions expect radians, so they are converted with a factor 2π/360. The center of the circle, if not given, is expected to be in the global variable <tt>diagramCenter</tt>. The formulas convert the polar to a cartesian representation of a point.</p>
+
+<p>segmentCircle is a little bit more complicated. Like above, a set of points are created first, then a loop creates the SVG code, but this time, a more complicated path is generated. The path begin with an arc (A) on the inner circle, followed by a line (L) to the outer radius, which is then followed by an arc (A) on the outer circle, opposite direction. The path is closed by the Z command. Again, the SVG code is appended to the global result variable.</p>
+
+<p>A class name attribute is generated for the segment, which is used in CSS rules to control the background fill color.</p>
+
+<p>Finally, a set of two circles is painted in order to emphasize the circular appearance with a slightly havier stroke width.</p>
+
+<pre>
+function segmentCircle ( r0, r1, classNames=[ ], center=diagramCenter ) {
+    <cc>// Creates 12 closed segments</cc>
+    let p = [ ] ;
+    p.push( createPoints( r0, -15 ));
+    p.push( createPoints( r1, -15 ));
+    for ( let i = 0 ; i < 12 ; i ++ ) {
+        const j = (i + 1) % 12 ;
+        let className = classNames[ i ] ? `class="${classNames[ i ]}"` : "" ;
+        s += `<path ${className} d="M ${p[ 0 ][ i ].x} ${p[ 0 ][ i ].y} A ${r0} ${r0} 0 0 1 ${p[ 0 ][ j ].x} ${p[ 0 ][ j ].y} L ${p[ 1 ][ j ].x} ${p[ 1 ][ j ].y} A ${r1} ${r1} 0 0 0 ${p[ 1 ][ i ].x} ${p[ 1 ][ i ].y} Z" />\r\n` ;
+        }
+    s += `<circle cx="${center.x}" cy="${center.y}" r="${r0}" fill-opacity="0"/>\r\n` ;
+    s += `<circle cx="${center.x}" cy="${center.y}" r="${r1}" fill-opacity="0"/>\r\n` ;
+    }
+</pre>
+
+<p>The classNames argument is calculated at run time from the note names by the createClassNames function:</p>
+
+<pre>
+function createClassNames ( names, present="N", empty="" ) {
+    <cc>// Create segment class names</cc>
+    let result = [ ] ;
+    for ( let i = 0 ; i < names.length ; i ++ ) result[ i ] = names[ i ] ? present : empty ;
+    return result ; 
+    }
+</pre>
+
+<pre>
+	segmentCircle( r[ 1 ], r[ 2 ], createClassNames( noteNames ));
+</pre>
+
+<p>The textCircle function builds on the same principle, and places the text elements in a circular pattern. An offset value is added to the y coordinate to compensate for the text line height:</p>
+
+<pre>
+function textCircle ( r, yOffset=5, textData, center=diagramCenter ) {
+    <cc>// Prints 12 text elemes arranged on a circle</cc>
+    let p = createPoints( r, 0, { x : center.x , y : center.y + yOffset } ) ;
+    for ( let i = 0 ; i < 12 ; i ++ ) {
+        s += `<text x="${p[ i ].x}" y="${p[ i ].y}">${textData[ i ]}</text>\r\n` ;
+        } }
+</pre>
+
+<pre id=result>
+</pre>
+
+<script>
+	// Diagram center position
+const diagramCenter = { x : 100, y : 100 };
+	// Result variable
+let s ;
+	// Utility functions
+function createPoints ( r, a=0, center=diagramCenter ) {
+	// Calculates the points on a circle
+	const opts = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+	a = a * Math.PI / 180 ;
+	let points = [ ] ;
+	for ( let i = 0 ; i < 12 ; i ++ , a += Math.PI / 6 ) {
+		points[ i ] = { 
+			x : ( center.x + r * Math.sin( a )).toLocaleString( undefined, opts ), 
+			y : ( center.y - r * Math.cos( a )).toLocaleString( undefined, opts ) 
+			} ; } 
+	return points ; 
+	}
+function radialLines ( r0, r1, center ) {
+	// Draws 12 radial lines between radii
+	let p = [ ] ;
+	p.push( createPoints( r0, -15, center ) ) ;
+	p.push( createPoints( r1, -15, center ) ) ;
+	for ( let i = 0 ; i < 12 ; i ++ ) {
+		s += `<path d="M ${p[ 0 ][ i ].x} ${p[ 0 ][ i ].y} L ${p[ 1 ][ i ].x} ${p[ 1 ][ i ].y}" />\r\n` ;
+		} }
+function createClassNames ( names, present="N", empty="", rootIndex=0 ) {
+	// Create segment class names
+	let result = [ ] ;
+	for ( let i = 0 ; i < names.length ; i ++ ) result[ i ] = (names[ i ] ? present : empty) + (i === rootIndex? " root" : "") ;
+	return result ; 
+	}
+function segmentCircle ( r0, r1, classNames=[ ], rootIndex=0, center=diagramCenter ) {
+	// Creates 12 closed segments
+	let p = [ ] ;
+	p.push( createPoints( r0, -15 ));
+	p.push( createPoints( r1, -15 ));
+	for ( let i = 0 ; i < 12 ; i ++ ) {
+		const j = (i + 1) % 12 ;
+		let className = classNames[ i ] ? `class="${classNames[ i ]}"` : "" ;
+		s += `<path ${className} d="M ${p[ 0 ][ i ].x} ${p[ 0 ][ i ].y} A ${r0} ${r0} 0 0 1 ${p[ 0 ][ j ].x} ${p[ 0 ][ j ].y} L ${p[ 1 ][ j ].x} ${p[ 1 ][ j ].y} A ${r1} ${r1} 0 0 0 ${p[ 1 ][ i ].x} ${p[ 1 ][ i ].y} Z" />\r\n` ;
+		}
+	s += "\r\n" ;
+	s += `<circle cx="${center.x}" cy="${center.y}" r="${r0}" fill-opacity="0"/>\r\n` ;
+	s += `<circle cx="${center.x}" cy="${center.y}" r="${r1}" fill-opacity="0"/>\r\n` ;
+	}
+function textCircle ( r, yOffset=5, textData, center=diagramCenter ) {
+	// Prints 12 text elemes arranged on a circle
+	let p = createPoints( r, 0, { x : center.x , y : center.y + yOffset } ) ;
+	for ( let i = 0 ; i < 12 ; i ++ ) {
+		s += `<text x="${p[ i ].x}" y="${p[ i ].y}">${textData[ i ]}</text>\r\n` ;
+		} }
+function createCircularScaleDiagram ( targetElement, noteNames, intervalNames ) {
+		// Radius defintions
+	const r = [ 40, 50, 75, 90, 40, 63, 90 ];	
+		// Create the drawing
+	s = "<g id=\"radials\">\r\n" ;
+	radialLines( r[ 0 ], r[ 3 ] );
+	s += "</g>\r\n" ;
+	s += "<g id=\"segments\">\r\n" ;
+	segmentCircle( r[ 1 ], r[ 2 ], createClassNames( noteNames ));
+	s += "</g>\r\n" ;
+	s += "<g id=\"index\">\r\n" ;
+	textCircle( r[ 4 ], 3, [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" ] ); 
+	s += "</g>\r\n" ;
+	s += "<g id=\"notes\">\r\n" ;
+	textCircle( r[ 5 ], 4, noteNames );
+	s += "</g>\r\n" ;
+	s += "<g id=\"intervals\">\r\n" ;
+	textCircle( r[ 6 ], 5, intervalNames ); 
+	s += "</g>\r\n" ;
+		// post result
+	document.getElementById( targetElement ).innerHTML = s;
+	}
+	// Generate diagrams
+createCircularScaleDiagram ( "fig-001", 
+	[ "C", "", "D", "", "E", "F", "", "G", "", "A", "", "B" ],
+	[ "R", "", "M2", "", "M3", "p4", "", "p5", "", "M6", "", "M7" ]
+	) ;
+createCircularScaleDiagram ( "fig-002", 
+	["D", "", "E", "F", "", "G", "", "A", "", "B", "C", "" ],
+	[ "R", "", "M2", "m3", "", "p4", "", "p5", "", "M6", "m7", ""  ]
+	) ;
+</script>
+
+</div><script type="module" src="/inc/page.js" ></script></body></html>

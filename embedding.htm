@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm"version="2021-08-04" editor-name="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-08-18" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-08-18" />
+<meta name="version" content="1" />
+<meta name="categories" content="Web Development > SVG" />
+<meta name="tags" content="web, development, svg, embed, html." />
+<meta name="description" content="SVG can be embedded into HTML in various ways, as image source, as object source, or inline as native SVG element." />
+<title>Web Development - Embedding SVG into HTML</title>
+
+<link rel="stylesheet" href="/inc/page.css" />
+ 
+</head><body><div id="content"><h1>Embedding SVG into HTML</h1>
+
+<p id="page-abstract"></p>
+
+<p>An external SVG file can be loaded into an IMG element:</p>
+
+<figcaption class="listing">SVG in an image container</figcaption><pre>
+&lt;img src="img/fig-001.svg" width="32" height="32" /&gt;
+</pre>
+
+<figcaption class="figure">SVG rendered in an image container</figcaption>
+<img src="img/fig-001.svg" width="32" height="32"/>
+
+<p>This method is not recommended, but seems to be widely supported. A better method is to use an OBJECT element:</p>
+
+<figcaption class="listing">SVG in an object container</figcaption><pre>
+&lt;object data="img/fig-001.svg" type="image/svg+xml" width="32" height="32"&gt;&lt;/object&gt;
+</pre>
+
+<figcaption class="figure">SVG rendered in an object container</figcaption>
+<object data="img/fig-001.svg" type="image/svg+xml" width="32" height="32"></object>
+
+<p>Here the image is referenced in the <tt>data</tt> attribute.</p>
+
+<p>An alternative way is to use the HTML SVG tag:</p>
+
+<figcaption class="listing">SVG element in HTML</figcaption><pre>
+&lt;svg  version="1.1" xmlns="http://www.w3.org/2000/svg" 
+    viewBox="-50 -50 100 100" width="32" height="32"&gt;
+&lt;style&gt;
+    #content svg { stroke : darkorange ; 
+    stroke-width : 8 ; 
+    stroke-linecap : round ; 
+    fill : white ; }
+    &lt;/style&gt;
+&lt;circle cx="0" cy="0" r="45" /&gt;
+&lt;line x1="-20" y1="20" x2="20" y2="-20" /&gt;
+&lt;line x1="-20" y1="-20" x2="20" y2="20" /&gt;
+&lt;/svg&gt;
+</pre>
+
+<figcaption class="figure">Native SVG element</figcaption>
+<svg  version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100" width="32" height="32">
+<style>
+	#content { stroke : darkorange ; stroke-width : 8 ; stroke-linecap : round ; fill : white ; }
+	</style>
+<circle cx="0" cy="0" r="45" />
+<line x1="-20" y1="20" x2="20" y2="-20" />
+<line x1="-20" y1="-20" x2="20" y2="20" />
+</svg>
+
+<h2 cbc="expanded">Problems with CSS</h2><div>
+
+<p>It is not immediately obvious, but the <tt>style</tt> element is problematic as a child node of the <tt>SVG</tt> element. The arrangement suggests that the style declaration is scoped to its SVG parent &ndash; but in fact, the scope is the <em>entire document</em>! To prove that, you can add a copy of the SVG element and change the stroke color. The change overwrites the previous declaration and has an effect on all other SVG drawing elements.</p>
+
+<p>For this reason we must include a proper selector like <tt>#fig-003</tt> in the declaration.</p>
+
+<p>A better way to provide local styles for the SVG drawing elements to encapsulate them in a group element (<tt>G</tt>) and apply an inline-style attribute or define equivalent attributes:</p>
+
+<figcaption class="listing">Local styles for drawing elements</figcaption><pre>
+&lt;svg  version="1.1" xmlns="http://www.w3.org/2000/svg" 
+    viewBox="-50 -50 100 100" width="32" height="32"&gt;
+&lt;g <hi>stroke="blue" stroke-width="8" stroke-linecap="round" fill="white"</hi>&gt;
+&lt;circle cx="0" cy="0" r="45" /&gt;
+&lt;line x1="-20" y1="20" x2="20" y2="-20" /&gt;
+&lt;line x1="-20" y1="-20" x2="20" y2="20" /&gt;
+&lt;/g&gt;
+&lt;/svg&gt;
+</pre>
+
+<figcaption class="figure">Local drawing styles</figcaption>
+<svg  version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100" width="32" height="32">
+<g stroke="blue" stroke-width="8" stroke-linecap="round" fill="white">
+<circle cx="0" cy="0" r="45" />
+<line x1="-20" y1="20" x2="20" y2="-20" />
+<line x1="-20" y1="-20" x2="20" y2="20" />
+</g>
+</svg>
+
+<!-- Problems with CSS --></div>
+
+</div><script type="module" src="/inc/page.js" ></script></body></html>

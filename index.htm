@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm"version="2021-08-04" editor-name="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-06-17" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-06-17" />
+<meta name="version" content="1" />
+<meta name="categories" content="Programming > Web Technology > SVG" />
+<meta name="tags" content="web, development, svg, vector, graphics, introduction." />
+<meta name="description" content="SVG has gained increasing popularity in the web since its advent in late 2001. It is a vector graphics XML format, and thus ideal for drawings, icons and illustrations. At the time of writing, most browsers have excellent support for SVG." />
+<title></title>
+
+<link rel="stylesheet" href="/inc/page.css" />
+ 
+</head><body><div id="content"><h1>SVG &ndash; Scalable Vector Graphics</h1>
+
+<p id="page-abstract"></p>
+
+<p>SVG is readable text. For example, the following code creates a circled X:</p>
+
+<figcaption class="listing">SVG source code</figcaption><pre>
+&lt;svg  version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100"&gt;
+&lt;g stroke="darkorange" stroke-width="8" stroke-linecap="round" fill="white"&gt;
+    &lt;circle cx="0" cy="0" r="45" /&gt;
+    &lt;line x1="-20" y1="20" x2="20" y2="-20" /&gt;
+    &lt;line x1="-20" y1="-20" x2="20" y2="20" /&gt;
+    &lt;/g&gt;
+&lt;/svg&gt;
+</pre>
+
+<p>SVG can be <a href="embedding.htm">integrated into an HTML</a> document as external resource or inlined with the SVG element. For example, the code above, placed in the HTML document, creates the following image:</p>
+
+<figcaption class="figure">SVG in the document</figcaption>
+<div load-src="img/fig-001.svg" style="width:32px; height:32px; display:inline-block;"></div>
+
+<p>An external resource must include an XML declaration prolog at the very top of the document if an encoding other than UTF-8 or UTF-16 is used. So it is safe to omit this line in an SVG file:</p>
+
+<figcaption class="listing">XML prolog</figcaption><pre>
+&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+</pre>
+
+<p>There are several benefits of SVG over other formats:</p>
+
+<ul>
+<li>SVG is ideal to create in a text editor for low to medium-complex graphical elements.</li>
+<li>SVG can be created with various grafical editors, such as Inkscape, Visio, Illustrator and others, although the output is somewhat bloated. Fortunately, after saving, the files can be edited in a text editor to have all the junk removed.</li>
+<li>The individual drawing elements such as <tt>circle</tt>, <tt>line</tt> or <tt>path</tt> behave like regular HTML elements, they can be styled, event handlers attached and accessed with JavaScript.</li>
+</ul>
+
+<h2 cbc>Starter</h2><div>
+
+<p>The SVG element must have a namespace declaration (<tt>xmlns="http://www.w3.org/2000/svg"</tt>), and should have <tt>version="1.1"</tt> and a <tt>baseProfile="full"</tt> attributes.</p>
+
+<p>The <tt>viewBox="x y w h"</tt> specifies the drawing coordinates range, the drawing area. Drawing parts outside the view box are clipped. Negative x and y values are perfect. <tt>width</tt> and <tt>height attributes are used to define the size of the SVG element in the document, the drawing is zoomed to fit the specified size. If omitted, the image is scaled up to fill the parent element area.</tt></p>
+
+<p>The <tt>g</tt> element is used to group multiple drawing elements and apply common attributes to them. Most important attributes are <tt>stroke</tt> (stroke or pen color), <tt>stroke-width</tt>, <tt>fill</tt> color, <tt>stroke-linecap="round"</tt> (the form of stroke ends), <tt>stroke-linejoin="round"</tt> (the form of corners between segments).</p>
+
+<p>The group element <tt>g</tt> has no coordinates, but a <tt>transform</tt> attribute can be used to rotate, translate or skew the group and its child elements.</p>
+
+<p>Drawing elements are stacked on top of each other in the order of appearance.</p>
+
+<p>Coordinate sytem origin is in the upper left corner, positive x direction is to the right, y direction is to the bottom. This is the same way HTML elements are positioned. Units are the same as in CSS (px, pt, cm). If no unit postfix is given, screen units are used.</p>
+<!-- Starter --></div>
+
+
+<p>Examples</p>
+<img src="circle.svg" style="border:1px solid black" />
+<img src="rectangle.svg" style="border:1px solid black" />
+<img src="text.svg" style="border:1px solid black" />
+<img src="circle-of-5th.svg" style="border:1px solid black" width="150px" />
+<img src="scale-circle.svg" style="border:1px solid black" width="150px" />
+<img src="scale-circle-2.svg" style="border:1px solid black" width="150px" />
+
+
+<h2 cbc>Links</h2><div>
+
+<dl>
+<dt><a href="https://www.networkworld.com/article/2770992/creating-images-with-a-text-editor.html">Creating images with a text editor</a> - Networkworld</dt>
+<dt><a href="https://developer.mozilla.org/en-US/docs/Web/SVG">Scalable Vector Graphics</a> - MDN</dt>
+<dd><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial">SVG Tutorial</a></dd>
+</dl>
+<dt><a href="https://oreillymedia.github.io/Using_SVG/extras/ch01-XML.html">XML Prologs and Document Types</a></dt>
+<dd>From the book <a href="https://www.oreilly.com/library/view/using-svg-with/9781491921968/">Using SVG with CSS3 and HTML5</a></dd>
+</div>
+
+<script>
+let a0 = 15;
+let r0 = 28;
+let r1 = 48;
+let x0 = 50;
+let y0 = 50;
+for ( let i = 0 ; i < 12 ; i++ ) {
+	const a = Math.PI/180*(a0 + i * 30);
+	console.log( `x1=${(x0+r0*Math.sin(a)).toLocaleString(undefined,{minimumFractionDigits:2})} y1=${(y0-r0*Math.cos(a)).toLocaleString(undefined,{minimumFractionDigits:2})} x2=${(x0+r1*Math.sin(a)).toLocaleString(undefined,{maximumFractionDigits:2})} y2=${(y0-r1*Math.cos(a)).toLocaleString(undefined,{minimumFractionDigits:2})}` );
+	}
+
+</script>
+
+</div><script type="module" src="/inc/page.js" ></script></body></html>
