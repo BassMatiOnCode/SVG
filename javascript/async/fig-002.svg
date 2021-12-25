@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<svg version="1.1" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" width="210" height="190" viewBox="-105 15 210 190">
+  <defs>
+<marker orient="auto" refY="0" refX="0" id="arrow" style="overflow:visible">
+    <path stroke-linejoin="round" d="M 8.7,4 -2.2,0 8.7,-4 c -1.75,2.4 -1.74,5.6 0,8 z" transform="matrix(-1,0,0,-1,-1,0)" style="fill:black"/>
+    </marker>
+<style>
+    text { stroke:none ; fill:black }
+    rect { stroke:black ; fill:white }
+    line { strock:black }
+    circle { stroke:black ; fill:white }
+    path { fill : none }
+    .no-stroke { stroke : none }
+    </style>
+    </defs>
+
+<g font-size="13" font-family="Times New Roman" stroke="black" text-anchor="middle">
+
+<g transform="translate( 0, 0 )" >
+<circle cx="0" cy="50" r="30"/>
+<text x="0" y="53">Pending</text>
+</g>
+
+<g transform="translate( 0, 100 )" >
+<path d="M 50 0 A 50 50 0 0 1 50 100 L -50 100 A 50 50 0 0 1 -50 0 Z" />
+<text x="0" y="17">Settled</text>
+</g>
+
+<g transform="translate( -50, 100 )" >
+<circle cx="0" cy="50" r="30"/>
+<text x="0" y="53">fulfilled</text>
+</g>
+
+<g transform="translate( 50, 100 )" >
+<circle cx="0" cy="50" r="30"/>
+<text x="0" y="53">rejected</text>
+</g>
+
+<g>
+<path d="M -22 70 Q  -45 90 -48 120" marker-end="url(#arrow)"/>
+<circle cx="-34" cy="83" r="7" class="no-stroke"/>
+<text x="-50" y="86">Success</text>
+</g>
+
+<g>
+<path d="M 22 70 Q  45 90 48 120" marker-end="url(#arrow)"/>
+<circle cx="34" cy="83" r="8" class="no-stroke"/>
+<text x="40" y="87">Fail</text>
+</g>
+
+</g></svg>

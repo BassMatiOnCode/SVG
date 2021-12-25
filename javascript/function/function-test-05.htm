@@ -1,0 +1,19 @@
+﻿<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="function-test-05.htm">function-test-05.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+debugger;
+const ticker = { count : 0 ,
+	start : function ( ) { 
+		const self = this ;
+		window.setInterval ( function tick ( ) { self.count += 1 ; console.log ( self.count ) } , 1000 ) }
+	}
+ticker.start( );
+	// 1
+	// 2
+	// 3
+	// &hellip;
+</script>
+</body></html>

@@ -1,0 +1,32 @@
+﻿<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="async-test-06.htm">async-test-06.htm</a></p>
+<p>This document must be served over the HTTP(S) protocol. The FILE protocol will not work!</p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+debugger;
+"use strict"
+let status = "idle" ;
+let xhr = new XMLHttpRequest( );
+ 
+function startStepA ( ) {
+	let xhr = new XMLHttpRequest( );
+	this.loadHandler = function ( evt ) { 
+		if ( this.status  === "404" ) {
+		const xhr = new XMLHttpRequest( );
+		}
+	xhr.addEventListener( "error", function errorHandler ( evt ) {
+		console.log( evt );
+		}	) ;
+	xhr.open( "GET", "resource-1.txt" );
+	xhr.send( );
+	}
+
+
+
+let stepA = { 
+	
+	} ;
+</script>
+</body></html>

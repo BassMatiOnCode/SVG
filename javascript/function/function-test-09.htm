@@ -1,0 +1,45 @@
+﻿<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="function-test-09.htm">function-test-09.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+    // Remove or change for non-strict mode
+"use non-strict"
+
+    // Define a function on globalThis:
+function f ( ) { console.log( this ) }
+console.log( globalThis.f === f ) ;
+    // true
+
+console.log( f( )); 
+    // In non-strict mode:
+    // Window {window: Window, self: Window, …}
+    // In strict mode:
+    // undefined
+console.log( globalThis.f( ));
+    // Window {window: Window, self: Window, …}
+
+const o1 = { 
+    f1 ( ) { console.log( this ) } ,
+    f2 ( ) { a = 42 } ,  // Error in strict mode
+    f3 ( ) { this.f1 ( ) } , 
+    f4 ( ) { f1 ( ) }  // Error
+    }
+o1.f1 ( ) ;
+    // {f1: ƒ, f2: ƒ, f3: ƒ}
+f1 = o1.f1 ;
+f1( ) ;
+    // Window {window: Window, self: Window, …}
+globalThis.f1( ) ;
+    // Window {window: Window, self: Window, …}
+o1.f2 ( ) ;
+    // Exeption in strict mode: a is not defined
+console.log( globalThis.a );
+    // 42 in non-strict mode
+o1.f3 ( ) ;
+    // {f1: ƒ, f2: ƒ, f3: ƒ, f4: ƒ}
+o1.f4 ( ) ;
+    // Window {window: Window, self: Window, …}
+</script>
+</body></html>

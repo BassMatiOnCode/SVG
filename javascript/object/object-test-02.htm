@@ -1,0 +1,80 @@
+<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="object-test-02.htm">object-test-02.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+	// The Person factory initializes Person instance members.
+const PersonFactory = function ( firstName, lastName ) { 
+	const o = { firstName, lastName } ;
+	Object.setPrototypeOf( o, PersonFactory.prototype );
+	return o ;
+	} ;
+	
+	// The Person prototype defines inherited shared members.
+PersonFactory.prototype = { 
+	constructor : PersonFactory ,
+	greet ( ) { return "Hello, my name is " + this.firstName + " " + this.lastName + "." } ,
+	farewell ( ) { return "Goodbye!" }
+	} ;
+
+	// We call the PersonFactory to create a new person instance:
+const o1 = PersonFactory( "John" , "Doe" ) ;
+
+	// Test:
+console.log( o1.greet( ));
+	// Hello, my name is John Doe.
+console.log( o1.farewell( ));
+	// Good-bye!
+
+console.log( o1 );
+    // PersonFactory {firstName: 'John', lastName: 'Doe'}
+    //      firstName: "John"
+    //      lastName: "Doe"
+    //      [[Prototype]]: Object
+console.log( o1 instanceof PersonFactory );
+    // true
+console.log( o1 instanceof Object );
+    // true
+console.log( typeof o1 );
+    // "object"
+console.log( o1.constructor.name );
+    // "PersonFactory"
+console.log( Object.getPrototypeOf( o1 ).constructor.name );
+    // "PersonFactory"
+
+const p1 = Object.getPrototypeOf( o1 );
+console.log( p1 );
+	// {constructor: ƒ, greet: ƒ, farewell: ƒ}
+	//      constructor: ƒ ( firstName, lastName )
+	//      farewell: ƒ farewell( )
+	//		greet: ƒ greet( )
+	//		[[Prototype]]: Object
+console.log( p1.constructor.name );
+	// "PersonFactory"
+
+const p2 = Object.getPrototypeOf( p1 );
+console.log( p2 );
+	// {constructor: ƒ, __defineGetter__: ƒ, __defineSetter__: ƒ, hasOwnProperty: ƒ, __lookupGetter__: ƒ, …}
+	//		constructor: ƒ Object()
+	//		hasOwnProperty: ƒ hasOwnProperty()
+	//		isPrototypeOf: ƒ isPrototypeOf()
+	//		propertyIsEnumerable: ƒ propertyIsEnumerable()
+	//		toLocaleString: ƒ toLocaleString()
+	//		toString: ƒ toString()
+	//		valueOf: ƒ valueOf()
+	//		__defineGetter__: ƒ __defineGetter__()
+	//		__defineSetter__: ƒ __defineSetter__()
+	//		__lookupGetter__: ƒ __lookupGetter__()
+	//		__lookupSetter__: ƒ __lookupSetter__()
+	//		get __proto__: ƒ __proto__()
+	//		set __proto__: ƒ __proto__()
+console.log( p2.constructor.name );
+	// "Object"
+	
+const p3 = Object.getPrototypeOf( p2 );
+console.log( p3 );
+	// null
+
+</script>
+</body></html>

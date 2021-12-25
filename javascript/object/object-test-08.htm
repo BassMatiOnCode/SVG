@@ -1,0 +1,23 @@
+﻿<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="object-test-08.htm">object-test-08.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+	// Declaring prototype members
+const Person = class Person {
+    firstName = "John" ;
+	lastName = "Smith" ;
+	greet ( termination = "." ) { return "Hi, my name is " + this.fullName + termination ; } } ;
+
+const o1 = new Person( );
+console.log( o1 );
+    // Person {firstName: 'John', lastName: 'Smith'}
+    //    firstName: "John"
+    //    lastName: "Smith"
+    //    [[Prototype]]: Object
+    //        constructor: class Person
+    //        greet: ƒ greet( termination = "." )
+    //        [[Prototype]]: Object
+</script>
+</body></html>

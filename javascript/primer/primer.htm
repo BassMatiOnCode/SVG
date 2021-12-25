@@ -1,0 +1,723 @@
+﻿<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm"version="2021-08-23" editor-name="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-08-24" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-09-07" />
+<meta name="version" content="1" />
+<meta name="categories" content="Web Technologies > JavaScript" />
+<meta name="tags" content="web, technologies, javascript, primer" />
+<meta name="description" content="This is a first introduction to JavaScript. It is intended to give a newcomer a first overview and some basics to get started." />
+
+<link rel="stylesheet" href="/inc/page.css" />
+ 
+<title>Web Technologies > JavaScript</title>
+
+</head><body><div id="page-header"></div><div id="main-toolbar"></div><div id="content">
+
+<h1>JavaScript</h1>
+
+<p id="page-abstract"></p>
+
+<h2 cbc>Intro</h2><div>
+
+<p>JavaScript is an interpreted programming language. You write script files, they are somehow loaded into a JavaScript engine, where they are parsed and executed. Scripting engines are hosted in many different environments, such as Windows Scripting Host, Node, Deno, and web browsers. To get a script to a web browser, we can write an HTML file and point a browser to it:</p>
+
+<figcaption class="listing">A simple HTML file with a well-known script</figcaption><pre>
+&lt;html&gt;&lt;body&gt;
+&lt;<hi>script</hi>&gt;
+document.body.append( "Hello world!" );
+&lt;<hi>/script</hi>&gt;
+&lt;/body&gt;&lt;/html&gt;
+</pre>
+
+<p>And here is the result:</p>
+
+<figcaption class="example no-borders">The first script: <a href="primer-test-01.htm">primer-test-01.htm</a></figcaption>
+<iframe src="primer-test-01.htm" style="height:50px"></iframe>
+
+<h3 cbc>Development Web Servers</h3><div>
+
+<p>To preview a website with JavaScript modules, you need to serve files over the http(s) protocol. That doesn't require a full-blown web server, a small, light-weight static file server should be sufficient.</p>
+
+<ul>
+<li>Deno + fileserver.js</li>
+<li>Deno + Oak</li>
+<li>Node.js</li>
+<li>Lighthttpd</li>
+<li>IIS Express</li>
+<li>...</li>
+</ul>
+
+<!-- Development Web Servers --></div>
+
+<h3>Debugging</h3><div>
+
+<p>To debug a script in a web page, load the page in the browser, then press <tt>ctrl-shift-i</tt> to <em>inspect</em> the document. The key combination may be different, depending on your browser and/or operating system. Or click the related entry in the context menu or the browser burger menu.</p>
+
+<p>Click the <tt>Sources</tt> tab. If you cannot find your code, click the <tt>Show Navigator</tt> button on the top left. You will find folders and files. Click the one that has your script. It will be loaded in the center panel of the DevTools window.</p>
+
+<p>You can set breakpoints in the line numbers gutter. Reload (refresh) the page in the browser window to execute the scripts again. Execution will halt when a breakpoint is hit.</p>
+
+<!-- Debugging --></div>
+
+<!-- Intro --></div>
+
+<h2 cbc>Variables, Objects and Primitive Values</h2><div>
+
+<p>A <em>variable</em> is a container for a <em>value</em>. A value has a certain <em>type</em>. Variables are one of the most important things in any programming languages. It is essential that variables can be handled most efficiently. This requires that variables are uniform, fixed in size, and behave uniformly.</p>
+
+<p>Types differ in size and functionality. Worse, the size of many objects changes during its lifetime. If they were stored directly in variables, efficiency would decrease significantly. The solution is to store values somewhere in memory, and store their <em>address</em> in a variable.</p>
+
+<p>So variables are effectively <em>references</em> to a value in memory.</p>
+
+<p>To work on a type in memory, a microprocessor must <em>dereference</em> the variable. Which is fast, but not zero-time.</p>
+
+<p>Some data types are native to a microprocessor: Integers, booleans, single and double precision floating point values for instance. They fit in one to eight bytes and are directly support by the microprocessor instruction set. So it makes sense to store some data types directly in a variable, in the same space that would otherwise be occupied by an object reference. The JavaScript <em>primitive types</em> are good candidates here.</p>
+
+<p>Strings are somewhat different. They are directly supported by microprocessor instruction sets, but they most likely won't fit into the space of a memory address (32, 64 or whatever bits). So they must be stored like object in memory and are referenced by an address in a variable.</p>
+
+
+<!-- h2 Variables, Objects and Primitive Values --></div>
+
+<h2 cbc>Primitive Values</h2><div>
+
+<p>A primitive value is not an object and thus has no methods. There are seven primitive data types:</p>
+
+<ol>
+<li>string</li>
+<li>number</li>
+<li>bigint</li>
+<li>boolean</li>
+<li>symbol</li>
+<li>undefined</li>
+<li>null</li>
+</ol>
+
+<p>For efficiency reasons, primitive values are <em>immutable</em>, they cannot be modified. However, if a variable references a primitive value, the reference can be <em>replaced</em> with a reference to a different primitive value.</p>
+
+<p>Primitive values except <tt>null</tt> and <tt>undefined<tt></tt> can be "boxed" in an object wrapper:</p>
+
+<ol>
+<li>String</li>
+<li>Number</li>
+<li>Bigint</li>
+<li>Boolean</li>
+<li>Symbol</li>
+</ol>
+
+<p>Note that their first letter is uppercase.</p>
+
+<p>To be precisely, these are so-called <em>constructor functions</em> (we'll explain this term later in the OO chapter). They can be used to box a primitive value:</p>
+
+<figcaption class="listing">Boxing primitive values</figcaption><pre>
+const s1 = "John Doe" ; 
+	<cc>// A primitive string value</cc>
+console.log( s1 );
+	<cc>// John Doe</cc>
+const s2 = new String( s1 );
+	<cc>// A String object</cc>
+console.log( s2 )
+	<cc>// String {'John Doe'}</cc>
+</pre>
+
+<p>To unbox, use the <tt>valueOf</tt> method. It returns the encapsulated primitive value:</p>
+
+<figcaption class="listing">Unboxing primitive values</figcaption><pre>
+const s3 = s2.valueOf( );
+	<cc>// A primitive value</cc>
+console.log( s3 );
+	<cc>// John Doe</cc>
+</pre>
+
+<p>The JavaScript engine does a lot of boxing and unboxing under the hood. For example, although a primitive value has no members, you can apply a method on a string primitive:</p>
+
+<figcaption class="listing">Applying a method on a primitive value</figcaption><pre>
+console.log( s1.toUpperCase( ));
+	<cc>// JOHN DOE</cc>
+</pre>
+
+<p>If you explicitly boxed a primitive value, JavaScript won't unbox it when passed to functions in the argument list. The function will get an copy of the object reference instead.</p>
+
+<h4>More Information</h4><div>
+
+<dl>
+<dt><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference#numbers_dates">Numbers and Dates</a> on MDN</dt>
+<dt><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference#text_processing">Text Processing</a> on MDN</dt>
+
+</dl>
+
+<!-- h4 More Information --></div>
+
+<!-- Primitive Values --></div>
+
+<h2 cbc>Objects</h2><div>
+
+<p>An object is a data structure, stored somewhere in memory. The size of objects can vary significantly and grow very large, so it does not make sense to store objects directly in a variable. Instead, an object variable only contains a <em>reference</em>, the address of the actual object in memory.</p>
+
+<p>The following script demonstrates that:</p>
+
+<figcaption class="listing">Object variables are references to an object</figcaption><pre>
+function Person ( firstName, lastName ) {
+	this.firstName = firstName; 
+	this.lastName = lastName;
+	}
+debugger;
+const o1 = new Person( "John", "Doe" );
+let o2 = o1 ;
+console.log( o1 );
+	<cc>// Person {firstName: 'John', lastName: 'Doe'}</cc>
+console.log( o2 );
+	<cc>// Person {firstName: 'John', lastName: 'Doe'}</cc>
+o2.lastName = "Smith" ;
+console.log( o1 );
+	<cc>// Person {firstName: 'John', lastName: 'Smith'}</cc>
+console.log( o2 );
+	<cc>// Person {firstName: 'John', lastName: 'Smith'}</cc>
+</pre>
+
+<p>Note that changing the object through <tt>o2</tt> is seen also through <tt>o1</tt>, because both variables reference the same object in memory.</p>
+
+<p>An <tt>Object</tt> type represents a structured piece of memory. It can have a name, or remain anonymous. Objects can be empty, or have <em>members</em> (<em>properties</em> and <em>methods</em>). Contrary to other programming languages, in JavaScript, object members can be added or removed at run-time.</p>
+
+<p>Simpified, an object is an unordered sequence of key-value pairs, where the key is a String or a Symbol, and value can be any type.</p>
+
+<figcaption class="listing">Initializing an object</figcaption><pre>
+let person = {
+	firstName : "John" ,
+	lastName : "Doe" 
+	}
+</pre>
+
+<p>Members can be added at any time:</p>
+
+<figcaption class="listing">Adding a member</figcaption><pre>
+person.age = 42 ;
+console.log( person );
+<cc>{firstName: "John", lastName: "Doe", age: 42}</cc>
+</pre>
+
+<p>There is an important difference between objects and primitive values. A primitive value, such as a number of a boolean value, have a size of 1, 2, 4 or 8 bytes. Microprocessors can handle them natively and very efficient in their "unboxed" state. Sometimes, for example when you use members on primitive data types, their value is "boxed" into an appropriate object wrapper and then the method is applied. A concept also known from C#. Boxing and unboxing takes some time, but that does not outweigh the performance advatange when primitive values can be passed around in expressions and function parameters.</p>
+
+<h4>More Information</h4><div>
+
+<dl>
+<dt><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> on MDN</dt>
+<dt><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference#fundamental_objects">Fundamental Objects</a> on MDN</dt>
+</dl>
+
+<!-- h4 More Information --></div>
+
+<!-- Objects --></div>
+
+<h2 cbc>Built-In Objects</h2><div>
+
+<p>The built-in "objects" are actually "constructor functions". They are associated with a prototype that inherits members to instances of that class (type). You can create instance object with the new operator, like so:</p>
+
+<pre>let flag = new Boolean( true );</pre>
+
+<p><tt>Boolean</tt> is a constructor function that creates a wrapper for a binary primitive value, with the possible values <tt>true</tt> and <tt>false</tt>. 
+
+<tt>Number</tt> ist a double-precision 64-bit IEEE 754 value wrapper. There is no integer number, simple integers are also stored as floating-point numbers. Which might lead to unexpected results, because large integers can only be approximated with the number format. The range below <tt>Number.MAX_SAFE_INTEGER</tt> is safe to use for comparisons. Above, you should resort to  <tt>BigInt</tt>, which is an integer data type with arbitrary precision. </p>
+
+<p><tt>String</tt> is a wrapper for a string primitive value, a sequence of 16-bit characters. The first character has the index position 0. The index value can be interpreted as "distance from the start of the string".</p>
+
+<p>The <tt>Null</tt> wrapper has exactly one value: <tt>null</tt>. Null represents the intentional absense of a value.</p>
+
+<p>The <tt>Undefined</tt> wrapper has exactly one value, <tt>undefined</tt>.  A variable has the value <tt>undefined</tt> before it has been assigned a value.</p>
+
+<p>The <tt>Symbol</tt> wrapper is a more advanced concept and will be explained later.</p>
+
+<p><tt>Date</tt> represents the number of milliseconds since the 1st of January 1970 UTC, and comes with a number of useful methods.</p>
+
+<p><tt>Array</tt> is an ordered, heterogenous collection of values of any type:</p>
+
+<figcaption class="listing">Array literals</figcaption><pre>
+let primes = [ 1, 2, 3, 5, 7, 11, 13, 17, 19, 23 ];
+let person = [ "John", "Doe", 42 ];
+</pre>
+
+<p>The elements of an array can be accessed by an index:</p>
+
+<figcaption class="listing">Accessing array elements</figcaption><pre>
+console.log( "Is", primes<hi>[ 1 ]</hi>, "a prime number?" );
+<cc>Is 2 a prime number?</cc>
+</pre>
+
+<p>Similar to <tt>Date</tt>, <tt>Array</tt> comes with a number of methods. For example, the <tt>push</tt> method adds an element at the end of the array, and <tt>indexOf</tt> returns the index of an array element:</p>
+
+<figcaption class="listing">Some array methods</figcaption><pre>
+primes.push( 29 );
+console.log( "Is", primes<hi>[ 0 ]</hi>, "a prime number?" );
+<cc>Is 1 a prime number?</cc>
+primes.shift( );
+console.log( primes );
+<cc>(10) [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]</cc>
+console.log( "Yes,", primes[ 1 ], "is a prime number, as well as", primes[ 9 ] );
+<cc>Yes, 2 is a prime number, as well as 29</cc>
+</pre>
+
+<p>Note that we have removed the first array element (because 1 is not considered prime number), but the elements remain accessible under their original index: We have created a <em>gap</em>! Similarly, we can start with an empty array and add elements at arbitrary positions:</p>
+
+<figcaption class="listing">Array with gaps</figcaption><pre>
+let numbers = [ ] ;
+numbers[ 0 ] = 0;
+numbers[ 9 ] = 9;
+console.log( numbers );
+<cc>(10) [0, empty × 8, 9]</cc>
+</pre>
+
+<p><tt>Math</tt> is a another important built-in object, among <tt>RegExp</tt>, <tt>Map</tt>, <tt>Set</tt> and <tt>JSON</tt> and many others.</p>
+
+
+<h4>More Information</h4><div>
+
+<dl>
+<dt><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference#error_objects">Error Objects</a> on MDN</dt>
+<dt><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference#numbers_dates">Numbers and Dates</a> on MDN</dt>
+</dl>
+
+<!-- h4 More Information --></div>
+
+<!-- Built-In Objects --></div>
+
+<h2 cbc>Function</h2><div>
+
+<p>The <tt>Function</tt> represent an object with ordinary members, arguments, a block of executable instructions, and a return value. Functions can be defined in multiple ways, here is one of them:</p>
+
+<figcaption class="listing">Using a function</figcaption><pre>
+function multiply ( a, b ) { return a * b; } <cc>// definition</cc>
+console.log( multiply( 6, 7 ));  <cc>// use</cc>
+<cc>42</cc>
+</pre>
+
+<p>In the function definition above, <tt>a</tt> and <tt>b</tt> are called <em>formal parameters</em> or just <em>parameters</em>. When called, the function input values (6 and 7 in this case) are called <em>arguments</em>. They are assigned to the parameters in their order of appearance.</p>
+
+<p>Functions can have local variables to store temporary values. In the beginnings of JavaScript, they were defined with <tt>var</tt>:</p>
+
+<figcaption class="listing">Variables inside functions</figcaption><pre>
+function multiply ( a, b ) { 
+	var result ;
+	result = a * b ;
+	return result ; 
+	} 
+</pre>
+
+<p>Since var and the unintended omission of var can lead to very unexpected behavior, ES2015 introduced the keywords <tt>const</tt> and <tt>let</tt> to define variables:</p>
+
+<figcaption class="listing">Variables inside functions</figcaption><pre>
+function multiply ( a, b ) { 
+	const result = a * b ;
+	return result ; 
+	} 
+</pre>
+
+<p><tt>Const</tt> prevents the assignment of values after initialization. Use it whenever posible. If the value changes in an algorigthm (for example in a counter), use <tt>let</tt> instead.</p>
+
+<p>When a function is called, the round parentheses ( ) act as function-call operator, which expects the name of the function on the left, and a list of comma-separated arguments inside. The operator evaluates to the value defined by the <tt>return</tt> statement inside the function body.</p>
+
+<figcaption class="listing">Function call</figcaption><pre>
+const result = multiply( 6, 7 );
+</pre>
+
+
+<h4>More Information</h4><div>
+
+<dl>
+<dt><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a> on MDN</dt>
+</dl>
+
+<!-- h4 More Information --></div>
+
+
+<!-- Function --></div>
+
+<h2 cbc>Operators</h2><div>
+
+<p>An <em>operator</em> takes one or more arguments and returns a single value. Let's fill this phrase with meaning.</p>
+
+<dl>
+<dt>Arithmetic operators</dt>
+<dd>Plus (+), minus (-), divide (/), multiply (*), remainder (%) and exponentiation (**).</dd>
+
+<dt>Increment (++) and decrement (--) operators</dt>
+
+<dt>Relational operators</dt>
+<dd>Less than (&lt;) greater than (&gt;), less or equal (&lt;=), greater or equal (&gt;=).</dd>
+
+<dt>Equality test operators</dt>
+<dd>Equal (==), identical (===), not equal (!=) and not identical (!==).</dd>
+
+<dt>Conditional operator</dt>
+<dd>Depending on a condition, returns one or the other expression: (condition ? trueExpression : falseExpression).</dd>
+
+<dt>Comma operator</dt>
+<dd>Evaluates a comma-separated list of expressions and return the vaue of the last expression.</dd>
+
+<dt>Logical operators</dt>
+<dd>And (&&), or (||), not (!).</dd>
+
+<dt>Assignment operators</dt>
+<dd>Simple assignment (=), addition assignment (+=), subtraction assignment (-=), multiplication assignment (*=), division assignment (/=), et cetera.</dd>
+
+<dt>Expression Grouping Operator ( )</dt>
+<dd>A pair of round parentheses group a sequence of literals, variables and operators to a subexpression, and evaluates them with highest priority. Parentheses can be used to break the natural operator precedence.</dd>
+<dd>Example: (1 + 2) * (3 + 4)</dd>
+<dd>The expressions in parentheses are evaluated before the multiplication operator is applied.</dd>
+</dl>
+
+<h3>Additional Resources</h3><div>
+
+<dl class="link-list">
+<dt><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference#expressions_and_operators">Expressions and Operators</a> on MDN</dt>
+</dl>
+
+</div>
+
+<!-- Operators --></div>
+
+<h2 cbc>Literals</h2><div>
+
+<p>A literal is the notation of a value in the source code. Unlike variables or constants, literals are anonymus, they have no associated name.</p>
+
+<figcaption class="listing">Literals</figcaption><pre>
+const n = 123 ;  <cc>// A numeric literal</cc>
+</pre>
+
+<p>In the example above, "123" is a literal of type "Number". 
+
+<p>Special characters define the type of a literal. For instance, string literals are enclosed in single (') or double quotes ("):</p>
+
+<figcaption class="listing">String literals</figcaption><pre>
+let s = "John" ;   <cc>// String literals with double...</cc>
+s += ' Doe.'  <cc>// ... and single quotes</cc>
+s = ' And "right" said Fred.' ;  // Double quotes within a string literal
+</pre>
+
+<p>Array literals use square brackets:</p>
+
+<figcaption class="listing">Array literals</figcaption><pre>
+let a = [ ] ;  <cc>// An empty array</cc>
+a = [ 2, 3, 5, 7, 11, 13 ] ;  <cc>// An array with some numbers</cc>
+a = a.concat( [ 17, 19, 23 ] );  <cc>// Arrays can be declared on-the-fly</cc>
+</pre>
+
+<p>The array elements are declared as comma-separated list of values.</p>
+
+<p>The next expampe demonstrates object literals:</p>
+
+<figcaption class="listing">Object literals</figcaption><pre>
+const o = { firstName : "John" , lastName : "Smith" , age : 42 }
+</pre>
+
+<p>The object literal uses curly braces and a set of name-value pairs to create an object variable.</p>
+
+<!-- Literals --></div>
+
+<h2 cbc>Declarations</h2><div>
+
+<p>Variables and constants are memory regions with an associated name. You can store any value in that memory region with one of the assignment operators.</p>
+
+<h3 cbc>Variable Declaration</h3><div>
+
+<p><tt>let</tt> declares a variable and was introduced in ES6 in 2015 because declarations with <tt>var</tt> had some serious flaws which could easily break programs and are hard to find at the same time.</p>
+
+<p><tt>let</tt> declares a variable with block scope. The variable cannot be redeclared in the same scope, and the variable must have been declared before first use.</p>
+
+<figcaption class="listing">Variable declarations with <tt>let</tt></figcaption><pre>
+let a = "John" ;
+if ( someCondition ) { 
+    let a = "Doe" ;  <cc>// legal - declaration in a block scope
+        // hides outer variable with the same name</cc>
+    }
+console.log( a );  <cc>// John</cc>
+let a = "Smith" ;  <cc>// illegal - redeclaration in the same block</cc>
+</pre>
+
+<p>The following example has two nested counting loops. Both declare the loop counter variable <tt>i</tt>.</p>
+
+<figcaption class="listing"><tt>let</tt> variable declaration</figcaption><pre>
+function a ( ) { 
+    for ( <hi>let i</hi> = 0 ; i &lt; 3 ; i ++ ) {
+        document.body.innerHTML += ( "&lt;br/&gt;" + "a:" + i );
+        for (  <hi>let i</hi> = 0 ; i &lt; 3 ; i ++ ) { 
+            document.body.innerHTML += ( " b:" + i + " " );
+    }  }  }
+document.body.innerHTML += "Starting..." ;
+a( );
+document.body.innerHTML += "&lt;br/&gt;Finished." ;
+</pre>
+
+<p>The variable <tt>i</tt> of the outer loop is only visible within the outer loop statement. The inner loop statement declares a loop counter with the same name <tt>i</tt>. This declaration <em>hides</em> the outer loop counter <tt>i</tt>. Changing the inner <tt>i</tt> has no effect on the outer <tt>i</tt>.</p>
+
+<figcaption class="example no-borders"><a href="primer-test-02.htm">primer-test-02</a></figcaption>
+<iframe src="primer-test-02.htm" style="height:240px"></iframe>
+
+<!-- Variable Declaration --></div>
+
+<h3 cbc>Contant Declaration</h3><div>
+
+<p>The declaration of a constant variable seems to be strange at first sight. But a constant uses the same mechanism as variable under the hood. The difference is that a constant variable can be initialized only once. Additional assignments throw an exception. In fact, a constant must be initialized in the declaration statement:</p>
+
+<figcaption class="listing">Contants must be initialized </figcaption><pre>
+const a;  <cc>// Exception: Uninitialized constant</cc>
+a = "John" ;
+</pre>
+
+<p>Re-initialization and re-declaration is not allowed:</p>
+
+<figcaption class="listing">Contant declaration with <tt>let</tt></figcaption><pre>
+const a = "John" ;
+a += " Doe";  <cc>// Exception: Assignment to a constant</cc>
+const a = "John Doe" ;  <cc>// Exception: Redeclaration of constant</cc>
+</pre>
+
+<!-- Contant Declaration With const --></div>
+
+<h3 cbc>Variable Declaration With <tt>var</tt></h3><div>
+
+<p>The keyword <tt>var</tt> is used to declare a variable:</p>
+
+<figcaption class="listing">var declaration</figcaption><pre>
+var a = 42;
+console.log( a );  <cc>// 42</cc>
+console.log( window.a );  <cc>// 42</cc>
+</pre>
+
+<p>Variables are declared in the <em>global scope</em>, which makes them a property of the <em>global object</em>. In case of browsers, this is the <tt>window</tt> object.</p>
+
+<p>Variables in the global scope are visible everywhere, because the global object is the ultimate parent of everything.</p>
+
+<p>In non-strict mode, the <tt>var</tt> keyword is optional, so the following declaration is equivalent:</p>
+
+<figcaption class="listing">Variable declaration without var</figcaption><pre>
+a = 42;
+console.log( a );  <cc>// 42</cc>
+console.log( window.a );  <cc>// 42</cc>
+</pre>
+
+<p>In strict mode, the first assignment raises an exception.</p>
+
+<p>Strict mode is enabled by the following string, either at the top of the code for the entire script, or at the top of the function body for that function:</p>
+
+<figcaption class="listing">Strict mode</figcaption><pre>
+"use strict";  
+</pre>
+
+<p>Prior to ES2015, functions were the only object that had a scope. If a variable is declared with <tt>var</tt> inside of a function, the visibility of that variable was limited to the function scope, i. e. the function's statement block:</p>
+
+<figcaption class="listing">Variable declaration in a Function</figcaption><pre>
+var a = 42;
+function f ( ) {
+	var a = 24;
+	console.log( a );  <cc>// 24</cc>
+	console.log( window.a );  <cc>// 42</cc>
+	}
+console.log( a );  <cc>// 42</cc>
+console.log( window.a );  <cc>// 42</cc>
+</pre>
+
+<p>ATTENTION: In non-strict mode, a variable declaration in a function without the <tt>var</tt> keyword silently creates a global variable:</p>
+
+<figcaption class="listing">Variable declaration in a Function Without <tt>var</tt></figcaption><pre>
+<cc>// Can be omitted:</cc>
+<cc>// var a = 42;</cc>
+function f ( ) {
+	a = 24;
+	console.log( a );  <cc>// 24</cc>
+	console.log( window.a );  <cc>// 24</cc>
+	}
+console.log( a );  <cc>// 24</cc>
+console.log( window.a );  <cc>// 24</cc>
+</pre>
+
+<p>Implicit global variable declaration on first use is prohibitively dangerous! Simple typing errors did not result in a variable reference, but created a new global variable instead. For example, the following program will never terminate:</p>
+
+<figcaption class="listing">Typing error breaks a program</figcaption><pre>
+for ( var counter = 0 ; coutner < 3 ; counter ++ ) console.log ( counter );
+</pre>
+
+<p>For this reason, ES5 introduced strict mode. In strict mode, all variables must be declared prior to use. Use of an undeclared variable throws an exception.</p>
+
+<p>But we are not finished with the horror story. The next big thing is called "variable declaration hoisting". Variable hoisting effectively prevents variables with block scope. In other program languages you can introduce a variable right before first use. If the program code referenced this variable prior to declaration, an compile-time error occurred. Redeclarations of the variable in the same block also generated a compiler error. Declaration of a variable with the same name in a nested block introcuces a new, block-scoped variable that hides the outer variable with the same name.</p>
+
+<p>Not so in JavaScript. Consider the following example:</p>
+
+<figcaption class="listing">Variable declaration hoisting</figcaption><pre>
+function test ( ) {
+	for ( var i = 0 ; i < 3 ; i ++ ) {
+		for ( var i = 0 ; i < 3 ; i ++ ) console.log( i );
+   }  }
+</pre>
+
+<p>In the example above, it appears that we have two local variables, both named <tt>i</tt>. They are declared right before use. That's fine. Unfortunately, the JavaScript engine reads this as follows:</p>
+
+<figcaption class="listing">Variable declaration hoisting</figcaption><pre>
+function test ( ) {
+	var i;
+	for ( i = 0 ; i < 3 ; i ++ ) {
+		for ( i = 0 ; i < 3 ; i ++ ) console.log( i );
+   }  }
+</pre>
+
+<p>JavaScript <em>hoists</em> all variable declarations to the beginning of the function body, no matter where they appear, even in strict mode. The developer obviously tried to use different loop counters here, but ultimatly failed. In larger code fragments, this may not be so obvious&hellip;</p>
+
+<p class="note">ADVICE<br/>Under all circumstances, stay away from <tt>var</tt>!</p>
+
+<!-- Declarations --></div>
+
+<!-- Declarations --></div>
+
+<h2 cbc>Expressions</h2><div>
+
+<p>An expression is a combination of variables, literals and operators, and evaluates to a single value.</p>
+
+<p>Note that a function call falls into the category of operators, because the round parentheses are considered the function call operator, which expect the name of the function to the left, and a list of arguments in between.</p>
+
+<!-- Expressions --></div>
+
+<h2 cbc>Statements</h2><div>
+
+<p>Statements are the fundamental building blocks of a program. Multiple statements are separated by a semicolon. The statement separator can often be omitted, JavaScript engines can often <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#automatic_semicolon_insertion">infer</a> begin and end of statements. However, additional separators don't hurt and can make a piece of code more robust.</p>
+
+<p class="note">NOTE<br/>Savings in typing effort are paid off with debugging effort!</p>
+
+<h3>Compound Statement Blocks</h3><div>
+
+<p>Multiple statements can be combined to a compound statement with curly braces.</p>
+
+<figcaption class="listing">Block with multiple statements</figcaption><pre>
+let s ;
+if ( response.statusCode === 404 ) {
+	s = "Not found: ";
+	s += url;
+	}
+else s = response.text( );
+</pre>
+
+<!-- Compound Statement Blocks --></div>
+
+<h3>Branch Statements</h3><div>
+
+<p>A conditional branch statement (<tt>if...else</tt>) executes, depending on the evaluation of a boolean expression, one of two branches:</p>
+
+<figcaption class="listing">Conditional branch</figcaption><pre>
+if ( response.statusCode === 404 ) return "Not found: " + url ; 
+else return response.text( );
+</pre>
+
+<p>A multiple branch statement (<tt>switch</tt>) evaluates an expression and executes the branch that matches the expression:</p>
+
+<figcaption class="listing">Multiple branch statement</figcaption><pre>
+switch ( product.category ) {
+case "ordinary" :
+    proceedWithPayment( );
+    break;
+case "expensive" :
+    const ok = checkCustomerBalanceFirst( );
+    if ( ok ) proceedWithPayment( );
+    break;
+case "dangerous" :
+    const ok = callTheManagerFirst( );
+    if ( ok ) { proceedWithPayment( ); break; }
+    <cc>// intended fall-through here</cc>
+case "prohibited" :
+    callThePolice( );
+    abortPayment( );
+    break;
+default :
+    const ok = callTheManagerFirst( );
+    if ( ok ) proceedWithPayment( ); 
+    else abortPayment( );
+    }
+</pre>
+
+<p>Note the <tt>break</tt> statements at the end of branches. This statement causes the program flow to break out of the current statement (switch in this case), and continue with the next statement.</p>
+
+<p>Note the intentional omission of break for dangerous goods: If the manager did not give his ok for the purchase, program execution flows into the "prohibited" branch.</p>
+
+<p>Note that the <tt>default</tt> branch does not have to appear at the end of the list of branches. Sometimes a clever arrangement of branches can save some repetition of code, and perhaps improve readability.</p>
+
+<p></p>
+
+<!-- Branch Statements --></div>
+
+<h3>Other Statements</h3><div>
+
+<h4>return</h4><div>
+<p><tt>return</tt> ends function execution and returns a value to the caller:</p>
+
+<figcaption class="listing">Return statements</figcaption><pre>
+function multiply ( a, b ) { return a * b }
+</pre>
+
+<p>The result expression is optional and must appear on the same line as the <tt>return</tt> keyword, or enclosed in round parentheses.</p>
+
+<!-- h4 return -->
+
+<h4>debugger</h4><div>
+
+<p>Halts the program execution if a debugger is available. Open the browser F10 developer tools to open a debugger.</p>
+
+<!-- h4 debugger --></div>
+
+<h4>goto</h4>
+<!-- h4 goto -->
+
+<h4>break</h4>
+<!-- h4 break -->
+
+<h4>dontinue</h4>
+<!-- h4 continue -->
+
+<h4>Label</h4><div>
+
+<p>A label is used in combination with break, continue and goto statements.</p>
+
+<!-- h4 label --></div>
+
+<!-- Other Statements --></div>
+
+<h3 cbc>Loop Statements</h3><div>
+
+<h4>while</h4><div>
+<!-- while --></div>
+
+<h4>do...while</h4><div>
+<!-- do while --></div>
+
+<h4>for</h4><div>
+<!-- for --></div>
+
+<h4>for...in</h4><div>
+<!-- for...in --></div>
+
+<h4>for...of</h4><div>
+<!-- for...of --></div>
+
+<h4>More Information</h4><div>
+
+<dl>
+<dt><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference#iterations">Iterations</a> on MDN</dt>
+</dl>
+
+<!-- h4 More Information --></div>
+
+<!-- h3 Loop Statements --></div>
+
+<h4>More Information on Statments</h4><div>
+
+<dl>
+<dt><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference#statements">Statements</a> on MDN</dt>
+</dl>
+
+<!-- h4 More Information --></div>
+
+<!-- h2 Statements --></div>
+
+</div>
+
+<script type="module" src="/inc/page.js" ></script></body></html>

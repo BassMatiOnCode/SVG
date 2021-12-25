@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm"version="2021-08-23" editor-name="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-06-19" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-06-19" />
+<meta name="version" content="1" />
+<meta name="categories" content="Programming > Web Technology > SVG" />
+<meta name="tags" content="web, development, svg, vector, graphics, group, structuring, resuse." />
+<meta name="description" content="SVG documents can be structured with container elements. This makes maintenance simpler and facilitates re-use of drawing components." />
+
+<link rel="stylesheet" href="/inc/page.css" />
+<style>figcaption.figure + svg { margin: 10px 0 0 10px }</style>
+<title>Web Development - SVG - Grouping and Re-Use</title>
+ 
+</head><body><div id="page-header"></div><div id="main-toolbar"></div><div id="content">
+
+<h1>Grouping and Re-Use</h1>
+
+<p id="page-abstract"></p>
+
+<h2 cbc>G</h2><div>
+
+<p>The <tt>g</tt> element is a container element, used to group drawing elements into logical structures, and inherit common attributes (especially <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/Presentation#attr-color-interpolation">presentation attributes</a>) and styles to child elements.</p>
+
+<!-- h2 G --></div>
+
+<h2 cbc>Use</h2><div>
+
+<p>The <tt>use</tt> element instaticates or duplicates an existing element, including its child elements. The element is referenced in the <tt>href</tt> property, position and size are determined by the <tt>x</tt>, <tt>y</tt>, <tt>width</tt> and <tt>height</tt> properties:</p>
+
+<figcaption class="listing">Use example</figcaption>
+<pre>
+&lt;use href="url(#element-id)" x="10" y="10" width="20" height="20" />
+</pre>
+
+<p>The element referenced in <tt>href</tt> can be</p>
+<ul>
+<li>an entire internal or external SVG document</li>
+<li>a document fragment</li>
+<li>any internl SVG element with an <tt>id</tt> attribute, such as a <tt>symbol</tt>, <tt>g</tt>, et cetera.</li>
+</ul>
+
+<p>More information:</p>
+
+<dl class="link-list">
+<dt><a href="https://svgwg.org/svg2-draft/struct.html#UseElement">W3C SVG 2 Draft</a></dt>
+</dl>
+
+<!-- h2 --></div>
+
+<h2 cbc>Symbol</h2><div>
+
+<p>The <tt>symbol</tt> element is a template container with its own coordinate system. Elements in the <tt>symbol</tt> container are not rendered, they can be instantiated and positioned with the <tt>use</tt> element:</p>
+
+<figcaption class="listing">SVG markup</figcaption><pre>
+&lt;svg viewBox ="-50 -50 100 100" width="100" stroke="CornflowerBlue" stroke-width="5" fill="none" style="border: none 1px silver"&gt;
+    &lt;<hi>symbol</hi> id="<hi>sy-001</hi>" viewBox="-25 -25 50 50" width="50" height="50"&gt;
+        &lt;circle cx="0" cy="0" r="22" /&gt;
+        &lt;/symbol&gt;
+    &lt;use href="<hi>#sy-001</hi>" x="0" y="0" /&gt;
+    &lt;use href="<hi>#sy-001</hi>" x="-50" y="0" /&gt;
+    &lt;use href="<hi>#sy-001</hi>" x="-50" y="-50" /&gt;
+    &lt;use href="<hi>#sy-001</hi>" x="0" y="-50" /&gt;
+    &lt;/svg&gt;
+</pre>
+
+<figcaption class="figure">Four circles</figcaption>
+<svg viewBox ="-50 -50 100 100" width="100" stroke="CornflowerBlue" stroke-width="5" fill="none" style="border: none 1px silver">
+	<symbol id="sy-001" viewBox="-25 -25 50 50" width="50" height="50">
+		<circle cx="0" cy="0" r="22" />
+		</symbol>
+	<use href="#sy-001" x="0" y="0" />
+	<use href="#sy-001" x="-50" y="0" />
+	<use href="#sy-001" x="-50" y="-50" />
+	<use href="#sy-001" x="0" y="-50" />
+	</svg>
+
+<p>A symbol is instantiated with its upper left corner at the specified coordinates, then scaled to the specified width and height. To draw a set of concentric circles, the x and y coordinates must correlate to the width and height:</p>
+
+<figcaption class="listing">Concentric circles, code</figcaption><pre>
+&lt;svg viewBox ="-50 -50 100 100" width="100" stroke="CornflowerBlue" stroke-width="5" fill="none" style="border: none 1px silver"&gt;
+	&lt;symbol id="sy-001" viewBox="-25 -25 50 50" &gt;
+		&lt;circle cx="0" cy="0" r="22" /&gt;
+		&lt;/symbol&gt;
+	&lt;use href="#sy-001" x="-7" y="-7" width="14" height="14" /&gt;
+	&lt;use href="#sy-001" x="-15" y="-15" width="30" height="30" /&gt;
+	&lt;use href="#sy-001" x="-25" y="-25" width="50" height="50" /&gt;
+	&lt;use href="#sy-001" x="-40" y="-40" width="80" height="80" /&gt;
+	&lt;/svg&gt;
+</pre>
+
+<figcaption class="figure">Concentric circles</figcaption>
+<svg viewBox ="-50 -50 100 100" width="100" stroke="CornflowerBlue" stroke-width="5" fill="none" style="border: none 1px silver">
+	<symbol id="sy-001" viewBox="-25 -25 50 50">
+		<circle cx="0" cy="0" r="22" />
+		</symbol>
+	<use href="#sy-001" x="-7" y="-7" width="14" height="14" />
+	<use href="#sy-001" x="-15" y="-15" width="30" height="30" />
+	<use href="#sy-001" x="-25" y="-25" width="50" height="50" />
+	<use href="#sy-001" x="-40" y="-40" width="80" height="80" />
+	</svg>
+<br/>
+
+<h3 cbc>References</h3><div>
+
+<dl>
+<dt><a href="https://svgwg.org/svg2-draft/struct.html#SymbolElementRefXAttribute">W3C SVG 2 Symbol</a></dt>
+</dl>
+
+<!-- h3 --></div>
+
+<!-- h2 symbol --></div>
+
+<h2 cbc>Defs</h2><div>
+
+<p>The definition element <tt>defs</tt> is a container for re-usable elements. These elements are not rendered, they act as template. The elements must have a unique <tt>id</tt> attribute so that they can be referenced from <tt>use</tt> elements for instantiation.</p>
+
+<p>The <tt>defs</tt> element is very similar to the <tt>g</tt> element, the difference is that a <tt>g</tt> element is rendered, a <tt>defs</tt> element not.</p>
+
+<!-- h2 --></div>
+
+
+
+</div><script type="module" src="/inc/page.js" ></script></body></html>

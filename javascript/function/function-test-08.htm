@@ -1,0 +1,15 @@
+﻿<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="function-test-08.htm">function-test-08.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+const o1 = { firstName : "John" , lastName : "Smith" ,
+	getFullName ( ) { return this.firstName + " " + this.lastName }
+	}
+console.log( o1.firstName );
+const f = o1.getFullName ;
+console.log( f ( ));
+debugger;
+</script>
+</body></html>

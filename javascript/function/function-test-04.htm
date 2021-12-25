@@ -1,0 +1,16 @@
+﻿<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="function-test-04.htm">function-test-04.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+debugger;
+const ticker = { count : 0 ,
+	start : function ( ) { window.setInterval ( function tick ( ) { this.count += 1 ; console.log ( this.count ) } , 1000 ) }
+	}
+ticker.start( );
+	// NaN
+	// NaN
+	// &hellip;
+</script>
+</body></html>

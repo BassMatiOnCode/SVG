@@ -1,0 +1,841 @@
+﻿<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm"version="2021-08-23" editor-name="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-08-25" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-09-05" />
+<meta name="version" content="4" />
+<meta name="categories" content="Web Technologies > JavaScript" />
+<meta name="tags" content="web, technologies, javascript, object" />
+<meta name="description" content="On this page we will have a closer look a the JavaScript Object type. It is the mother of nearly everything." />
+
+<link rel="stylesheet" href="/inc/page.css" />
+ 
+<title>Web Technologies > JavaScript > Object in Depth</title>
+
+</head><body><div id="page-header"></div><div id="main-toolbar"></div><div id="content">
+
+<h1>Object in Depth</h1>
+ 
+<p id="page-abstract"></p>
+
+<p>Objects are containers for values, functions or other objects. Object members are associated with a name. In other words, an object is an unordered collection of name-value pairs.</p>
+
+<h2 cbc>Terms of Object Oriented Design</h2><div>
+
+<p>To ensure that we speak the same language, it is useful to agree on some terms and phrases.</p>
+
+<dl>
+<dt>Variable</dt>
+<dd>A name-value combination, where the value is stored in memory, and the name is an entry in a "book-of-names" or "name table", associated with a reference to that memory location. In JavaScript, a value is always an object of some kind. Even "primitive values" such as a number, a boolean value or a string is packaged in an object-wrapper when stored in memory.</dd>
+
+<dt>Object</dt>
+<dd>An object is a type which combines data (properties) and behavior (methods). In some way, and object is a <em>container</em>.</dd>
+
+<dt>Member</dt>
+<dd>The elements contained by an object are called <em>members</em>. A member has an associated name, unique within the object. A member can be a method, a property or an object. </dd>
+
+<dt>Method</dt>
+<dd>A function member of an object is called <em>method</em>. Methods define the behavior of an object.</dd>
+
+<dt>Property</dt>
+<dd>A value or object member of an object is called <em>property</em>. Properties define the state of an object.</dd>
+<dd>In JavaScript, the term <em>properties</em> is used often for object members, because in JS nearly everything is derived from <tt>Object</tt>, even functions.</dd>
+
+<dt>Class</dt>
+<dd>A class is the description of an object, a list of members and their associated names. A synonym of <em>type</em> in the context of objects. A class is a compile-time construct in other languages.</dd>
+
+<dt>Instance</dt>
+<dd>The instance is the incarnation of a class at run-time, a dedicated piece of memory which contains the actual properties and methods as declared in the class. Often used as synonym for <em>object</em> to emphasize the relation to its class.</dd>
+<dd>In JavaScript, an instance is a regular object that has been created by a statement like <tt>new Person( )</tt>, where <tt>Person</tt> is a so-called "constructor function" or short "ctor" or "ctor-fn". Therefore the object can be considered an "instance of Person".</dd>
+
+<dt>State</dt>
+<dd>The data members (properties) of an object.</dd>
+
+<dt>Behavior</dt>
+<dd>The function members (methods) of an object.</dd>
+
+<dt>this</dt>
+<dd>The keyword <tt>this</tt> in a statement references the object where the function which carries that code "lives in". So it is not the function, it is the object where the function lives in:
+</dd>
+<dd><pre>const o = { firstName : "John" , 
+    lastName : "Smith" , 
+    greet : function ( ) { return "Hi, I am " + <hi>this</hi>.firstName + " " + <hi>this</hi>.lastName + "." }
+    }
+</pre></dd>
+<dd>In the example above, <tt>this</tt> references the object <tt>o</tt>.</dd>
+</dl>
+
+<!-- Terms of Object Oriented Design --></div>
+
+<h2 cbc>Object Basics</h2><div>
+
+<p>The easiest way to create a new, empty object is to use <em>object literal notation</em>, a pair of curly braces:</p>
+
+<figcaption class="listing">Creating an empty object</figcaption><pre>
+const o = { } ;
+</pre>
+
+<p>This is creates a simple, empty object with no user-defined members. However, even an empty object already has some inherited members, as we will see in a minute.</p>
+
+<h3 cbc>Object Initializers</h3><div>
+
+<p>The object literal can be provided with initializers in various forms. The comma-separated list of name-value pairs is one of the most common:</p>
+
+<figcaption class="listing">Object literal with name-value initializers</figcaption><pre>
+const o = { firstName : "John" , lastName : "Doe" } ;
+</pre>
+
+<p>The value is an <em>expression</em> (a combination of literals, variables and operators) that evaluates to a value or object, including functions. For instance, <em>methods</em> are defined with a function declaration expression:</p>
+
+<figcaption class="listing">Adding a method</figcaption><pre>
+const o = { greet : <hi>function</hi> ( firstName, lastName ) { 
+    return "Hello, I am " + firstName + " " + lastName + "." 
+    } } ;
+</pre>
+
+<!-- Initializers --></div>
+
+<h3 cbc>ES2015 Shorthand Initializers</h3><div>
+
+<p>Since ES2015, the colon and the <tt>function</tt> keyword may be omitted in a method declaration:</p>
+
+<figcaption class="listing">ES2015 shorthand for adding a method</figcaption><pre>
+const o = { greet ( ) { 
+    return "Hello, I am " + this.firstName + " " + this.lastName + "."  
+    } } ;
+</pre>
+
+<p id="v-init">Instead of a name:value pair, a simple <em>variable</em> can be specified as initializer: </p>
+
+<figcaption class="listing">Variable initializers</figcaption><pre>
+const firstName = "John" ;
+const lastName = "Doe" ;
+const greet = function ( ) { 
+	return "Hello, I am " + this.firstName + " " + this.lastName + "." 
+	} ;
+const o = { <hi>firstName</hi>, <hi>lastName</hi>, <hi>greet</hi> } ;
+</pre>
+
+<p>Name and value of the member are derived from the variable.</p>
+
+<p>Sometimes the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax">spread operator</a> (<tt>...</tt>) , a sequence of three dots in front of an iterable, is used as object initializer. Because the spread operator returns a comma-separated list of elements, it pretty much boils down to ES2015 variable initializers mentioned <a href="#v-init">above</a>:</p>
+
+<figcaption class="listing">Creating an object copy</figcaption><pre>
+const o1 =  { firstName : "John" , lastName : "Doe" } ;
+const o2 = { ...o1 } ;  <cc>// is a shorthand to &hellip;</cc>
+const o3 = { o1.firstName , o1.lastName } ;
+</pre>
+
+<p>The declarations  o2 and o3 are equivalent.</p>
+
+<!-- h3 ES2015 Shorthand Initializers --></div>
+
+<h3 cbc>Computed Member Names</h3><div>
+
+<p>Since ES2015, we can use computed member names. The name is defined by a string expression enclosed in square brackets:</p>
+
+<figcaption class="listing">Computed member names:</figcaption><pre>
+const propNames = [ "firstName", "lastName" ] ;
+cons o = { [propNames[ 0 ]] : "John" , [propNames[ 1 ]] : "Doe" } ;
+</pre>
+
+<p>Note that is allowed to provide member names that violate JavaScript variable name syntax. If you do so, you will have to use the bracket notation to access these members. The dot member access operator will produce a syntax error.</p>
+
+<!-- h3 Computed Member Names--></div>
+
+<h3 cbc>Accessing Members: Dot Notation</h3><div>
+
+<p>We already have used the dot notation to access object members without mention. If used on the left side of an assignment operator, an existing member value will be overwritten. A non-exisiting member will be created and initialized.</p>
+
+<p>This is certainly a double edged sword. On one side, it is one aspect of JavaScript's dynamic nature. The downside is that a simple typing error can produce a syntactically correct but logically wrong program. Consider the follwing example:</p>
+
+<figcaption class="listing">Using the dot notation</figcaption><pre>
+const o = { } ;
+o.lastName = "Dee" ;
+o.lastname = "Doe" ;
+console.log( o.lastName );  <cc>// Dee</cc>
+</pre>
+
+<p>In the third line, the lastName should have been changed from "Dee" to "Doe", but the mistyped member name creates a new property instead. So we end up with an object with two members:</p>
+
+<figcaption class="listing">The unexpected result</figcaption><pre>
+const o = { lastName : "Dee" , lastname : "Doe" } ;
+</pre>
+
+<p class="note">Recommendation<br/>Always "use strict" mode to make assignments to undeclared variables a syntax error!</p>
+
+<!-- h3 Accessing Members: Dot Notation --></div>
+
+<h3 cbc>Accessing Members: Bracket Notation</h3><div>
+
+<p>The bracket notation, a pair of square brackets, should already be familiar from array index notation. The value inside the brackets must be a <em>string expression</em>, where the dot operator expects a syntactical <em>variable name</em>. The interesting point is that the string can be a <em>syntactically illegal name</em>, it may contain spaces or special characters, or begin with a digit:</p>
+
+<figcaption class="listing">Using bracket notation</figcaption><pre>
+const o = { } ;
+o [ "first name" ] = "John" ;
+o [ "last*name" ] = "Doe" ;
+o [ "0" ] = 42 ;
+o [ "1" ] = 43 ;
+</pre>
+
+<p>The downside of this freedom is that you cannot use dot notation to access such odd members.</p>
+
+<p>Note that <em>variables</em> can often be evaluated to a string expression (most objects have a <tt>toString</tt> method). The advantage is that you can now access object members <em>programmatically</em>.</p>
+
+<p>Bracket notation looks very similar to array element access, the only difference is that array index values must be numeric (integer) expressions, whereas object bracket notation requires string expressions. </p>
+
+<figcaption class="listing">Programmatic member access</figcaption><pre>
+const memberName = firstName ;
+o[ memberName ] = "Joe" ;
+</pre>
+
+<!-- h3 Accessing Members: Bracket Notation --></div>
+
+<!-- h2 Object Basics --></div>
+
+<h2 cbc>Prototype Inheritance</h2><div>
+
+<p id="prototype">Most objects in JavaScript have a [[Prototype]]. A prototype is a regular JavaScript object, either built-in, or user-defined. The prototype is not a regular member (hence the strange double-bracket notation in documentation and debuggers), and it cannot be accessed with the dot operator or the bracket operator. But you can use <tt>Object.getPrototypeOf( object )</tt> and <tt>Object.setPrototypeOf( object, prototypeObject )</tt>. In most browsers, the prototype can also be accessed with <tt>__proto__</tt> getters and setters, too:</p>
+
+<figcaption class="listing"></figcaption><pre>
+console.log( Object.getPrototypeOf( o1 ) === o1.__proto__ );
+    <cc>// true</cc>
+</pre>
+
+<p>If an object has <tt>null</tt> as prototype, is considered to have <em>no</em> prototype. For example, the protoype of a simple object has no prototype:</p>
+
+<figcaption class="listing">Object has no prototype</figcaption><pre>
+const o = { } ;
+const p1 = Object.getPrototypeOf( o );
+console.log( p1 === null );
+    <cc>// false</cc>
+const p2 = Object.getPrototypeOf( p1 );
+console.log( p2 === null );
+    <cc>// true</cc>
+</pre>
+
+<p>Because a prototype is a regular JavaScript object, a prototype can have its own prototype. Multiple prototypes form the so-called <em>prototype-chain</em>. The chain ends on the object which has a null prototype.</p>
+
+<p class="note">Although null is a JavaScript object, it has neither members nor a prototype, so in cannot inherit anything to other objects.</p>
+
+<p>An object <em>inherits</em> members from all objects in its prototype chain. All instances of a certain "class" share the same prototype chain. This is the way JavaScript implements object-oriented concepts.</p>
+
+<p>The behavior of an object is defined by its methods. Because inherited members are shared between all instances of a certain class, it is a good idea to implement methods on the prototype chain. The trade-off is some additional time spent to locate a member in the prototype chain.</p>
+
+<p>The state of an object is defined by its data members (properties). Properties are usually not shared between instances of the same class, so they are defined directly on the object as <em>own properties</em>.</p>
+
+<p class="note">SIDE NOTE<br/>ES2015 introduced the <tt>class</tt> and some other keywords to make class design more intuitive for devolopers familiar with other OO languages. However, <tt>class</tt> is mostly syntactical sugar. Under the hood, JavaScript classes remain prototype-inheritance based. Unless this foundation is not properly understood, using such shortcuts can lead to unexpected results.</p>
+
+<!-- Prototype Inheritance --></div>
+
+<h2 cbc>Inspection of Simple Objects</h2><div>
+
+<p>Let's consider an object o1 with two members. If we log o1 to the console, we can find our members, and an additional third one, shown as <tt>[[Prototype]]</tt>:</p>
+
+<figcaption class="listing">Inspecting an object</figcaption><pre>
+const o1 = { firstName : "John" , lastName : "Doe" } ;
+console.log( o1 );
+    <cc>// {firstName: "John", lastName: "Doe"}</cc>
+        <cc>// firstName: "John"</cc>
+        <cc>// lastName: "Doe"</cc>
+        <cc>// <hi>[[Prototype]]</hi>: Object</cc>
+</pre>
+
+<p>This "member" represents the <em>prototype</em> of <tt>o1</tt>. </p>
+
+<p>The prototype of any object can be retrieved with <tt>Object.getPrototypeOf( o )</tt>. So let's check that and see what the prototype has to offer:</p>
+
+<figcaption class="listing">Inherited members</figcaption><pre>
+const p1 = Object.getPrototypeOf( o1 );
+console.log( p1 );
+    <cc>// {constructor: ƒ, __defineGetter__: ƒ, __defineSetter__: ƒ, …}</cc>
+        <cc>// <hi>constructor</hi>: ƒ <hi>Object</hi>()</cc>
+        <cc>// hasOwnProperty: ƒ hasOwnProperty()</cc>
+        <cc>// isPrototypeOf: ƒ isPrototypeOf()</cc>
+        <cc>// propertyIsEnumerable: ƒ propertyIsEnumerable()</cc>
+        <cc>// toLocaleString: ƒ toLocaleString()</cc>
+        <cc>// toString: ƒ toString()</cc>
+        <cc>// valueOf: ƒ valueOf()</cc>
+        <cc>// __defineGetter__: ƒ __defineGetter__()</cc>
+        <cc>// __defineSetter__: ƒ __defineSetter__()</cc>
+        <cc>// __lookupGetter__: ƒ __lookupGetter__()</cc>
+        <cc>// __lookupSetter__: ƒ __lookupSetter__()</cc>
+        <cc>// <hi>get __proto__</hi>: ƒ __proto__()</cc>
+        <cc>// <hi>set __proto__</hi>: ƒ __proto__()</cc>
+</pre>
+
+<p>There is a whole bunch of members, they all are functions. Let's start with <tt>constructor</tt>.</p>
+
+<p>The <tt>constructor</tt> member points to a function named <tt>Object( )</tt>. This function is used to create new instances of <tt>Object</tt>, therefore it can be seen as "class" or "instance factory". In JavaScript, it is usually called the <em>constructor function</em>.</p>
+
+<figcaption class="listing">instanceof operator</figcaption><pre>
+console.log( p1.constructor );
+    <cc>//ƒ Object() { [native code] }</cc>
+console.log( p1.constructor.name );
+    <cc>// "Object"</cc>
+console.log( o instanceof Object );
+    <cc>// true</cc>
+</pre>
+
+<p>A constructor function for a certain class is always associated with a prototype object, from which instances of that class inherit members. For instance, the <tt>Object( )</tt> constructor function is associated with the <tt>Object prototype</tt>, and <tt>Object instances</tt> will have the <tt>Object prototype</tt> as their immediate prototype:</p>
+
+<figcaption class="listing">Constructor function and the prototype object</figcaption><pre>
+const o = new Object( );
+const p = Object.getPrototypeOf( o );
+console.log( Object.prototype === p );
+    <cc>// true</cc>
+</pre>
+
+<p>Figure 1 illustrates the whole picture in a diagram:</p>
+
+<figcaption class="figure">Prototype inheritance diagram for a user-defined object</figcaption>
+<object data="drawing-1.svg" type="image/svg+xml" style="margin:10px"></object>
+
+<p>Arrows represent the prototype reference chain from bottom to top. Inheritance direction is opposite, from top to bottom.</p>
+
+<p>We'll delve deeper into that matter later.</p>
+
+<p>Because o1 is an instance of <tt>Object</tt>, it inherits members from the <tt>Object</tt> prototype. For example, <tt>hasOwnProperty( )</tt>: According to the documentation, this method returns true if the member was defined on the specified object:</p>
+
+<figcaption class="listing">Checking own properties</figcaption><pre>
+console.log( o1.hasOwnProperty( "firstName" ));
+    <cc>// true</cc>
+    <cc>// firstName was defined on o1.</cc>
+console.log( o1.hasOwnProperty( "hasOwnProperty" ));
+    <cc>// false</cc>
+    <cc>// hasOwnProperty is inherited.</cc>
+</pre>
+
+<p>Now I would like to turn your attention to the last two members of <tt>Object</tt>. These are the <tt>__proto__</tt> property accessor functions, a getter and a setter method. They provide access to an object's [[Prototype]] object, and are supported in most if not all browsers. And because <tt>o1</tt> inherits from the Object prototype, it is possible to find <tt>o1</tt>'s prototype with <tt>o1.__proto__</tt>:</p>
+
+<figcaption class="listing">Non-standard way of getting the [[Prototype]]</figcaption><pre>
+console.log( o1.__proto__) ;
+    <cc>// {constructor: ƒ, __defineGetter__: ƒ, __defineSetter__: ƒ, …}</cc>
+    <cc>// OK, there is an object. Let's check if that's the Object prototype:</cc>
+console.log( Object.getPrototypeOf( o1 ) === o1.__proto__ );
+    <cc>// true</cc>
+console.log( Object.getPrototypeOf( o1 ) === Object.prototype );
+    <cc>// true</cc>
+</pre>
+
+<p>Now let's create another object with object literal syntax. If the object was created by the <tt>Object( )</tt> constructor function under the hood, their prototypes should be identical:</p>
+
+<figcaption class="listing">User-defined objects inherit from Object</figcaption><pre>
+const o2 = { firstName : "John" , lastName : "Smith" };
+console.log( o1 instance of Object ):
+    <cc>// Object</cc>
+console.log( o2 instance of Object ):
+    <cc>// Object</cc>
+console.log( Object.getPrototypeOf( o1) === Object.getPrototypeOf( o2 ));
+    <cc>// true</cc>
+</pre>
+
+<p>The code above shows that all objects created with object literal notation are instances of <tt>Object</tt> and inherit from the same Object prototype.</p>
+
+<p>The following code checks whether this prototype has a prototype of its own:</p>
+
+<figcaption class="listing"><tt>Object</tt> has no prototype</figcaption><pre>
+console.log( Object.getPrototypeOf( Object.getPrototypeOf( o1 ));
+    <cc>// null</cc>
+</pre>
+
+<p>Aparently not. In other words, the prototype chain ends here. And if you closely inspect the Object prototype members in the listing above, you won't find a [[Prototype]] pseudo-member!</p>
+
+<!-- h2 Inspection of Simple Objects --></div>
+
+<h2 cbc>User-Defined Prototypes</h2><div>
+
+<p>All objects in JavaScript, with very few exceptions such as <tt>null</tt>, should inherit from <tt>Object.prototype</tt> at the top. The Object prototype provides a set of methods that support the JavaScript infrastructure, so a user-defined prototype object which has a null prototype is not a good idea. And due to this requirement, it may not be the best idea to decorate the Object prototype it with user-defined class-specific members. How can we achieve that? You may already have guessed, with an additional object in the prototype chain.</p>
+
+<p id="ctor-fn">The JavaScript infrastructure prescribes a constructor function and an associated prototype object. A constructor function is designed to be used in combination with the <tt>new</tt> operator. C++, C# and other OO-language users will know this guy very well. But in the examples below we will use a slightly different, "manual" approach which might better illustrate prototype inheritance.</p>
+
+<p>Let's look at <a href="object-test-02.htm">object-test-02.htm</a>:</p>
+
+<figcaption class="listing">The person factory function</figcaption><pre>
+    <cc>// The Person factory creates Person instances.</cc>
+const PersonFactory = function ( firstName, lastName ) { 
+    const o = { firstName, lastName } ;
+    Object.setPrototypeOf( o, PersonFactory.prototype );
+    return o ;
+    } ;
+</pre>
+
+<p>The factory function has two parameter for the instance data, <tt>firstName</tt> and <tt>lastName</tt>. Their values are used to initialize the object <tt>o</tt>. Before the new object is returned to the caller, its prototype is set to the Person prototype.</p>
+
+<p>This is defined in the next listing:</p>
+
+<figcaption class="listing">The person prototype</figcaption><pre>
+    <cc>// The Person prototype defines inherited shared members.</cc>
+PersonFactory.prototype = { 
+    constructor : PersonFactory ,
+    greet ( ) { return "Hello, my name is " + this.firstName + " " + this.lastName + "." } ,
+    farewell ( ) { return "Goodbye!" }
+    } ;
+</pre>
+
+<p>The prototype object is created with object literal notation just as before. Its <tt>constructor</tt> member is set to the <tt>PersonFactory</tt> function, and it gets two function members, <tt>greet( )</tt> and <tt>farewell( )</tt>.</p>
+
+<p>A reference to the person prototype object must be stored in <tt>PersonFactory.prototype</tt>.</p>
+
+<p>Now we can create person instances:</p>
+
+<figcaption class="listing">Creating a person instance</figcaption><pre>
+const o1 = PersonFactory( "John" , "Doe" ) ;
+    <cc>// Test:</cc>
+console.log( o1.greet( ));
+    <cc>// Hello, my name is John Doe.</cc>
+console.log( o1.farewell( ));
+    <cc>// Good-bye!</cc>
+</pre>
+
+<p>This is what we are trying to achieve:</p>
+
+<figcaption class="figure">Prototype chain with a user-defined prototype</figcaption>
+<object data="drawing-2.svg" type="text/svg+xml"></object>
+
+<p>Note the different naming convention between Object Constructor and Person Factory: The <tt>Object( )</tt> constructor function works a little bit different from <tt>PersonFactory( )</tt>, as we will see later.</p>
+
+<p>Let's check the person instance and its prototype chain:</p>
+
+<figcaption class="listing">Checking the instance properties</figcaption><pre>
+console.log( o1 );
+    <cc>// PersonFactory {firstName: 'John', lastName: 'Doe'}</cc>
+    <cc>//      firstName: "John"</cc>
+    <cc>//      lastName: "Doe"</cc>
+    <cc>//      [[Prototype]]: Object</cc>
+console.log( o1 instanceof PersonFactory );
+    <cc>// true</cc>
+console.log( o1 instanceof Object );
+    <cc>// true</cc>
+console.log( typeof o1 );
+    <cc>// object</cc>
+console.log( o1.constructor.name );
+    <cc>// PersonFactory</cc>
+console.log( Object.getPrototypeOf( o1 ).constructor.name );
+    <cc>// PersonFactory</cc>
+</pre>
+
+<p>The name in front of the <tt>o1</tt> dump is <tt>Object.getPrototypeOf( o1 ).constructor.name</tt>, which is "PersonFactory". That makes sense. On a prototype, it doesn't, as we will see shortly.</p>
+
+<p>The person instance is an instance of both <tt>PersonFactory</tt> and <tt>Object</tt>, and ist type is "object" &ndash; which is somewhat meaningless, because nearly every object in JavaScript is of type "object". In only means that it is not a string, a number or a boolean value.</p>
+
+<p>A more reliable and meaningful information is the name of the constructor function, <tt>o1.constructor.name</tt>, "PersonFactory".</p>
+
+<p><tt>o1</tt> inherits <tt>constructor</tt> from its prototype, so <tt>Object.getPrototypeOf( o1 ).constructor.name</tt> should always give the same name.</p>
+
+<p>Now let's have a look at <tt>o1</tt>'s prototype:</p>
+
+<figcaption class="listing">Instance prototype</figcaption><pre>
+const p1 = Object.getPrototypeOf( o1 );
+console.log( p1 );
+    <cc>// {constructor: ƒ, greet: ƒ, farewell: ƒ}</cc>
+    <cc>//      constructor: ƒ ( firstName, lastName )</cc>
+    <cc>//      greet: ƒ farewell( )</cc>
+    <cc>//      greet: ƒ greet( )</cc>
+    <cc>//      [[Prototype]]: Object</cc>
+console.log( p1.constructor.name );
+    <cc>// "PersonFactory"</cc>
+</pre>
+
+<p>This time, there is no name if front of the object structure. It should have been "Object", but it isn't. As mentioned above, don't worry, that's more confusing than informative. Stick to <tt>p1.constructor.name</tt>, that always returns meaningful information.</p>
+
+<p>Now we continue with the prototype of <tt>p1</tt>:</p>
+
+<figcaption class="listing">Prototype's prototype</figcaption><pre>
+const p2 = Object.getPrototypeOf( p1 );
+console.log( p2 );
+    <cc>// {constructor: ƒ, __defineGetter__: ƒ, __defineSetter__: ƒ, hasOwnProperty: ƒ, __lookupGetter__: ƒ, …}</cc>
+    <cc>//      <hi>constructor</hi>: ƒ <hi>Object()</hi></cc>
+    <cc>//      hasOwnProperty: ƒ hasOwnProperty()</cc>
+    <cc>//      isPrototypeOf: ƒ isPrototypeOf()</cc>
+    <cc>//      propertyIsEnumerable: ƒ propertyIsEnumerable()</cc>
+    <cc>//      toLocaleString: ƒ toLocaleString()</cc>
+    <cc>//      toString: ƒ toString()</cc>
+    <cc>//      valueOf: ƒ valueOf()</cc>
+    <cc>//      __defineGetter__: ƒ __defineGetter__()</cc>
+    <cc>//      __defineSetter__: ƒ __defineSetter__()</cc>
+    <cc>//      __lookupGetter__: ƒ __lookupGetter__()</cc>
+    <cc>//      __lookupSetter__: ƒ __lookupSetter__()</cc>
+    <cc>//      get __proto__: ƒ __proto__()</cc>
+    <cc>//      set __proto__: ƒ __proto__()</cc>
+console.log( p2.constructor.name )
+    <cc>// "Object"</cc>
+</pre>
+
+<p>It is the familiar <tt>Object.prototype</tt>. And this is the end of the prototype chain:</p>
+
+<figcaption class="listing">End of the prototype chain</figcaption><pre>
+const p3 = Object.getPrototypeOf( p2 );
+console.log( p3 );
+    <cc>// null</cc>
+</pre>
+
+<!-- User-Defined Prototypes --></div>
+
+<h2 cbc>Class Hierarchies</h2><div>
+
+<p>In this section we will create a property chain with Object, Person, Employee and Manager "classes". We will explore <tt>Object.create( )</tt> and <tt>Object.defineProperties( )</tt> for use with instance factories and prototypes, and the re-use of some parent class code.</p>
+
+<p>The advantage of <tt>Object.create( )</tt> and <tt>Object.defineProperties( )</tt> becomes apparent when we consider how the object member access operators ("." and "[]") work under the hood. Imagine an instruction like <tt>o.member=value</tt> in an instance factory. The member access operator begins to look for <tt>member</tt> on the new instance object <tt>o</tt>. Of course, it is not present there because the object has just been created. Then the prototype of o is inspected, and of course the member will not be found. The same with the prototype's prototype, and so on, until the end of the prototype chain is reached. Now it is clear that <tt>member</tt> must be created as own property on on the new instance <tt>o</tt>. This procedue is repeated for every new instance property. Not the most efficient strategy, I guess.</p>
+
+<p><tt>Object.create( )</tt> and <tt>Object.defineProperties( )</tt> work better in such a scenario, because the members are created on the instance <em>without searching the prototype chain</em>.</p>
+
+<p>Ok, now let's dive into the code.</p>
+
+<figcaption class="listing">The person instance factory</figcaption><pre>
+const PersonFactory = function ( firstName, lastName ) {
+    const o = Object.create ( PersonFactory.prototype, {
+        firstName : { enumerable : true , writable : true , value : firstName } ,
+        lastName : { enumerable : true , writable : true , value : lastName }
+        } ) ;
+    return o ;
+    } ;
+</pre>
+
+<p>The person instance factory creates a new person instance with the properties <tt>firstName</tt> and <tt>lastName</tt>. The person factory function is associated with a prototype object which we will define below. So far nothing new. New is the way the instance object is created &ndash; with <tt>Object.create</tt> instead of an object literal ("{ }"). </p>
+
+<p><tt>Object.create( )</tt> expects two parameters, the instance prototype, and a list of property descriptors. The prototype can be found in <tt>PersonFactory.prototype</tt>.</p>
+
+<p>A property descriptor defines the name, value and some attributes of an instance property. Note that the property is created on the instance object without searching the prototype chain. If you provide a property with the same name of a property that already exists somewhere up the prototype chain, the new property on the instance will override (hide, shadow) the prototype's property to the member access operators.</p>
+
+<p>Now the person prototype definition:</p>
+
+<figcaption class="listing">The person prototype</figcaption><pre>
+PersonFactory.prototype = Object.create ( <hi>Object.prototype</hi> , {
+    <hi>constructor</hi> : { enumerable : true, value : PersonFactory } ,
+    <hi>greet</hi> : { enumerable : true , value : function ( termination = "." ) { 
+        return "Hi, my name is " + this.firstName + " " + this.lastName + termination } } , 
+    <hi>farewell</hi> : { enumerable : true , value : function ( ) { 
+        return "Goodbye!" } }
+    } ) ; 
+</pre>
+
+<p>The person prototype object is referenced by <tt>PersonFactory.prototype</tt> and inherits from <tt>Object.prototype</tt>. Again, <tt>Object.create( )</tt> is used to define protoype and properties of the new object. Note that <tt>create( )</tt> can also create <em>methods</em> on the new object, not only properties. This is one reason why JavaScript does not make a clear distinction between properties and methods. Because a function is also some kind of object, a method can be considered "property" of an object.</p>
+
+<p>In the code above, the <tt>constructor</tt> property and the <tt>greet</tt> and <tt>farewell</tt> methods are created. They return strings composed of string literals and person instance values. The <tt>constructor</tt> property references the factory function associated with the prototype.</p>
+
+<p>The next "class" in the prototype chain is <em>employee</em>, which "derives" from person. We begin with the <tt>EmployeeFactory</tt> function:</p>
+
+<figcaption class="listing">Employee factory function</figcaption><pre>
+const EmployeeFactory = function ( firstName, lastName, position ) {
+        <cc>// Call the parent class constructor first. </cc>
+    const o = Object.getPrototypeOf( EmployeeFactory.prototype ).constructor( firstName, lastName );
+        <cc>// Change the prototype from person prototype to employee prototype.</cc>
+    Object.setPrototypeOf( o, EmployeeFactory.prototype );
+        <cc>// Create and initialize employee instance members.</cc>
+    Object.defineProperties ( o, {
+        position : { enumerable : true , writable : true , value : position }
+        } ) ;
+    return o ;
+    } ;
+</pre>
+
+<p>The first line calls the parent factory function, which returns an initialized person instance. Its prototype must be changed to the employee prototype. The employee-specific properties ("position" in this case) are created with <tt>Object.defineProperties( )</tt>, which works exactly as described for <tt>Object.create( )</tt>.</p>
+
+<figcaption class="listing">Employee prototype</figcaption><pre>
+EmployeeFactory.prototype = Object.create ( <hi>PersonFactory.prototype</hi> , {
+    <hi>constructor</hi> : { value : EmployeeFactory, enumerable : true } , 
+    <hi>greet</hi> : { enumerable : true , value : function ( termination = "." ) { 
+        return Object.getPrototypeOf( EmployeeFactory.prototype )
+            .<hi>greet.call</hi>( this, ", " ) + this.position + termination } }
+    } ) ;
+</pre>
+
+<p>Once again, <tt>Object.create( )</tt> is used to produce the employee prototype object. This time, its prototype is the person prototype, and it has the members <tt>constructor</tt> and <tt>greet</tt>. Note that <tt>EmployeeFactory.prototype.greet</tt> overrides <tt>PersonFactory.prototype.greet</tt>, but the code calls the overriden parent class methods to avoid duplication of code.</p>
+
+<p>Note that the overridden person greet method is called in the context of the new employee instance (with greet.call( this,...)) in order to make <tt>this</tt> point to the correct object at run-time.</p>
+
+<figcaption class="listing">The manager class implementation</figcaption><pre>
+const ManagerFactory = function ( firstName, lastName, department ) {
+        <cc>// Call the parent class constructor first.</cc>
+    const o = Object.getPrototypeOf( ManagerFactory.prototype ).constructor( firstName, lastName, "manager" );
+        <cc>// Change the prototype from employee prototype to manager prototype.</cc>
+    Object.setPrototypeOf( o, ManagerFactory.prototype );
+        <cc>// Create and initialize manager instance members.</cc>
+    Object.defineProperties ( o, {
+        department : { enumerable : true , writable : true , value : department }
+        } ) ;
+    return o ;
+    } ;
+
+ManagerFactory.prototype = Object.create ( EmployeeFactory.prototype , {
+    constructor : { value : ManagerFactory, enumerable : true } , 
+    greet : { enumerable : true , value : function ( termination = " department." ) { 
+        return Object.getPrototypeOf( ManagerFactory.prototype )
+            .greet.call( this, " of the " ) + this.department + termination } }
+    } ) ;
+</pre>
+
+<p>The manager factory function calls the employee factory function and provides the literal "manager" in the <tt>position</tt> property, then adds a <tt>department</tt> property to the manager instance.</p>
+
+<p>The manager prototype overrides but re-uses the employee prototype greet function to add the department value to the greeting string.</p>
+
+<p>The drawing below illustrates the relationships between the involved objects:</p>
+
+<figcaption class="figure">Manager inheritance example</figcaption>
+<object data="drawing-3.svg" type="text/svg+xml"></object>
+
+<p>Now let's see how this works. The code can be found in <a href="object-test-03.htm">object-test-03.htm</a>.</p>
+
+<figcaption class="listing">The manager instance</figcaption><pre>
+const o1 = new ManagerFactory ( "John", "Doe", "accounting" );
+console.log( o1.greet( ));
+    <cc>// Hi, my name is John Doe, manager of the accounting department.</cc>
+console.log( o1 instanceof ManagerFactory );
+    <cc>// true</cc>
+console.log( o1 instanceof EmployeeFactory );
+    <cc>// true</cc>
+console.log( o1 instanceof PersonFactory );
+    <cc>// true</cc>
+console.log( o1 instanceof Object );
+    <cc>// true</cc>
+console.log( o1.constructor.name );
+    <cc>// ManagerFactory</cc>
+</pre>
+
+<p>Now the manager prototype:</p>
+
+<figcaption class="listing">The manager prototype</figcaption><pre>
+const p1 = Object.getPrototypeOf( o1 );
+console.log( p1 );
+    <cc>// EmployeeFactory {constructor: ƒ, greet: ƒ}</cc>
+console.log( p1.constructor.name );
+    <cc>// ManagerFactory</cc>
+</pre>
+
+<p>The employee prototype:</p>
+
+<figcaption class="listing">The employee prototype</figcaption><pre>
+const p2 = Object.getPrototypeOf( p1 );
+console.log( p2 );
+    <cc>// PersonFactory {constructor: ƒ, greet: ƒ}</cc>
+console.log( p2.constructor.name );
+    <cc>// EmployeeFactory</cc>
+</pre>
+
+<p>The person prototype:</p>
+
+<figcaption class="listing">The person prototype</figcaption><pre>
+const p3 = Object.getPrototypeOf( p2 );
+console.log( p3 );
+    <cc>// {constructor: ƒ, greet: ƒ, farewell: ƒ}</cc>
+console.log( p3.constructor.name );
+    <cc>// PersonFactory</cc>
+</pre>
+
+<p>The Object prototype:</p>
+
+<figcaption class="listing">The Object prototype</figcaption><pre>
+const p4 = Object.getPrototypeOf( p3 );
+console.log( p4 );
+    <cc>// {constructor: ƒ, __defineGetter__: ƒ, __defineSetter__: ƒ, hasOwnProperty: ƒ, __lookupGetter__: ƒ, …}</cc>
+console.log( p4.constructor.name );
+    <cc>// Object</cc>
+</pre>
+
+<p>End of the prototype chain:</p>
+
+<figcaption class="listing">End of the prototype chain</figcaption><pre>
+const p5 = Object.getPrototypeOf( p4 );
+console.log( p5 );
+	// null
+</pre>
+
+<p>Intermediate conclusion: This section demonstrated how JavaScript prototype-inheritance works. It showed the most important scenarios, and works quite efficient.</p>
+
+<p>The next section introduces the <tt>new</tt> operator, which should be most familiar to traditional OO-language programmers.</p>
+
+<!-- Class Hierarchies --></div>
+
+<h2 cbc>The <tt>new</tt> Operator</h2><div>
+
+<p>Consider the following code for creating person instances:</p>
+
+<figcaption class="listing">Using the <tt>new</tt> operator</figcaption><pre>
+const o1 = new Person( "John", "Doe" );
+</pre>
+
+<p>The new operator expects a constructor function call expression on the right side, and returns an object instance. To understand what's going on here, let's first have a look at the operator pseudo-code:</p>
+
+<figcaption class="listing">The <tt>new</tt> operator under the hood</figcaption><pre>
+operator new ( constructorFunction ) {
+    <cc>// The constructor function is mandatory, additional arguments are optional and are passed to the constructor function.</cc>
+    <cc>//</cc>
+    <cc>// Create a new empty object and set its prototype.</cc>
+    const o = { } ;
+    Object.setPrototypeOf( o, constructorFunction.prototype );
+    <cc>// Strip the first element (constructorFunction) from the arguments list.</cc>
+    const args = Array.slice.call( arguments, 1 );
+    <cc>// Call the constructor function in the context of the new object o.</cc>
+    <cc>// and pass initialization arguments.</cc>
+    const candidate = constructorFunction.call( o, args );
+    <cc>// Return the initialized object to the caller.</cc>
+    return candidate || o ;
+    }
+</pre>
+
+<p>The operator expects a constructor function. The constructor function corresponds largely to the instance factory functions we have used in the previous sections, but there are some subtle differences.</p>
+
+<p>The first few instructions create a new object and set its prototype to the prototype object associated with the constructor function. The optional second and subsequent arguments are isolated and stored in the <tt>args</tt> array. Then the function is called with the <tt>args</tt> and <tt>this</tt> bound to the new object.</p>
+
+<p>If the constructor returns an value, that is returned to the caller. Otherwise, the new object <tt>o</tt> is returned.</p>
+
+<p class="note">NOTE<br/>that constructor function names always <em>begin with an uppercase letter</em> to distinguish them from ordinary functions. Constructor functions must not be called directly, they are designed to be used the <tt>new</tt> operator. The capital first letter helps to remember that. If you forget the new operator, <tt>this</tt> references the <tt>globalThis</tt>, which is the <tt>window</tt> object in browsers, and you won't find you members where you expect them&hellip;</p>
+
+<p>Now let's have a look at a Person constructor funtion:</p>
+
+<figcaption class="listing">The Person constructor function</figcaption><pre>
+const Person = function ( firstName, lastName ) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    }
+</pre>
+
+<p>The function was bound to the new object with <tt>function.call( o, &hellip; )</tt>, so <tt>this</tt> refers to the object <tt>o</tt>. This is a very convenient way to create instance members.</p>
+
+<p>The result is a <tt>Person</tt> instance, which can be assigned to a variable:</p>
+
+<figcaption class="listing">Creating a Person instance</figcaption><pre>
+const o1 = new Person( "John", "Doe" );
+</pre>
+
+<p>A new function will reference an empty object in its <tt>prototype</tt> member (myFunction.prototype = Object.prototype). As a result, all <tt>Person</tt> instances automatically inherit the members from the <tt>Object.prototype</tt>, but of course you can supply your own prototype object here. We will look into that in a minute.</p>
+
+<p>As we have seen in the previous sections, member creation can be done more efficiently and fine-grained with <tt>Object.createProperties( )</tt>:</p>
+
+<figcaption class="listing">The improved Person constructor function</figcaption><pre>
+const Person = function ( firstName, lastName ) {
+    Object.defineProperties ( this, {
+        firstName : { enumerable : true , writable : true , value : firstName } ,
+        lastName : { enumerable : true , writable : true , value : lastName }
+        } ) ;
+    }
+</pre>
+
+<p>Compared with the <tt>PersonFactory</tt> function from above, the code is simpler. No need to create an instance object and set its properties, this has already been done by the <tt>new</tt> operator. Note that <tt>this</tt> references the new Person instance.</p>
+
+<p>The <tt>Person</tt> prototype definition has not changed:</p>
+
+<figcaption class="listing">The Person prototype object</figcaption><pre>
+PersonFactory.prototype = Object.create ( Object.prototype , {
+    constructor : { enumerable : true, value : Person } ,
+    greet : { enumerable : true , value : function ( termination = "." ) { 
+        return "Hi, my name is " + this.firstName + " " + this.lastName + termination } } , 
+    farewell : { enumerable : true , value : function ( ) { 
+        return "Goodbye!" } }
+    } ) ;
+</pre>
+
+<p>The <tt>Person</tt> prototype is not derived from a user-defined prototype, so we use the <tt>Object.prototype</tt> instead. Properties and methods are created as usual.</p>
+
+<p>The <tt>Employee</tt> constructor is very similar, except that the <tt>Person</tt> constructor is called to avoid duplication of code.</p>
+
+<figcaption class="listing">The Employee constructor</figcaption><pre>
+const Employee = function ( firstName, lastName, position ) {
+        <cc>// Call the parent class constructor first with "this" bound to the new instance object. </cc>
+    Object.getPrototypeOf( Employee.prototype )).constructor.call( this, firstName, lastName );
+        <cc>// Create and initialize employee instance members.</cc>
+    Object.defineProperties ( this, {
+        position : { enumerable : true , writable : true , value : position }
+        } ) ;
+    } ;
+</pre>
+
+<p>Again the Employee prototype did not change much:</p>
+
+<figcaption class="listing">The Employee prototype</figcaption><pre>
+EmployeeFactory.prototype = Object.create ( Person.prototype , {
+    constructor : { value : Employee, enumerable : true } , 
+    greet : { enumerable : true , value : function ( termination = "." ) { 
+        return Object.getPrototypeOf( Employee.prototype )
+            .greet.call( this, ", " ) + this.position + termination } }
+    } ) ;
+</pre>
+
+<p>And the story repeats for the <tt>Manager</tt> class:</p>
+
+<figcaption class="listing">The Manager class implementation</figcaption><pre>
+const Manager = function ( firstName, lastName, department ) {
+        // Call the parent class constructor first.
+    Object.getPrototypeOf( ManagerFactory.prototype ).constructor.call( this, firstName, lastName, "manager" );
+        // Create and initialize manager instance members.
+    Object.defineProperties ( this, {
+        department : { enumerable : true , writable : true , value : department }
+        } ) ;
+    } ;
+
+ManagerFactory.prototype = Object.create ( Employee.prototype , {
+    constructor : { value : Manager, enumerable : true } , 
+    greet : { enumerable : true , value : function ( termination = " department." ) { 
+        return Object.getPrototypeOf( Manager.prototype )
+            .greet.call( this, " of the " ) + this.department + termination } }
+    } ) ;
+</pre>
+
+<p>The code is implemented in <a href="object-test-04.htm">object-test-04.htm</a>. Run it in a debugger. The console output is pretty much the same as  in <a href="object-test-03.htm">object-test-03.htm</a>, except for the constructor function names. The term "Factory" has been dropped in favor of common naming conventions.</p>
+
+<p>In the end, we should have obtained the same result as in the previous section:</p>
+
+<figcaption class="figure">The complete object model</figcaption>
+<object data="drawing-3.svg" type="text/svg+xml"></object>
+
+<!-- h2 The new Opeator --></div>
+
+<h2 cbc>Multiple Inheritance</h2><div>
+
+<p>An object has exactly one [[Prototype]] member. That means that the object can only inherit from one single prototype object.</p>
+
+<!-- h2 Multiple Inheritance --></div>
+
+<h2 cbc>Class Members</h2><div>
+
+<p>Instance method and methods inherited from the property chain have <tt>this</tt> set to the instance object, and thus can work efficiently with the instance properties.</p>
+
+<p>Class members ("static" members in other OO-languages) are different, they are not related to an instance, and can be seen as "service" or "support function" that rely somehow to a class. These kind of methods can conveniently be defined on the constructor function:</p>
+
+<figcaption class="listing">Defining class methods</figcaption><pre>
+Person.instanceCounter = 0;
+Person.countInstances = function ( ) {
+    return ++Person.instanceCounter ;
+    }
+</pre>
+
+<p>The count method can be called in the <tt>Person</tt> constructor, like so:</p>
+
+<figcaption class="listing">Defining class methods</figcaption><pre>
+const Person = function ( firstName, lastName ) {
+    Object.defineProperties ( this, {
+        firstName : { enumerable : true , writable : true , value : firstName } ,
+        lastName : { enumerable : true , writable : true , value : lastName }
+        } ) ;
+    console.log( <hi>Person.countInstances</hi> ( ));
+    }
+</pre>
+
+<p>Whenever a <tt>Person</tt> instance is created, the instance counter is incremented and logged to the console:</p>
+
+<figcaption class="listing">Counting person instances</figcaption><pre>
+const o1 = new Person( "John", "Doe" );
+    <cc>// 1</cc>
+const o1 = new Emloyee( "John", "Smith", "mechanic" );
+    <cc>// 2</cc>
+const o1 = new Manager( "Jane", "Dee", "accounting" );
+    <cc>// 3</cc>
+</pre>
+
+<!-- Class Members --></div>
+
+<h2 cbc>Additional Resources</h2><div>
+
+<dl class="link-list">
+<dt><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> on MDN</dt>
+<dt><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Details_of_the_Object_Model">Details of the Object Model</a> on MDN</dt>
+</dl>
+
+<!-- Additional Resources --></div>
+
+</div><script type="module" src="/inc/page.js" ></script></body></html>

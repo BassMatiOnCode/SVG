@@ -1,0 +1,602 @@
+﻿<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm"version="2021-08-23" editor-name="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-09-06" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-09-08" />
+<meta name="version" content="1" />
+<meta name="categories" content="Programming > Web Technologies > JavaScript" />
+<meta name="tags" content="" />
+<meta name="description" content="The <em>function</em> is the real JavaScript workhorse. Prior to ES2015 classes, the function was the only element that provided a local scope, and variables inside a function were the only way to provide controlled access with closures." />
+
+<link rel="stylesheet" href="/inc/page.css" />
+ 
+<title>Web Technologies > JavaScript - Function</title>
+
+</head><body><div id="page-header"></div><div id="main-toolbar"></div><div id="content">
+
+<h1>Function</h1>
+
+<p id="page-abstract"></p>
+
+<p>A JavaScript function is actually an object. A function is created by the (internal) <tt>Function( )</tt> constructor, has a [[Prototype]] and members. The difference to an object is that a function has a code block and is callable.</p>
+
+<h2 cbc>Function Declaration</h2><div>
+
+<p>A function declaration has the following form:</p>
+
+<figcaption class="listing">Function declaration</figcaption><pre>
+function functionName ( /* parameter list */ ) { /* instructions */ }
+</pre>
+
+<p>The keyword <tt>function</tt> at the beginning of a statement starts a function declaration, followed by the mandatory function name, a pair of round parentheses enclosing an optional formal parameter list, followed by a pair of curly braces, enclosing a list of statements.</p>
+
+<p>Function declarations are <em>hoisted</em>, that is they are parsed before code execution.</p>
+
+<p>A function expression has the following form:</p>
+
+<figcaption class="listing">Function declaration</figcaption><pre>
+let functionReference = function functionNameAlias ( /* parameter list */ ) { /* instructions */ } ;
+</pre>
+
+<p>The variable must be used to call the function. The functionNameAlias is optional and local to the function body (i. e. inaccessible to the outside), so it can only be used for recursive calls from inside the body.</p>
+
+<p>When given, the function alias name appears as function name in the debugger.</p>
+
+<p>Unlike function declarations, function expressions are <em>not hoisted</em>. This means that you must declare a function before it can be used.</p>
+
+<p>Functions can also be created from a string at run-time with the <tt>Function</tt> constructor.</p>
+
+<!-- h2 Function Declaration --></div>
+
+<h2 cbc>Function Constructor</h2><div>
+
+<p>Functions can be created dynamically at run-time from strings.</p>
+
+<figcaption class="listing">Function constructor syntax</figcaption><pre>
+Function ( [ p1, &hellip; , pn, ] body )
+</pre>
+
+<p>The function body is mandatory, the preceding parameter names are optional.</p>
+
+<figcaption class="listing">Function constructor example</figcaption><pre>
+const f = new Function ( "a", "b", "return a * b" );
+console.log( f( 6, 7 ));
+    <cc>// 42</cc>
+</pre>
+
+<p class="note">SECURITY CONCERN<br/>The <tt>Function</tt> parameters are strings. Make sure that they are never compiled from user input, or at least run strict input validation tests combined with restricted permissions to make sure that user input elements cannot be used to forge an attack.</p>
+
+<!-- h2 Function Constructor --></div>
+
+<h2 cbc>Arrow Function Expressions</h2><div>
+
+<p>The arrow function hat the following syntax:</p>
+
+<pre>( parameter-list ) => { statements }</pre>
+
+<p>At run-time, the arrow function call operator "( )" fills the parameter list with values, executes the function body, and evaluates to the return value:</p>
+
+<figcaption class="listing">Calling an arrow function (<a href="function-test-03.htm">function-test-03.htm)</a></figcaption><pre>
+const f = ( a, b, c ) => { return a + b + c } ;
+console.log( f ( 1, 2, 3 ));
+</pre>
+
+<p>Difference to the "standard" function declaration and function declaration expression:</p>
+
+<ul>
+<li>The arrow function has no own <tt>this</tt>, <tt>arguments</tt>, <tt>super</tt>, <tt>new.target</tt>.</li>
+<li>Arrow functions are always anonymous.</li>
+</ul>
+
+<p>If there is exactly one parameter, the parentheses can be omitted:</p>
+
+<figcaption class="listing">One parameter</figcaption><pre>
+const f = a => { return a * a } ;
+</pre>
+
+<p>If the function block consists of a single expression, the curly braces can be omitted:</p>
+
+<figcaption class="listing">Function block braces omitted</figcaption><pre>
+const f = a => return a * a
+</pre>
+
+<p>No statement operator is allowed. If you need one, the declaration expression must be enclosed in parentheses, or enclose the statement in curly braces as shown above:</p>
+
+<figcaption class="listing">Function block braces omitted</figcaption><pre>
+const f = ( a => return a * a ) ;
+</pre>
+
+<p>Side note: Sometimes it is not obvious from the source what will be assigned to the parameter(s) by the caller. For instance, consider the <tt>Array.prototype.map</tt> function:</p>
+
+<figcaption class="listing">Array map example</figcaption><pre>
+const a = [ "Joe Doe", "John Smith", "Jane Lane" ] ;
+const b = a.map( s => s.length ) ;
+</pre>
+
+<p>A look at the documentation reveals that <tt>map</tt> expects a function expression as parameter, and that function will be called once for each array element, with the array element passed in the first parameter.</p>
+
+
+<h4>More Information</h4><div>
+
+<dl class="link-list">
+<dt><a href="https://hacks.mozilla.org/2015/06/es6-in-depth-arrow-functions/">ES6 In Depth: Arrow Functions</a> &ndash; Jason Orendorff, hacks.mozilla.org</dt>
+</dl>
+
+</div>
+
+<!-- h2 Arrow Function Expressions --></div>
+
+<h2 cbc>Parameters</h2><div>
+
+<p>Function parameter names are declared as comma-separated list of variable names whithin round parentheses. If the caller does not supply enough arguments, the missing parameter values are undefined. If the caller supplies more arguments than parameters, they are ignored.</p>
+
+<p>Parameters are local variables, and thus visible only inside the function body. So it is possible to have multiple functions with the same parameter name(s).</p>
+
+<p>Since ES2015, we can use default values for parameters:</p>
+
+<figcaption class="listing">Default values</figcaption><pre>
+function f ( a = 1, b = "default" ) { &hellip; }
+</pre>
+
+<h3>Rest parameters</h3><div>
+
+<p>The rest parameters prefix is a sequence of three dots in front of a name, and must be the last element in the parameter list. It represents an array of parameters that follow the named parameters:</p>
+
+<pre>function f ( a, b, c, &hellip;andTheRest ) { &hellip; }</pre>
+
+</div>
+
+<!-- h2 Parameters --></div>
+
+<h2 cbc><tt>arguments</tt></h2><div>
+
+<p>In addition to the named parameters, all arguments passed in by the caller are accessible by the <tt>arguments</tt> keyword and can be accessed with a numerical index.</p>
+
+<p><tt>arguments</tt> is an array-like object, but not a full-featured <tt>Array</tt>. If you must, you can "borrow" methods from <tt>Array</tt> with the <tt>bind</tt>, <tt>call</tt> and <tt>apply</tt> methods. They are defined on <tt>Function.prototype</tt>. More on this later.</p>
+
+<figcaption class="listing">Arguments example (<a href="function-test-01.htm">function-test-01.htm</a>)</figcaption><pre>
+function product ( ) {
+    let result = 1;
+    for ( let i = 0 ; i < arguments.length ; i ++ ) result *= arguments[ i ] ; 
+    return result ; 
+    }
+console.log ( product( 1, 2, 3, 4 ));
+    <cc>// 24</cc>
+</pre>
+
+<!-- h2 <tt>arguments</tt> --></div>
+
+<h2 cbc>Local Variables</h2><div>
+
+<p>Local variables can be declared inside the function body. Like parameters, they are only visible within the function body, but inaccessible from outside. Even when a return statement returns a local variable, only a <em>copy</em> of the variable is returned to the caller.</p>
+
+<p>In non-strict mode, an assignment to an undefined variable always creates a member on the <tt>globalThis</tt>:</p>
+
+<figcaption class="listing">Assignment to undeclared variables</figcaption><pre>
+"use non-strict"
+const o1 = { f ( ) { a = 42 } }
+o1.f( );
+console.log( globalThis.a );
+    <cc>// 42</cc>
+</pre>
+
+<p>This is a common error. In strict mode, assignement to an undefined variable throws an exception.</p>
+
+<!-- h2 Local Variables --></div>
+
+<h2 cbc>Return Value</h2><div>
+
+<p>The <tt>return</tt> statement stops function code execution. An optional expression value is returned to the caller:</p>
+
+<pre>function f ( ) { &hellip; return [ expression ] }</pre>
+
+<p>If no expression was specified, or if the function terminates without a return statement, <tt>undefined</tt> is returned to the caller.</p>
+
+<p>It is not possible to return a reference to a local variable to the caller. In fact, it impossible in general to create a reference to a variable. If a <tt>return</tt> statement returns a variable, actually a <em>copy of the value</em> is returned.</p>
+
+<p>Note that if a variable contains a reference to an object in memory, a copy of the reference value is returned, not a copy of the object.</p>
+
+<!-- h2 Return Value --></div>
+
+<h2 cbc>Calling Functions</h2><div>
+
+<p>The function call operator, a pair of round parentheses "( )", expects a function reference on the left, an an optional comma-separated list of arguments in between them. A copy of the argument values is used to initialize the the function parameter variables, then the function statement block is executed. When finished, the operator returns the function return value.</p>
+
+<!-- h2 Calling Functions --></div>
+
+<h2 cbc><tt>this</tt></h2><div>
+
+<p><tt>this</tt> in JavaScript is <em>different</em> from what you might know. The keyword behaves differently in strict and non-strict mode. It is usually determined by where and how a function is called, and it may even be different each time the same function is called.</p>
+
+<h3 cbc>This in Global Context</h3><div>
+
+<p>This outside any function refers to the global object <tt>globalThis</tt>, which is <tt>window</tt> in browsers.</p>
+
+<p>Functions defined in the global context are actually defined on <tt>globalThis</tt>:</p>
+
+<figcaption class="listing"><tt>this</tt> in non-strict mode (<a href="function-test-09.htm">function-test-09.htm</a>)</figcaption><pre>
+function f ( ) { console.log( <hi>this</hi> ) }
+console.log( globalThis.f === f ) ;
+    <cc>// true</cc>
+console.log( f( )); 
+    <cc>// <hi>Window</hi> {window: Window, self: Window, …}</cc>
+console.log( globalThis.f( ));
+    <cc>// Window {window: Window, self: Window, …}</cc>
+</pre>
+
+<p>If you place the string "use strict" on top of the script or at the beginning of a function block, <tt>this</tt> on gobal object methods is undefined.</p>
+
+<figcaption class="listing"><tt>this</tt> in strict mode</figcaption><pre>
+<hi>"use strict"</hi> 
+function f ( ) { console.log( <hi>this</hi> ) }
+console.log( globalThis.f === f ) ;
+    <cc>// true</cc>
+console.log( f( )); 
+    <cc>// <hi>undefined</hi></cc>
+console.log( globalThis.f( ));
+    <cc>// Window {window: Window, self: Window, …}</cc>
+</pre>
+
+<p>Note that it makes a difference how the method was called!</p>
+
+<p class="note">My Thought<br/>If you asked me, I would say that non-strict mode makes more sense, because methods defined on an object should in general have <tt>this</tt> pointing to their parent object. On the other hand, strict mode prevents a lot of common programming errors, so strict mode is definitely recommended.</p>
+
+<!-- h3 This in Global Context --></div>
+
+<h3 cbc>This in Method Context</h3><div>
+
+<p>If a function is called in in the form <tt>object.method( )</tt>, <tt>this</tt> inside the method points to the object. If a method is called in the form <tt>method( )</tt>, the <tt>globalThis</tt> is assumed to be the parent object in non-strict mode, and the instruction is effectively <tt>globalThis.method( )</tt>.</p>
+
+<figcaption class="listing"><tt>this</tt> in strict mode</figcaption><pre>
+<hi>"use strict"</hi> 
+const o1 = { 
+    f1 ( ) { console.log( this ) } ,
+    f2 ( ) { a = 42 } ,  <cc>// Error: assignment to undefined variable</cc>
+    f3 ( ) { this.f1 ( ) } , 
+    f4 ( ) { f1 ( ) }  <cc>// Error</cc>
+    }
+o1.f1 ( ) ;
+    <cc>// {f1: ƒ, f2: ƒ, f3: ƒ}</cc>
+f1 = o1.f1 ;
+f1( ) ;
+    <cc>// Window {window: Window, self: Window, …}<cc>
+o1.f2 ( ) ;
+    <cc>// Exeption in strict mode: a is not defined</cc>
+console.log( globalThis.a );
+    <cc>// 42 in non-strict mode</cc>
+o1.f3 ( ) ;
+    <cc>// {f1: ƒ, f2: ƒ, f3: ƒ, f4: ƒ}</cc>
+globalThis.f1( ) ;
+    <cc>// Window {window: Window, self: Window, …}<cc>
+o1.f4 ( ) ;
+    <cc>// Window {window: Window, self: Window, …}<cc>
+</pre>
+
+
+
+<!-- h3 This in Method Context --></div>
+
+<ul>
+<li>the new instance object when used with the <tt>new</tt> operator</li>
+<li>the parent object when called as method</li>
+<li><tt>undefined</tt> in strict mode in a function defined in the global scope</li>
+<li><tt>undefined</tt> in strict mode in a function declaration expression</li>
+<li>The global object (window) in non-strict mode in a function defined in the global scope</li>
+<li>The global object (window) in non-strict mode in a function declaration expression</li>
+<li>the bound object if called via the <tt>bind</tt>, <tt>call</tt> and <tt>apply</tt> methods of the <tt>Function.prototype</tt> object.</li>
+</ul>
+
+<p>For example, consider this method call:</p>
+
+<figcaption class="listing">Method call: <tt>this</tt> references the parent</figcaption><pre>
+const o1 = { 
+    firstName : "John" , lastName : "Smith" , 
+    getFullName ( ) { return <hi>this</hi>.firstName + " " + <hi>this</hi>.lastName } 
+    } 
+console.log( o1.getFullName( )) ;
+    <cc>// John Smith</cc>
+</pre>
+
+<p>The function <tt>getFullName</tt> is a method of <tt>o1</tt>, therefore <tt>this</tt> in the method body is bound to <tt>o1</tt>.</p>
+
+<p>Now consider the following example. We expect that the <tt>count</tt> property is incremented and logged to the console every second:</p>
+
+<figcaption class="listing">Ticker version 1 (<a href="function-test-04.htm">function-test-04.htm</a>)</figcaption><pre>
+const ticker = { count : 0 , start : function ( ) { 
+    window.setInterval ( 
+        function <hi>tick</hi> ( ) { <tt>this</tt>.count += 1 ; console.log ( <tt>this</tt>.count ) } , 1000 ) }
+    }
+ticker.start( );
+    <cc>// NaN
+    // NaN
+    // NaN
+    // &hellip;</cc>
+</pre>
+
+<p>But actually, it isn't! Let's explore the reason.</p>
+
+<p>The <tt>ticker.start</tt> method uses a <em>function declaration expression</em> with a local name of "tick", which is not assigned to a member of <tt>ticker</tt>. So <tt>tick</tt> is actually <em>not</em> a method of <tt>ticker</tt>! To make that clear, we could log <tt>this</tt> to the console instead:</p>
+
+<figcaption class="listing">Logging <tt>this</tt></figcaption><pre>
+const ticker = { count : 0 , start : function ( ) { 
+    window.setInterval ( 
+        function tick ( ) { console.log( <tt>this</tt> ) } , 1000 ) }
+    }
+ticker.start( );
+    <cc>// Window {window: Window, self: Window, 
+    //    document: document, name: '', location: Location, …}
+    // &hellip;</cc>
+</pre>
+
+<p>Now it is clear that <tt>this</tt> in the <tt>tick</tt> function body is actually bound to the global scope, instead of <tt>ticker</tt>.</p>
+
+<p>To overcome this situation, we need a helper variable that can be "closed over". This variable is usually called "self" or "that". As we will see soon, a the "scope" of a function declaration (<tt>tick</tt>) <em>includes</em> the scope of its parent function (<tt>ticker.start</tt>), and thus will be able to access the local variables of its parent:</p>
+
+<figcaption class="listing">Ticker version 2 (<a href="function-test-05.htm">function-test-05.htm</a>)</figcaption><pre>
+const ticker = { count : 0 , start : function ( ) { 
+    const <hi>self</hi> = this ;
+    window.setInterval ( 
+        function tick ( ) { <hi>self</hi>.count += 1 ; console.log ( <hi>self</hi>.count ) } , 1000 ) }
+    }
+ticker.start( );
+    <cc>// 1
+    // 2
+    // 3
+    // &hellip;</cc>
+</pre>
+
+<p>Another attempt tries to solve this problem by defining <tt>tick</tt> as method of <tt>ticker</tt>. A method should have <tt>this</tt> bound to its parent object:</p>
+
+<figcaption class="listing">Ticker version 3 </figcaption><pre>
+const ticker = { count : 0 ,
+    tick : function tick ( ) { this.count += 1 ; console.log ( this.count ) } ,
+    start : function ( ) { window.setInterval ( ticker.tick, 1000 ) }
+    }
+ticker.start( );
+    <cc>// NaN
+    // NaN
+    // NaN
+    // &hellip;</cc>
+</pre>
+
+<p>But &ndash; apparently with no luck. Obviously, <tt>setInterval</tt> binds <tt>this</tt> on the <tt>tick</tt> function to <em>its own parent</em>, the global <tt>window</tt> object. In general, this is the desired behavior for an event handler; it should run in the context of the object that fired the event so that it has access to the object's properties. So, what can we do&hellip;?</p>
+
+<p>Use the very same trick for ourselves:</p>
+
+<figcaption class="listing">Ticker version 3 (<a href="function-test-06.htm">function-test-06.htm</a>)</figcaption><pre>
+const ticker = { count : 0 ,
+    tick : function tick ( ) { this.count += 1 ; console.log ( this.count ) } ,
+    start : function ( ) { window.setInterval ( <hi>ticker.tick.bind( ticker )</hi>, 1000 ) }
+    }
+ticker.start( );
+    <cc>// 1
+    // 1
+    // 3
+    // &hellip;</cc>
+</pre>
+
+<p>Yet another solution is to use an <em>arrow function</em> instead of a function declaration expression. Arrow functions don't have their own <tt>this</tt>, they "inherit" <tt>this</tt> from their parent's scope:</p>
+
+<figcaption class="listing">Ticker version 4 (<a href="function-test-07.htm">function-test-07.htm</a>)</figcaption><pre>
+const ticker = { count : 0 , start : function ( ) { 
+    start : function ( ) { window.setInterval ( 
+        <hi>( ) => { this.count += 1 ; console.log ( this.count ) }</hi>,
+        1000 ) } }
+ticker.start( );
+    <cc>// 1
+    // 2
+    // 3
+    // &hellip;</cc>
+</pre>
+
+<p>Here the arrow function was declared inside of the <tt>ticker.start</tt> method. Because an arrow function has no own <tt>this</tt>, it inherits <tt>this</tt> from the scope of its parent, the <tt>start</tt> method. Et voilá, it works!</p>
+
+<!-- h2 this --></div>
+
+<h2 cbc>Binding</h2><div>
+
+<p>We have previously talked about <tt>this</tt>, which is bound to a certain object or is <tt>undefined</tt>, depending on the context of the function declaration and  <tt>strict mode</tt>. The <tt>Function.prototype</tt> object provides a couple of methods to <em>bind</em> <tt>this</tt> and optionally some or all parameters of a function to values:</p>
+
+<ul>
+<li>bind( )</li>
+<li>call( )</li>
+<li>apply( )</li>
+</ul>
+
+<p><em>Binding</em> means in the context of a function call, that function parameters are preset with values so that they don't have to be specified with the function call operator.</p>
+
+<h3><tt>bind( )</tt></h3><div>
+
+<p>The syntax of <tt>Function.prototype.bind( )</tt> is</p>
+
+<pre>
+const f2 = f1.bind( thisObject [, arg ]&hellip; )
+</pre>
+
+<p><tt>bind</tt> creates a wrapper for a function which has <tt>this</tt> bound to the first parameter (<tt>thisObject</tt>), and parameters bound to the following arguments. This can be exploited to "borrow" methods from other objects. For example, the <tt>arguments</tt> keyword returns the function parameters in an array that feels like an array, but isn't. For example, it does not have the <tt>slice</tt> method, which is defined on <tt>Array.protoype</tt>.</p>
+
+<p>The following example shows how to "borrow" the <tt>slice</tt> method to the function <tt>arguments</tt>:</p>
+
+<figcaption class="listing">Borrowing methods (<a href="function-test-11.htm">function-test-11.htm</a>)</figcaption><pre>
+    <cc>// A weired add function</cc>
+function f ( ) { 
+    console.log( arguments );
+    <cc>// Recursion stop condition</cc>
+    if ( arguments.length === 1 ) return arguments[ 0 ];
+    <cc>// Bind the arguments to the Array's slice method</cc>
+    const slice = Array.prototype.splice.<hi>bind</hi>( arguments );
+    <cc>// Strip off the first argument</cc>
+    const rest = slice( 1 );
+    <cc>// Call f with the remaining arguments 
+    // spread out to a comma separated list</cc>
+    return arguments[ 0 ] + f ( ...rest );
+    }
+console.log( f ( 1, 2, 3 ));
+    <cc>// Arguments(3) [1, 2, 3, callee: ƒ, Symbol(Symbol.iterator): ƒ]</cc>
+    <cc>// Arguments(3) [2, 3, callee: ƒ, Symbol(Symbol.iterator): ƒ]</cc>
+    <cc>// Arguments(3) [3, callee: ƒ, Symbol(Symbol.iterator): ƒ]</cc>
+    <cc>// 6</cc>
+</pre>
+
+<p>The console output shows nicely, how the arguments are decimated with each call to <tt>f</tt>.</p>
+
+<p>Unfortunately, we cannot look into the <tt>slice</tt> wrapper function, it is presented as internal function in the debugger, but the MDN documentation as some information about the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind">internals</a>.</p>
+
+<!-- h3 bind( ) --></div>
+
+<h3 cbc><tt>call( )</tt></h3><div>
+
+<p>The <tt>call</tt> method combines bind with the function call operator. This saves us the wrapper function call in the previous example;</p>
+
+<figcaption class="listing">Borrowing methods (<a href="function-test-12.htm">function-test-12.htm</a>)</figcaption><pre>
+    <cc>// A weired add function</cc>
+function f ( ) { 
+    console.log( arguments );
+    <cc>// Recursion stop condition</cc>
+    if ( arguments.length === 1 ) return arguments[ 0 ];
+    <cc>// Strip off the first argument</cc>
+    const rest = Array.prototype.splice.<hi>call</hi>( arguments, 1 );
+    <cc>// Call f with the remaining arguments 
+    // spread out to a comma separated list</cc>
+    return arguments[ 0 ] + f ( ...rest );
+    }
+console.log( f ( 1, 2, 3 ));
+    <cc>// Arguments(3) [1, 2, 3, callee: ƒ, Symbol(Symbol.iterator): ƒ]</cc>
+    <cc>// Arguments(3) [2, 3, callee: ƒ, Symbol(Symbol.iterator): ƒ]</cc>
+    <cc>// Arguments(3) [3, callee: ƒ, Symbol(Symbol.iterator): ƒ]</cc>
+    <cc>// 6</cc>
+</pre>
+
+<!-- h3 call( ) --></div>
+
+<h3 cbc><tt>apply( )</tt></h3><div>
+
+<p>The <tt>Function.prototype.apply</tt> method goes one step further and integrates the spread operator (&hellip;) from the example above:</p>
+<figcaption class="listing">Borrowing methods (<a href="function-test-13.htm">function-test-13.htm</a>)</figcaption><pre>
+    <cc>// A weired add function</cc>
+function f ( ) { 
+    console.log( arguments );
+    <cc>// Recursion stop condition</cc>
+    if ( arguments.length === 1 ) return arguments[ 0 ];
+    <cc>// Strip off the first argument</cc>
+    const rest = Array.prototype.splice.call( arguments, 1 );
+    <cc>// Call f with the remaining arguments 
+    // spread out to a comma separated list</cc>
+    return arguments[ 0 ] + f.<hi>apply</hi> ( null, rest );
+    }
+console.log( f ( 1, 2, 3 ));
+    <cc>// Arguments(3) [1, 2, 3, callee: ƒ, Symbol(Symbol.iterator): ƒ]</cc>
+    <cc>// Arguments(3) [2, 3, callee: ƒ, Symbol(Symbol.iterator): ƒ]</cc>
+    <cc>// Arguments(3) [3, callee: ƒ, Symbol(Symbol.iterator): ƒ]</cc>
+    <cc>// 6</cc>
+</pre>
+
+<p>While <tt>f.apply( null, &hellip;</tt> is essentially nonsense, the example still demonstrates that the function call arguments can be passed in an array. Which eliminates the need for the spread operator.</p>
+
+<!-- h3 apply( ) --></div>
+
+<!-- h2 Binding --></div>
+
+<h2 cbc>Recursion</h2><div>
+
+<p>A function may call itself, this is called <em>recursion</em>. Recursion can be used to write dense and expressive code, at the cost of increased stack space usage and performance (function calls are more expensive than a loop.</p>
+
+<p>Recursion effectively is a kind of loop. There must be a stop condition that is guranteed to fulfil, otherwise your program runs out of stack space and crashes. </p>
+
+<figcaption class="listing">Recursive function example</figcaption><pre>
+function factorial ( numbers ) {
+    if ( numbers.length === 1 ) return numbers[ 0 ];
+    return numbers[ 0 ] * numbers.slice( 1 );
+    }
+console.log( factorial( [ 1, 2, 3, 4 ] ));
+    <cc>// 24</cc>
+</pre>
+
+<p>Recursion requires that the function knows how to reference itself. There are tree options to get a reference to the function:</p>
+
+<ol>
+<li>The function name as used in the function declarations statement</li>
+<li>An accessible variable, holding a reference to the function</li>
+<li>Through the <tt>callee</tt> member of the <tt>arguments</tt> object.</li>
+</ol>
+
+<!-- h2 Recursion --></div>
+
+<h2 cbc>Nested Functions</h2><div>
+
+<p>A function can be declared inside a function body. The same scope rules as for local variables apply: The inner function is visible inside the outer function, but not outside. Variables declared in the inner function are only accessible inside the inner function body, but not outside.</p>
+
+<p>Variables in an inner function hide variables with the same name in the outer function.</p>
+
+<!-- h2 Nested Functions --></div>
+
+<h2 cbc>Closures</h2><div>
+
+<p>As we have learned, function parameters, local variables and nested functions are invisible outside the outer function body. However, the outer function can return a reference to the inner function to the caller:</p>
+
+<figcaption class="listing">Returning a function reference</figcaption><pre>
+function createCounter ( value ) { return function inner ( ) { return ++ value } }
+const count = createCounter( );
+f( );
+</pre>
+
+<p>When called, the outer function <tt>createCounter</tt> creates a scope that contains its local variables. The inner function references this scope. The outer function then returns a reference to the inner function, and the caller stores this reference in the <tt>count</tt> variable. This reference chain keeps the outer function's scope alive, the variables therein maintain their values.</p>
+
+<p>When all references to the inner function are destroyed, the outer function's scope is also deleted, the associated memory is released.</p>
+
+<p>Example 2 shows how that works in context:</p>
+
+<figcaption class="listing">Closure example (<a href="function-test-02.htm">function-test-02.htm</a>)</figcaption><pre>
+function createCounter ( value ) { return function ( ) { return ++ value } }
+const count = createCounter( 123 );
+    <cc>// The value parameter is inaccessible outside the function body.</cc>
+console.log ( count( )); 
+    <cc>// 124</cc>
+console.log ( count( )); 
+    <cc>// 125</cc>
+console.log ( count( )); 
+    <cc>// 126</cc>
+</pre>
+
+<p>Each time the outer function <tt>createCounter</tt> is called, a new scope is created. Each scope is separate from the scopes created in previous calls. This allows it to create multiple different counters:</p>
+
+<figcaption class="listing">Multiple counters (<a href="function-test-03.htm">function-test-03.htm</a>)</figcaption><pre>
+    <cc>// createCounter returns a closure</cc>
+function createCounter ( value ) { return function ( ) { return ++ value } }
+    <cc>// Create three counters with different start values</cc>
+const a = createCounter( 100 );
+const b = createCounter( 200 );
+const c = createCounter( 300 );
+console.log ( a( )); 
+    <cc>// 101</cc>
+console.log ( a( )); 
+    <cc>// 102</cc>
+console.log ( a( )); 
+    <cc>// 103</cc>
+console.log ( b( )); 
+    <cc>// 201</cc>
+console.log ( b( )); 
+    <cc>// 202</cc>
+console.log ( b( )); 
+    <cc>// 203</cc>
+console.log ( c( )); 
+    <cc>// 301</cc>
+console.log ( c( )); 
+    <cc>// 302</cc>
+console.log ( c( )); 
+    <cc>// 303</cc>
+</pre>
+
+<p class="note">Side Note<br/>Closures emulate private members in other programming languages like C++, C# or Java. This is possible because in JavaScript, local variables are not stored on the function call stack, they are stored in memory in internal structures called "scope".</p>
+
+<p>Similarly, closures as described above are not possible in other programming languages, where local variables are located on the function stack. They are irrevocably gone after the function returned control flow to the caller. Of course you could return the address of a local variable to the caller, but the content referenced by this address must be considererd invalid after the function returned.</p>
+
+<p>In C++ 11, lambda functions have been introduces with the ability to create closures.</p>
+
+<!-- h2 Closures --></div>
+
+</div><script type="module" src="/inc/page.js" ></script></body></html>

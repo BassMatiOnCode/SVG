@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm"version="2021-08-23" editor-name="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-06-17" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-10-11" />
+<meta name="version" content="1" />
+<meta name="categories" content="Programming > Web Technology > SVG" />
+<meta name="tags" content="web, development, svg, vector, graphics, scritping, JavaScript." />
+<meta name="description" content="It is possible to embed JavaScript into SVG element." />
+
+<link rel="stylesheet" href="/inc/page.css" />
+<link rel="stylesheet" href="local.css" />
+
+<script type="module">import { swapAttributes } from "/inc/dom-helper-1.js" ; globalThis.swapAttributes = swapAttributes;</script>
+ 
+<title>Web Technologies - Scalable Vector Graphics - Scripting</title>
+
+</head><body><div id="page-header"></div><div id="main-toolbar"></div><div id="content">
+
+<h1>SVG Scripting</h1>
+
+<p id="page-abstract"></p>
+
+<figcaption class="listing">Embedding a script in an SVG element</figcaption>
+<pre>
+&lt;svg&gt;
+    &lt;circle id="c-00" cx="0" cy="0" r="25" /&gt;
+    &lt;circle cx="0" cy="0" r="8" fill="cornflowerblue" /&gt;
+    &lt;script&gt;<cc> // &lt;![CDATA[</cc>
+        document.getElementById( "c-00" ).addEventListener( "click", function( ) {
+        alert( "Hello world!" );
+        } ) ; 
+        <cc>// ]]&gt;</cc>&lt;/script&gt;
+    &lt;/svg&gt;
+</pre>
+
+<figcaption class="figure">Click the outer circle to trigger the script!</figcaption>
+<object data="./img/fig-006.svg" type="image/svg+xml"></object>
+
+<p>There are some points to remember:</p>
+
+<ol class="spaced-items">
+<li>Scripts are deactivated in images, they only work in inline SVG or in embedded documents (via <tt>object</tt> tag).</li>
+<li>A script tag in the <tt>SVG</tt> body creates an <tt>SVGScriptElement</tt>, not an <tt>HTMLScriptElement</tt>.</li>
+<li>SVG is XML, and the script may contain characters that violate the XML syntax. Therefore the script code should be embedded in a <tt>&lt;![CDATA[&hellip;]]&gt;</tt> wrapper.</li>
+<li>The scripting API of SVG DOM elements is sometimes different from HTML DOM elements. For example, HTML collection elements have a <tt>length</tt> property that returns the number of elements in the collection, but the related SVG collection property is <tt>numberOfItems</tt>. HTML collection elements have an array index operator (<tt>[ ]</tt>), SVG 1.1 collection elements don't. The <tt>className</tt> property of SVG elements is different.</li>
+<li>SVG is a namespaced language, so you need to use the namespaced versions of methods, like <tt>createElementNS( )</tt> and <tt>setAttributeNS( )</tt>.</li>
+</ol>
+
+<h2 cbc>Scripted Animations</h2><div>
+
+<p>The <tt>animatTransform</tt> element determines how the parent element is transformed over a time line. The following example demonstrates a <tt>line</tt> that is rotated:</p>
+
+<figcaption class="listing">Rotation of a line</figcaption>
+<pre>
+&lt;line id="l-00" x1="12" y1="28" x2="44" y2="28"&gt;
+    &lt;animateTransform attributeName="transform" attributeType="XML" 
+    type="rotate" from="180 28 28" to="0 28 28" <hi>begin="indefinite"</hi> dur="2s" fill="freeze"/&gt;
+    &lt;/line&gt;
+</pre>
+
+<p>Note that the <tt>begin</tt> was set to <tt>indefinite</tt>, which prevents the animation to start right-away. Instead, a click event handler triggers the animation:</p>
+
+<figcaption class="listing">Triggering the animation</figcaption>
+<pre>
+&lt;script type="module"&gt;	<cc>// &lt;![CDATA[</cc>
+import { swapAttributes } from "/inc/dom-helper.js" ; 
+const e = document.getElementById( "svg-001" );
+const <hi>animations </hi>= e.querySelectorAll( "animateTransform" );
+e.<hi>addEventListener</hi>( "<hi>click</hi>", function( ) {
+    for ( let i = 0 ; i < animations.length ; i ++ ) {
+        animations[ i ].<hi>beginElement</hi>( );
+        swapAttributes( animations[ i ], "from", "to" );
+        } } ) ; 
+    <cc>// ]]&gt;</cc> &lt;/script&gt;
+</pre>
+
+<p>In oder to make that work, the <tt>swapAttributes</tt> function from the <tt>dom-helper-1.js</tt> module is imported.</p>
+
+<p>The script finds the animation elements in the SVG element body and calls their <tt>beginElement</tt> method. This starts the animation. The next instruction swaps the <tt>from</tt> and <tt>to</tt> attribute values, so that the next click plays the animation reversed.</p>
+
+<figcaption class="figure">Click the circle to trigger the animation script</figcaption>
+<svg id="svg-001" width="56" height="56" stroke="cornflowerblue" stroke-width="5" fill="white" stroke-linecap="round">
+<circle cx="28" cy="28" r="25" />
+<line x1="12" y1="28" x2="44" y2="28">
+	<animateTransform attributeName="transform" attributeType="XML" type="rotate" from="180 28 28" to="0 28 28" begin="indefinite" dur="2s" fill="freeze"/>
+</line>
+<line x1="28" y1="12" x2="28" y2="44">
+	<animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 28 28" to="270 28 28" begin="indefinite" dur="2s" fill="freeze"/>
+	</line>
+<script type="module">	//<![CDATA[
+	const e = document.getElementById( "svg-001" );
+	const animations = e.querySelectorAll( "animateTransform" );
+	e.addEventListener( "click", function( ) {
+		for ( let i = 0 ; i < animations.length ; i ++ ) {
+			animations[ i ].beginElement( );
+			swapAttributes( animations[ i ], "from", "to" );
+			} } ) ; 
+	// ]]>
+	</script>
+</svg>
+
+<!-- h2 --></div>
+
+<h2 cbc>Linking to External Scripts</h2><div>
+
+<p>Things are a bit different in an external SVG file. Firstly, we cannot use ES2016 modules, they are not yet implemented in the SVG namespace.</p>
+
+<p>An HTML <tt>object</tt> element has been used to integrate figure 3 into this document:</p>
+
+<figcaption class="listing">The SVG code</figcaption>
+<pre>
+&lt;object data="./img/fig-003.svg" type="image/svg+xml"&gt;&lt;/object&gt;
+</pre>
+
+<p>Let's explore the external resource <tt>figure-003.svg</tt>:</p>
+
+<figcaption class="listing">The document structure</figcaption>
+<pre>
+&lt;?<hi>xml-stylesheet</hi> type="text/css" href="common-styles.css" ?&gt;
+&lt;<hi>svg</hi>  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56" height="56" stroke-width="5" fill="white" stroke-linecap="round"&gt;
+    &hellip;
+&lt;<hi>script</hi> xlink:href="/inc/svg-dom-helper-1.js"&gt;&lt;/script&gt;
+&lt;<hi>script</hi>&gt;	<cc>// &lt;![CDATA[</cc>
+    &hellip;
+    <cc>// ]]&gt;</cc> &lt;/script&gt;
+&lt;/svg&gt;
+</pre>
+
+<p>The first line imports the stylesheet for the drawing, which defines the visual appearance of graphical SVG elements. The second instruction declares the SVG element. It contains the drawing elements (same as above), and two script elements. The first one imports <tt>svg-dom-helper-1.js</tt> Note that the url is placed in an <tt>href</tt> attribute, not <tt>src</tt> as in an HTML document. This is required because the script element is of type <tt>SVGScriptElement</tt>, not <tt>HTMLScriptElement</tt>. Also note that this is not the <tt>dom-helper-1.js</tt> as in the previous example, because SVGScriptElements cannot handle ES2016 modules. Therefore, svg-dom-helper-1.js is written as non-module version.</p>
+
+<figcaption class="listing">The embedded script code</figcaption>
+<pre>
+&lt;<hi>script</hi>&gt;	<cc>// &lt;![CDATA[</cc>
+    const e = document.getElementById( "root" );
+    const animations = e.querySelectorAll( "animateTransform" );
+    e.addEventListener( "click", function( ) {
+        for ( let i = 0 ; i &lt; animations.length ; i ++ ) {
+            animations[ i ].beginElement( );
+            <hi>Synesis.DomHelper</hi>.swapAttributes( animations[ i ], "from", "to" );
+        } } ) ; 
+    <cc>// ]]&gt;</cc> &lt;/script&gt;
+</pre>
+
+<p>Essentially, the code is the same as before. The only the difference is how the <tt>swapAttributes</tt> method is called, which is owed to the fact that <tt>SVGScriptElement</tt> cannot handle ES2016 JavaScript modules.</p>
+
+<p>Now lets check how that works:</p>
+
+<figcaption class="figure">Scripts in an external SVG resource</figcaption>
+<object data="./img/fig-003.svg" type="image/svg+xml"></object>
+
+<p>Works in</p><ul>
+<li>Firefox 84.0.1</li>
+<li>Microsoft Edge 94.0.992.50</li>
+</ul>
+
+<!-- h2 --></div>
+
+</div><script type="module" src="/inc/page.js" ></script></body></html>

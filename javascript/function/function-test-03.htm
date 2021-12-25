@@ -1,0 +1,15 @@
+﻿<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="function-test-03.htm">function-test-03.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+debugger;
+let f = ( a, b, c ) => { return a + b + c } ;
+console.log( f ( 1, 2, 3 ));
+	// 6
+f = a => a * a 
+console.log( f ( 2 ));
+	// 4
+</script>
+</body></html>

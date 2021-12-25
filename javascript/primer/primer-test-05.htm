@@ -1,0 +1,27 @@
+﻿<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="primer-test-03.htm">primer-test-03.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+	// Boxing and unboxing
+debugger;
+const s1 = "John Doe" ; 
+	// A primitive string value
+console.log( s1 );
+	// John Doe
+const s2 = new String( s1 );
+	// A String object
+console.log( s2 )
+	// String {'John Doe'}
+const s3 = s2.valueOf( );
+	// A primitive value
+console.log( s3 );
+	// John Doe
+console.log( s1.toUpperCase( ));
+	// JOHN DOE
+function test ( s ) { console.log( s ) }
+test( s2 );
+	// String {'John Doe'}
+</script>
+</body></html>

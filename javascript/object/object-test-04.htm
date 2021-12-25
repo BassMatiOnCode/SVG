@@ -1,0 +1,115 @@
+﻿<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="object-test-04.htm">object-test-04.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+const Person = function ( firstName, lastName ) {
+    Object.defineProperties ( this, {
+        firstName : { enumerable : true , writable : true , value : firstName } ,
+        lastName : { enumerable : true , writable : true , value : lastName }
+        } ) ;
+    console.log( Person.countInstances( ));
+    }
+
+Person.instanceCounter = 0;
+Person.countInstances = function ( ) {
+    return ++Person.instanceCounter ;
+    }
+
+
+Person.prototype = Object.create ( Object.prototype , {
+    constructor : { enumerable : true, value : Person } ,
+    greet : { enumerable : true , value : function ( termination = "." ) { 
+        return "Hi, my name is " + this.firstName + " " + this.lastName + termination } } , 
+    farewell : { enumerable : true , value : function ( ) { 
+        return "Goodbye!" } }
+    } ) ;
+
+const Employee = function ( firstName, lastName, position ) {
+        // Call the parent class constructor first with "this" bound to the new instance object. 
+    Object.getPrototypeOf( Employee.prototype ).constructor.call( this, firstName, lastName );
+       // Create and initialize employee instance members.
+    Object.defineProperties ( this, {
+        position : { enumerable : true , writable : true , value : position }
+        } ) ;
+    } ;
+
+Employee.prototype = Object.create ( Person.prototype , {
+    constructor : { value : Employee, enumerable : true } , 
+    greet : { enumerable : true , value : function ( termination = "." ) { 
+        return Object.getPrototypeOf( Employee.prototype )
+            .greet.call( this, ", " ) + this.position + termination } }
+    } ) ;
+
+const Manager = function ( firstName, lastName, department ) {
+        // Call the parent class constructor first.
+    Object.getPrototypeOf( Manager.prototype ).constructor.call( this, firstName, lastName, "manager" );
+        // Create and initialize manager instance members.
+    Object.defineProperties ( this, {
+        department : { enumerable : true , writable : true , value : department }
+        } ) ;
+    } ;
+
+Manager.prototype = Object.create ( Employee.prototype , {
+    constructor : { value : Manager, enumerable : true } , 
+    greet : { enumerable : true , value : function ( termination = " department." ) { 
+        return Object.getPrototypeOf( Manager.prototype )
+            .greet.call( this, " of the " ) + this.department + termination } }
+    } ) ;
+
+    // Test
+const o1 = new Manager( "John", "Doe", "accounting" );
+    // 1
+o1.greet( );
+o1.farewell( );
+	// Hi, my name is John Doe, manager of the accounting department.
+
+console.log( o1 );
+	// Manager {firstName: 'John', lastName: 'Doe', position: 'manager', department: 'accounting'}
+console.log( o1 instanceof Manager );
+	// true
+console.log( o1 instanceof Employee );
+	// true
+console.log( o1 instanceof Person );
+	// true
+console.log( o1 instanceof Object );
+	// true
+console.log( o1.constructor.name );
+	// Manager
+
+const p1 = Object.getPrototypeOf( o1 );
+console.log( p1 );
+	// Employee {constructor: ƒ, greet: ƒ}
+console.log( p1.constructor.name );
+	// Manager
+
+const p2 = Object.getPrototypeOf( p1 );
+console.log( p2 );
+	// Person {constructor: ƒ, greet: ƒ}
+console.log( p2.constructor.name );
+	// Employee
+
+const p3 = Object.getPrototypeOf( p2 );
+console.log( p3 );
+	// {constructor: ƒ, greet: ƒ, farewell: ƒ}
+console.log( p3.constructor.name );
+	// Person
+
+const p4 = Object.getPrototypeOf( p3 );
+console.log( p4 );
+	// {constructor: ƒ, __defineGetter__: ƒ, __defineSetter__: ƒ, hasOwnProperty: ƒ, __lookupGetter__: ƒ, …}
+console.log( p4.constructor.name );
+	// Object
+
+const p5 = Object.getPrototypeOf( p4 );
+console.log( p5 );
+	// null
+
+const o2 = new Employee( "John", "Smith", "mechanic" );
+    // 2
+const o3 = new Person( "Jane", "Dee" );
+    // 3
+
+</script>
+</body></html>

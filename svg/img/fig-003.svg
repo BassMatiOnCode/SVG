@@ -1,0 +1,20 @@
+<?xml-stylesheet type="text/css" href="common-styles.css" ?>
+<svg id="root" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56" height="56" >
+<circle id="c-01" cx="28" cy="28" r="25" />
+<line id="l-00" x1="12" y1="28" x2="44" y2="28">
+	<animateTransform attributeName="transform" attributeType="XML" type="rotate" from="180 28 28" to="0 28 28" begin="indefinite" dur="2s" fill="freeze"/>
+	</line>
+<line id="l-01" x1="28" y1="12" x2="28" y2="44">
+	<animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 28 28" to="270 28 28" begin="indefinite" dur="2s" fill="freeze"/>
+	</line>
+<script xlink:href="/inc/svg-dom-helper-1.js"></script>
+<script>	//<![CDATA[
+	const e = document.getElementById( "root" );
+	const animations = e.querySelectorAll( "animateTransform" );
+	e.addEventListener( "click", function( ) {
+		for ( let i = 0 ; i < animations.length ; i ++ ) {
+			animations[ i ].beginElement( );
+			Synesis.DomHelper.swapAttributes( animations[ i ], "from", "to" );
+			} } ) ; 
+// ]]> </script>
+</svg>

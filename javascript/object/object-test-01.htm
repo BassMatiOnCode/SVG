@@ -1,0 +1,23 @@
+<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="object-test-01.htm">object-test-01.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+function Person ( firstName, lastName ) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    }
+
+Person.prototype = {
+    greet ( ) { return "Hi, my name is " + this.firstName + " " + this.lastName + "." ; }
+    } ;
+
+const o1 = new Person( "John", "Doe" );
+
+console.log( o1 );
+console.log( Object.getPrototypeOf( o1 ));
+console.log( Object.getPrototypeOf( Object.getPrototypeOf( o1 )));
+console.log( Object.getPrototypeOf( Object.getPrototypeOf( Object.getPrototypeOf( o1 ))));
+</script>
+</body></html>

@@ -1,0 +1,325 @@
+﻿<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm"version="2021-08-23" editor-name="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-09-05" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-09-10" />
+<meta name="version" content="1" />
+<meta name="categories" content="Programming > Web Technologies > Javascript" />
+<meta name="tags" content="web, technology, JavaScript, class, es2015" />
+<meta name="description" content="ES2015 introduced the class and related keywords. This should lower the hurdle for developers with experiences in other OO-langages to design class hierarchies correctly in JavaScript. However, under the hood, JavaScript remains prototype-inheritance-based. Before writing code with classes, you should have a solid understanding of prototype inheritance. Otherwise you might miss some good opportunities, or worse, get caught on the wrong foot&hellip;" />
+
+<link rel="stylesheet" href="/inc/page.css" />
+ 
+<title>Web Technologies > ES2015 Classes</title>
+
+</head><body><div id="page-header"></div><div id="main-toolbar"></div><div id="content">
+
+<h1>Classes</h1>
+
+<p id="page-abstract"></p>
+
+<h2 cbc>Class Declaration</h2><div>
+
+<p>A class declaration creates a constructor function and an associated prototype object under the hood.</p>
+
+<p>A class declaration begins with the <tt>class</tt> keyword, followed by the class name, followed by the class declaration body, enclosed in curly braces:</p>
+
+<figcaption class="listing">Class declaration</figcaption><pre>
+class DeclaredClassName { &hellip; }
+const o1 = new DeclaredClassName ( ) ;
+</pre>
+
+<p>The DeclaredClassName is used with the <tt>new</tt> operator to create class instance objects.</p>
+
+<p>The DeclaredClassName cannot be redeclared.</p>
+
+<p>In a more dynamic scenario, a class declaration expression can be used. A class declaration expression has the same form, but appears in an expression context, for example on the right side of an assignment operator:</p>
+
+<figcaption class="listing">Class expression</figcaption><pre>
+let ClassNameVariable = class ClassNameAlias { &hellip; }
+const o2 = new ClassNameVariable ( );
+</pre>
+
+<p>The <tt>ClassNameVariable</tt> is used to create class instance objects. Note that a different value (e. g. a different class declaration) can be assigned to the variable at any time!</p>
+
+<p>The ClassNameAlias is optional and appears in in the debugger to as class name, so it makes sense to use it.</p> 
+
+<p>The alias name cannot be used to create instances. It appears "undefined" or even unaccessible in most cases.</p>
+
+<p class="note">ATTENTION!<br/>The class alias name is not guaranteed to be unique! It is possible to use the same alias in multiple class declaration expressions.</p>
+
+<p>Therefore, it is best to stick with simple class declarations in most cases.</p>
+
+<p class="note">NOTE<br/>that class declarations and class expression are <em>not hoisted</em> like function declarations. As a consequence, you need to declare a class before you can use it.</p>
+
+<figcaption class="listing"><a href="object-test-06.htm">object-test-06.htm</a></figcaption><pre>
+    <cc>// Demonstrates class declarations and appearance of names in the debugger.</cc>
+debugger;
+    
+    <cc>// A class declaration</cc>
+class Person1 {
+    constructor ( firstName, lastName ) {
+        Object.defineProperties ( this , {
+            firstName : { writable : true , enumerable : true , value : firstName } ,
+            lastName : { writable : true , enumerable : true , value : lastName } 
+            } ) ; } } ;
+
+    <cc>// Create a class instance.</cc>
+const o1 = new Person1( "John" , "Smith" );
+console.log( o1 );
+    <cc>// Person1 {firstName: 'John', lastName: 'Smith'}</cc>
+
+    <cc>// A class declaration expression</cc>
+const Person2 = class {
+    constructor ( firstName, lastName ) {
+        Object.defineProperties ( this , {
+            firstName : { writable : true , enumerable : true , value : firstName } ,
+            lastName : { writable : true , enumerable : true , value : lastName } 
+            } ) ; } } ;
+
+    <cc>// Use the variable name to create a class instance.</cc>
+const o2 = new Person2( "John" , "Doe" );
+console.log( o2 );
+    <cc>// Person2 {firstName: 'John', lastName: 'Doe'}</cc>
+    <cc>// The instance is identified with the variable name used to declare the class.</cc>
+
+    <cc>// A class declaration expression</cc>
+const Person3 = class Person3Alias {
+    constructor ( firstName, lastName ) {
+        Object.defineProperties ( this , {
+            firstName : { writable : true , enumerable : true , value : firstName } ,
+            lastName : { writable : true , enumerable : true , value : lastName } 
+            } ) ; } } ;
+
+    <cc>// Use the variable name to create a class instance.</cc>
+const o3 = new Person3( "John" , "Doe" );
+console.log( o3 );
+    <cc>// Person3Alias {firstName: 'John', lastName: 'Doe'}</cc>
+    <cc>// A class name alias takes precedence of the variable name in the debugger.</cc>
+
+const Person4 = class Person3Alias {
+    constructor ( firstName, lastName, age ) {
+        Object.defineProperties ( this , {
+            firstName : { writable : true , enumerable : true , value : firstName } ,
+            lastName : { writable : true , enumerable : true , value : lastName } ,
+            age : { writable : true , enumerable : true , value : age } 
+            } ) ; } } ;
+
+const o4 = new Person4( "x", "y", 22 );
+console.log( o4 );
+    <cc>// Person3Alias {firstName: 'x', lastName: 'y', age: 22}</cc>
+    <cc>// A class name alias is not guaranteed to be unique!</cc>
+
+const o6 = new Person3Alias( "John" , "Doe" );
+    <cc>// Error: Person3Alias is undefined</cc>
+    <cc>// A class name alias cannot be used to create class instance objects.</cc>
+</pre>
+
+<!-- h2 Class Declaration --></div>
+
+<h2 cbc>Class Declaration Body</h2><div>
+
+<p>A class declaration body is always in "strict mode". This helps to eliminate incorrect programs caused by silly typing errors.</p>
+
+<!-- h2 Class Declaration Body  --></div>
+
+<h3 cbc>Constructor</h3><div>
+
+<p>The <tt>constructor</tt> method of a class is the equivalend of the old-fashioned <tt><a href="object.htm#ctor-fn">constructor function</a></tt>. It is used to initialize class instance members>:</p>
+
+<figcaption class="listing">The Person class</figcaption><pre>
+const Person = class {
+    <hi>constructor</hi> ( firstName, lastName ) {
+        Object.defineProperties ( this, {
+            firstName : { enumerable : true , writable : true , value : firstName } ,
+            lastName : { enumerable : true , writable : true , value : lastName }
+    } ) ; } } ;
+</pre>
+
+<p>A class can have only one constructor. Multiple constructors are considered a syntax error.</p>
+
+<!-- h3 Constructor --></div>
+
+<h3 cbc>Instance Properties</h3><div>
+
+<p>A class instance is a regular JavaScript object. As a result, instance members are created simply by assigning a value to a previously undefined member. This is the dynamic nature of JavaScript. Instance members are usually created and initialized in the constructor, but it can be done in any class method, or in fact <em>anywhere</em> in a program. </p>
+
+<p>Note that <tt>this</tt> in non-static class methods usually references the class instance object.</p>
+
+<p>An efficient way to create simpe <em>instance properties</em> is to declare them in the class body:</p>
+
+<figcaption class="listing"><a href="object-test-07.htm">object-test-07.htm</a></figcaption><pre>
+let Person = class Person {
+    firstName = "first name" ;
+    lastName = "last name" ;
+    getFullName = function( ) { return this.firstName + " " + this.lastName }
+    constructor ( ) { }
+    } ;
+const o1 = new Person( );
+console.log( o1 );
+    <cc>// Person {firstName: 'first name', lastName: 'last name'}
+    //    getFullName: ƒ ( )
+    //    firstName: "first name"
+    //    lastName: "last name"
+    //    [[Prototype]]: Object</cc>
+</pre>
+
+<p>Everything that looks like a variable declaration will be considered an instance member.</p>
+
+<p>If you want more control over instance member creation, a convenient place is the constructor, using the <tt>Object.createProperties( )</tt> method.</p>
+
+<!-- h3 Instance Properties --></div>
+
+<h2 cbc>Private Properties</h2><div>
+
+<p>Private properties are declared with a <tt>#</tt> as first character of the name. They cannot be accessed outside the class body.</p>
+
+<figcaption class="listing">Private properties</figcaption><pre>
+class Person {
+    #privateAge = 42;
+    get age ( ) { return this.#privateAge }
+    set age( value ) { this.#privateAge = value === 42 ? value : 42 }
+    }
+</pre>
+
+<p>Private members eliminate then need for constructing closures, which is the old-fashioned approach to provide controlled access to restricted variables.</p>
+
+<!-- h2 Private Properties --></div>
+
+<h2 cbc>Shared Methods</h2><div>
+
+<p>Function declarations inside the class body are considered shared methods and will be defined on the <a href="object.htm#prototype">prototype object</a>. A class instance object inherits them from the prototype chain, and they are shared among all class instances:</p>
+
+<figcaption class="listing"><a href="object-test-08.htm">object-test-08.htm</a></figcaption><pre>
+    <cc>// Declaring prototype members</cc>
+const Person = class Person {
+    firstName = "John" ;
+    lastName = "Smith" ;
+    greet ( termination = "." ) { return "Hi, my name is " + this.fullName + termination ; } } ;
+
+const o1 = new Person( );
+console.log( o1 );
+    <cc>// Person {firstName: 'John', lastName: 'Smith'}
+    //    firstName: "John"
+    //    lastName: "Smith"
+    //    [[Prototype]]: Object
+    //        constructor: class Person
+    //        <hi>greet</hi>: ƒ greet( termination = "." )
+    //        [[Prototype]]: Object</cc>
+</pre>
+
+<p>Getters and setters can easily be created:</p>
+
+<figcaption class="listing">The greet method</figcaption><pre>
+const Person = class {
+    get fullName ( ) { return this.firstName + " " + this.lastName } 
+    set fullName( s ) { s = s.split( " " ); 
+        this.firstName = s[ 0 ]; 
+        this.lastName = s[ 1 ];
+        } } ;
+</pre>
+
+<!-- h2 Shared Methods --></div>
+
+<h2 cbc>Static Members</h2><div>
+
+<p><em>Static members</em> are created with the <tt>static</tt> keyword:</p>
+
+<figcaption class="listing">Static members</figcaption><pre>
+const Person = class {
+    static #instanceCounter = 0 ;
+    static countInstances ( ) { console.log ( ++ Person.instanceCounter ) ; }
+    constructor ( ) {
+        Person.countInstances( );
+        } } ;
+</pre>
+
+<!-- h2 Static Members --></div>
+
+<h2 cbc>Class Inheritance</h2><div>
+
+<p>A class can extend another class:</p>
+
+<figcaption class="lisiting">Extending a superclass</figcaption><pre>
+class Person {  }
+class Employee extends Person {  }
+</pre>
+
+<p>The other class is commonly called <em>parent class</em> or <em>superclass</em>.</p>
+
+<p class="note">NOTE that a class can also extend a traditional constructor-function-based class declaration.</p>
+
+<p>The <tt>extend</tt> phrase can also be written as</p>
+
+<figcaption class="listing">Extends equivalent</figcaption><pre>
+Object.setPrototypeOf( employee.prototype, Person ); 
+</pre>
+
+<p>Here it becomes apparent that JavaScript classes are "just" a convenient wrapper around constructor functions and associated prototypes.</p>
+
+<p class="note">NOTE<br/>that a derived class MUST call <tt>super( )</tt> to complete initialization, or return an object instead!</p>
+
+<!-- h2 Class Inheritance --></div>
+
+<h2 cbc>Acessing the Superclass</h2><div>
+
+<p>The <tt>super</tt> keyword is used to reference the superclass members. When uses with the function call operator in the constructor, the superclass constructor is called:</p>
+
+<figcaption class="lisiting">Calling the superclass constructor</figcaption><pre>
+class Person {
+    firstName, lastName;
+    constructor ( firstName, lastName ) { 
+        this.firstName = firstName ;
+        this.lastName = lastName ;
+        }
+class Employee extends Person {
+    position;
+    constructor ( firstName, lastName, position ) {
+        <hi>super</hi>( firstName, lastName );
+        this.position = position;
+        }
+    }
+</pre>
+
+<p class="note">NOTE<br/>The constructor of a subclass <em>has no initial <tt>this</tt> binding</em>! It is therefore <em>essential</em> to call <tt>super</tt> as one of the first instructions before using <tt>this</tt> and before returning. Alternatively, the construcor of a derived class can return an object.</p>
+
+<p>The keyword <tt>super</tt> in combination with the member access operator (".") references members of the superclass:</p>
+
+<figcaption class="listing">Calling the superclass members</figcaption><pre>
+class Person {
+    firstName;
+    lastName;
+    constructor ( firstName, lastName ) { 
+        this.firstName = firstName ;
+        this.lastName = lastName ;
+        }
+    greet ( termination = "." ) {
+        return "Hi, my name is " + this.firstName + " " + this.lastName + termination;
+    }   }
+class Employee extends Person {
+    position;
+    constructor ( firstName, lastName, position ) {
+       super( firstName, lastName );
+        this.position = position;
+        }
+    greet ( termination = "." ) {
+        return  super.greet( ", " ) + this.position + termination ;
+    }   }
+const o1 = new Person( "John", "Doe" );
+console.log( o1.greet( ));
+    <cc>// Hi, my name is John Doe.</cc>
+const o2 = new Employee( "Jane", "Dee", "accountant" );
+console.log( o2.greet( ));
+    <cc>// Hi, my name is Jane Dee, accountant.</cc>
+</pre>
+
+<p>The code above can be found in <a href="object-test-10.htm">object-test-10.htm</a>.</p>
+
+<!-- Accessing the Superclass --></div>
+
+
+</div><script type="module" src="/inc/page.js" ></script></body></html>

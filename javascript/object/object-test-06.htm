@@ -1,0 +1,68 @@
+﻿<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="object-test-06.htm">object-test-06.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+	// Demonstrates class declarations and appearance of names in the debugger.
+debugger;
+	
+	// A class declaration
+class Person1 {
+	constructor ( firstName, lastName ) {
+		Object.defineProperties ( this , {
+			firstName : { writable : true , enumerable : true , value : firstName } ,
+			lastName : { writable : true , enumerable : true , value : lastName } 
+			} ) ; } } ;
+
+	// Create a class instance.
+const o1 = new Person1( "John" , "Smith" );
+console.log( o1 );
+	// Person1 {firstName: 'John', lastName: 'Smith'}
+
+	// A class declaration expression
+const Person2 = class {
+	constructor ( firstName, lastName ) {
+		Object.defineProperties ( this , {
+			firstName : { writable : true , enumerable : true , value : firstName } ,
+			lastName : { writable : true , enumerable : true , value : lastName } 
+			} ) ; } } ;
+
+	// Use the variable name to create a class instance.
+const o2 = new Person2( "John" , "Doe" );
+console.log( o2 );
+	// Person2 {firstName: 'John', lastName: 'Doe'}
+	// The instance is identified with the variable name used to declare the class.
+
+	// A class declaration expression
+const Person3 = class Person3Alias {
+	constructor ( firstName, lastName ) {
+		Object.defineProperties ( this , {
+			firstName : { writable : true , enumerable : true , value : firstName } ,
+			lastName : { writable : true , enumerable : true , value : lastName } 
+			} ) ; } } ;
+
+	// Use the variable name to create a class instance.
+const o3 = new Person3( "John" , "Doe" );
+console.log( o3 );
+	// Person3Alias {firstName: 'John', lastName: 'Doe'}
+	// A class name alias takes precedence of the variable name in the debugger.
+
+const Person4 = class Person3Alias {
+	constructor ( firstName, lastName, age ) {
+		Object.defineProperties ( this , {
+			firstName : { writable : true , enumerable : true , value : firstName } ,
+			lastName : { writable : true , enumerable : true , value : lastName } ,
+			age : { writable : true , enumerable : true , value : age } 
+			} ) ; } } ;
+
+const o4 = new Person4( "x", "y", 22 );
+console.log( o4 );
+	// Person3Alias {firstName: 'x', lastName: 'y', age: 22}
+	// A class name alias is not guaranteed to be unique!
+
+const o6 = new Person3Alias( "John" , "Doe" );
+	// Error: Person3Alias is undefined
+	// A class name alias cannot be used to create class instance objects.
+</script>
+</body></html>

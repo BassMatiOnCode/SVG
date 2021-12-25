@@ -1,0 +1,23 @@
+﻿<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="object-test-07.htm">object-test-07.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+    // Declaring instance properties
+let Person = class Person {
+    firstName = "first name" ;
+    lastName = "last name" ;
+    getFullName = function( ) { return this.firstName + " " + this.lastName }
+    constructor ( ) { }
+    } ;
+const o1 = new Person( );
+console.log( o1 );
+    // Person {firstName: 'first name', lastName: 'last name'}
+    //    getFullName: ƒ ( )
+    //    firstName: "first name"
+    //    lastName: "last name"
+    //    [[Prototype]]: Object
+
+</script>
+</body></html>

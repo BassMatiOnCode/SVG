@@ -1,0 +1,374 @@
+﻿<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm"version="2021-08-23" editor-name="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-08-21" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-09-21" />
+<meta name="version" content="1" />
+<meta name="categories" content="Web Development > Hosting" />
+<meta name="tags" content="web, development, hosting, partial, project" />
+<meta name="description" content="Web design incorporates many aspects, such as authoring, maintaining a code repository in a version control system, local testing, publishing on a production web server, and breaking a large website into smaller and more maintainable partial projects." />
+
+<link rel="stylesheet" href="/inc/page.css" />
+ 
+<title>Web Development &ndash; Hosting a Web Site</title>
+
+</head><body><div id="page-header"></div><div id="main-toolbar"></div><div id="content">
+
+<h1>Hosting a Web Site</h1>
+
+<p id="page-abstract"></p>
+
+<p>Division into partial projects with limited areas of concern should also make collaboration in larger teams, or groups of teams, much easier.</p>
+
+<h2 cbc>Version Control Systems</h2><div>
+
+<p>Website projects, like every other project, should be stored in a version control system. There are online hosters such as Github or Gitlab that not only provide the VCS server but also offer to host static websites out of a repsitory. With Github Pages, you only have to activate the feature and specify the root folder and branch, then the website is live and online. With Gitlab, you have to add a control file named <tt>.gitlab-ci.yml</tt> which contains instructions for deployment. A typical content is shown in listing 1:</p>
+
+<figcaption class="listing">.gitlab-ci.yml example content</figcaption><pre>
+image: alpine:latest
+pages:
+  stage: deploy
+  script:
+  - echo 'Nothing to do...'
+  artifacts:
+    paths:
+    - public
+  only:
+  - master
+</pre>
+
+<p>The deployment runner cares for the rest.</p>
+
+<p class="note">NOTE<br/>The work with repositories is only very roughly outlined. In practice you will have to consider branches, pull-requests and merges to establish a practical and safe collaborative workflow.</p>
+
+<!-- Version Control Systems --></div>
+
+<h2 cbc>Maintaining a Local Copy</h2><div>
+
+<p>To maintain a local copy of the repository, open a console window and type</p>
+
+<figcaption class="listing">Cloning the project</figcaption><pre>
+git clone https://github.com/username/projectname.git
+</pre>
+
+<p>Then a local copy of the project will be installed on the machine. Edit the files, add new ones or delete others. To push changes to the server on Github or Gitlab, type&hellip;</p>
+
+<figcaption class="listing">Updating the remote server</figcaption><pre>
+git add file-names
+git commit -m "Meaningful information about the changes"
+git push
+</pre>
+
+<p>On Github, the changes go live immediately. On Gitlab, you have to trigger continuous integration (CI) to start the deployment runner.</p>
+
+<p>The advantage of having a local copy is that you can fire a development webserver (such as deno, node, tiny-http or similar) and test the website locally. I used <tt>deno.exe</tt> with the <tt>file-server.js</tt> script with much success. The script does not serve perfectly according to the standards, but the browsers don't seem to have trouble with it. If you want, try Deno with <tt>Oak</tt>.</p>
+
+<!-- Maintaining a Local Copy --></div>
+
+<h2 cbc>Partitioning a Large Website Project</h2><div>
+
+<p>Consider the follwing website structure:</p>
+
+<figcaption class="figure">Large website structure</figcaption>
+<img src="img/fig-001.png" width="124"/>
+<pre style="display:none"><code>root-project
+ + inc
+ |  + page.css
+ |  + page.js
+ + index.htm
+ + toc.htm
+ + section-1
+ |  + partial-project-1
+ |     + index.htm
+ |     + toc.htm
+ + section-2
+     + partial-project-2
+     |	+ index.htm
+     |	+ toc.htm
+     + partial-project-3
+        + index.htm
+        + toc.htm
+</code></pre>
+
+<p>The entire project is hosted in a folder tree structure under a single wwwroot folder, with three partial project candidates in two sections.</p>
+
+<p>Now let's break it into several partial projects. Each partial project maintains its own, separate code repository and shall be developed and tested completely independent of the others. While testing a partial project, the developer shall not notice a difference to the unpartitioned website, except that only the partial project content is available. When published, a user on the client side shall not notice that the website is partitioned in any way.</p>
+
+<p>To make this feasible, a number of requirements must be met:</p>
+
+<ol id="requirements">
+<li>The published content of all partial projects must be accessible to each other over the http(s) (for the browsers on the client side) and file protocol (for the web server on the server side). Http addresses and file system addresses must be equivalent.</li>
+<li>URLs of resources must be valid locally on the developer machines, and on the production web server. They shall not be changed for deployment.</li>
+<li>Shared files (the include folder and its content) should exist only once, and must be accessible from all partial projects.</li>
+<li>The table-of-content of partial projects must be integrated into the root project's table-of-content, preferredly at runtime, so that the entire website content is available to the user from one place. </li>
+</ol>
+
+<p>We will exploit hard links to files and folders for this purpose. Git refuses to add files to the repository which are outside the project folder or behind a symbolic directory link, but it accepts files and folders behind a directory hard link.</p>
+
+<p class="note">NOTE that hard links are extremely dangerous. Moving a hard-link to a folder will move the target folder. If you then accidentally delete that folder, and if this folder was moved to a removable storage (such as a USB memory stick or an SD card), your files will be gone. Irrecoverably.</p>
+
+<!-- Partitioning a Large Website Project --></div>
+
+<h2 cbc>Separating the Partial Projects</h2><div>
+
+<p>A large website usually offers several opportunities to group its content areas logically in some way. For convenience, these areas have been named "partial-project-n" in the structure above.</p>
+
+<p>After separation, the section folders in the root project which previously contained the partial projects, are now empty:</p>
+
+<figcaption class="figure">Root project after separation</figcaption>
+<img src="img/fig-002.png" width="124"/>
+<pre style="display:none"><code>root-project-folder
+ + inc
+ |  + page.css
+ |  + page.js
+ + index.htm
+ + toc.htm
+ + section-1
+ + section-2
+</code></pre>
+
+<p>And we have four partial projects in a common project folder: The shared include files project, the website root project, and three partial projects.</p>
+
+<figcaption class="figure">Structure of the partitioned project</figcaption>
+<img src="img/fig-003.png" width="124"/>
+<pre style="display:none"><code>website-project-folder
+ + root--project-folder
+ |  + inc
+ |     + page.css
+ |     + page.js
+ |  + index.htm
+ |  + toc.htm
+ |  + section-1
+ |  + section-2
+ + partial-project-1-folder
+ |  + index.htm
+ |  + toc.htm
+ + partial-project-2-folder
+ | + index.htm
+ |  + toc.htm
+ + partial-project-3-folder
+    + index.htm
+    + toc.htm
+</code></pre>
+
+<p>Considering the <a href="#requirements">requirements</a>, the arrangement in the current form will clearly not work. The structure in the file system is different from the logical site structure. Many links will be broken. For example, if a developer fires a development-webserver in the partial project and opens the site in a browser, the <tt>index.htm</tt> file in that folder will be served, but links to stylesheets and scripts are broken. The page will not be rendered as expected.</p>
+
+<p>In the next step we will address this problem.</p>
+
+<!-- Separating the Partial Projects --></div>
+
+<h2 cbc>Creating Symbolic Links</h2><div>
+
+<p>In this step we will add symbolic links to the shared include folder to each partial project. The structure will then look like this:</p>
+
+<figcaption class="figure">Structure of the partitioned project</figcaption>
+<img src="img/fig-004.png" width="124"/>
+
+<p>Unix users will use the <tt>ln</tt> command, but creating symbolic links is not possible out of the box on Windows. You have three or more options:</p>
+
+<ol>
+<li>Turn on developer mode</li>
+<li>Activate the administrator account and run the mklink command with administrator priviledges.</li>
+<li>Use the powershell</li>
+<li>I don't know&hellip;</li>
+</ol>
+
+<p>Let's check the first alternative.</p>
+
+<ol class="instructions">
+<li>To turn on developer mode, go to <tt>Windows Settings</tt> and navigate to <tt>Update &amp; Security &gt; For Developers &gt; Developer Mode</tt>.</li>
+<li>Turn the toggle-switch <em>on</em>.</li>
+</ol>
+
+<p>The previous instructions have to be run only once.</p>
+
+<ol class="instructions continue">
+<li>Open a <tt>File Explorer</tt> and navigate to the project folder.</li>
+<li>Type <tt>cmd</tt> in the address bar. This opens a console window.</li>
+<li>At the command prompt, type <tt>mklink /D inc ..\inc</tt>.</li>
+</ol>
+
+<p>An <tt>inc</tt> directory appears in the current folder. Note the small arrow icon in the lower left corner. That is a symbolic directory link on Windows.</p>
+
+<figcaption class="figure">A symbolic link to the include folder</figcaption>
+<img src="img/fig-005.png"/>
+
+<p>The second alternative is to run <tt>cmd.exe</tt> under the administrator account. First, make sure the administrator account is active:</p>
+
+<ol class="instructions">
+<li>Open the <tt>File Explorer</tt> and right-click on <tt>This PC &gt; Manage</tt>. This opens the Computer Management console.</li>
+<li>Activate <tt>Computer Management &gt; Local Users and Groups &gt; Users</tt>.</li>
+<li>Right-click <tt>Administrator</tt>, then click <tt>Properties</tt>.</li>
+<li>Clear the checkbox <tt>Account is disabled</tt>.</li>
+<li>Click <tt>OK</tt>.</li>
+<li>Right-click <tt>Administrator</tt>, then click <tt>Set Password...</tt>.</li>
+<li>Enter a password and click <tt>OK</tt>.</li>
+<li>Close the <tt>Computer Management</tt> console.</li>
+</ol>
+
+<p>Again, this has only to be done once. Then open a console window under the administrator account:</p>
+
+<ol class="instructions continue">
+<li>Press <tt>Windows-R</tt>, then type <tt>runas /user:administrator cmd</tt> in the text box. Press <tt>OK</tt> to execute the command</li>
+<li>Enter the administrator password and press <tt>Return</tt>.</li>
+<li>Type <tt>cd \path-to-the\partial-project-1
+</tt></li>
+<li>Type <tt>mklink /D inc ..\inc</tt></li>
+</ol>
+
+<p TBC>The advantage is that git will recognize that it deals with a symbolic directory link, and not track the target folder content in the current repository. In other words, the contents of the target folder is not duplicated into the current repository. That's what we want.</p>
+
+<p class="note"|>If you have files and folders behind the symbolic link already in the repository, git will keep tracking them (I believe so). You may have to <code>git rm -r --cached inc/</code> to remove them from the repository.</p>
+
+<p>If the developer reloads the browser now, the page should be rendered as expected.</p>
+
+<!-- Creating Symbolic Links --></div>
+
+<h2 cbc>Hard Links</h2><div>
+
+<p>Another alternative is to create hard-links to the desired folders. On Windows they are called "junctions". The difference to a symbolic link is that a hard-link is simpler, not as flexible, and do not require admin priviledges or developer mode turned on.</p>
+
+<p>To create a directory hard-link or <em>junction</em>, &hellip;</p>
+
+<ol class="instructions">
+<li>Open a <tt>File Explorer</tt> and navigate to the project folder.</li>
+<li>Type <tt>cmd</tt> in the address bar. A console windows opens up.</li>
+<li>Type <tt>mklink /J inc ..\inc</tt></li>
+</ol>
+
+<p>Unix users will use the <tt>ln</tt> command to create a directory hard-link.</p>
+
+<p>The downside of a directory hard-link is that git cannot tell that inc in the partial project folder is a link. Git sees the content as if it were duplicated here, and consequently will track the files. This is not what we want.</p>
+
+<p>To suppress tracking, we need an entry in the <tt>.gitignore</tt> file:</p>
+
+<figcaption class="listing">Entry in .gitignore</figcaption><pre>
+/inc
+</pre>
+
+<!-- Hard Links --></div>
+
+<h2 cbc>Maintaining the Site Map</h2><div>
+
+<p>The site map is a list of links to (nearly) every page in the web site. In fact, it is a tree structure that defines the structure of the website. There is only one instance of the site map, and it is loaded dynamically into the navigation side-panel on each page.</p>
+
+<p> The site map is stored in the file <tt>toc.htm</tt>, and each partial project has its own partial <tt>toc.htm</tt>. The recursive fragment loader of the <a href="/web-projects/web-design-toolbox/index.htm">Web Design Toolbox</a> loads these HTML fragments dynamically and integrates all partial site-map files into the document. To make this work, the developer has to do some provisioning:</p>
+
+<p>Firstly, the root site-map has loader instructions that <em>link</em> to the site-map of partial projects.</p>
+
+<p>Here is an example of a root sitemap file:</p>
+
+<figcaption class="listing">Root site-map <tt>toc.htm</tt></figcaption><pre>
+&lt;ul class="collapsible"&gt;
+&lt;li&gt;&lt;a href="index.htm"&gt;Home&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Section 1
+    &lt;ul load-src="<hi>/partial-project-1/toc.htm</hi>"&gt;&lt;/ul&gt;
+    &lt;/li&gt;
+&lt;li&gt;Section 2
+    &lt;ul load-src="<hi>/partial-project-2/toc.htm</hi>"&gt;&lt;/ul&gt;&lt;/li&gt;
+    &lt;ul load-src="<hi>/partial-project-3/toc.htm</hi>"&gt;&lt;/ul&gt;&lt;/li&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
+</pre>
+
+<p>Secondly, the developer must provide a sitemap file in each partial project:</p>
+
+<figcaption class="listing">Partial project site-map <tt>toc.htm</tt></figcaption><pre>
+&lt;li&gt;&lt;a href="index.htm"&gt;Partial Project 1&lt;/a&gt;
+    &lt;ul&gt;
+    &lt;li&gt;&lt;a href="page-1.htm"&gt;Page 1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="page-2.htm"&gt;Page 2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="page-3.htm"&gt;Page 3&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;&lt;/li&gt;
+</pre>
+
+<p>Thirdly, the sitemap of partial projects may have a kind of "header" that hints the developer to the location of the partial project within the entire website:</p>
+
+<figcaption class="listing">Partial site-map header</figcaption><pre>
+&lt;ul class="collapsible"&gt;
+&lt;li&gt;Home
+    &lt;ul&gt;
+    &lt;li&gt;Section 1
+        &lt;ul <hi>section-root</hi>&gt;
+        &lt;li&gt;&lt;a href="index.htm"&gt;Partial Project 1&lt;/a&gt;
+            &lt;ul&gt;
+            &hellip; <cc>// Content list from above omitted</cc>
+            &lt;/ul&gt;&lt;/li&gt;
+        &lt;/ul&gt;&lt;/li&gt;
+    &lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</pre>
+
+<p>The element with the <tt>section-root</tt> attribute and everything before is considered "header", and the recursive fragment loader will <em>not</em> integrate these parts into a parent sitemap. However, if the developer tests only the partial project, this <tt>toc.htm</tt> will be considered root-sitemap, and the header will not be removed.</p>
+
+<p>Note that there are no links to the home page and the scection page, and there is a reason for it: The developer starts the web server in the partial project directory, so the server considers this folder wwwroot. Everything outside this root folder will <em>not</em> be served. So it is useless to provide links there (unless you are willing to fiddle more with symbolic links&hellip;).</p>
+
+<p class="note">NOTE<br/>If you are not inclined to use the <a href="/web-design-toolbox/index.htm">Web Design Toolbox</a> (or at least its recursive fragment loader component), you can always maintain a single sitemap file in the root project folder, and link to it from your web pages in a way you personally prefer. Just remember to push two projects to the remote repositories if you work on a partial project.</p>
+
+<!-- Maintaining the Site Map--></div>
+
+<h2 cbc>Testing Integrated Partial Projects</h2><div>
+
+<p>You bet that the developer will check the correct integration of partial projects into the root project. Unfortunately, all URLs referencing some content in partial projects, are incorrect. They have the form</p>
+
+<pre>/partial-project-1/some-path/some-page.htm</pre>
+
+<p>According to the arrangement in the file system, they should be</p>
+
+<pre>/../partial-project-1/some-path/some-page.htm</pre>
+
+<p>And even worse: If the developer starts the web server in the root project folder, the partial project folders are inaccessible, because they are outside of wwwroot... So, what can we do?</p>
+
+<p>How about some additional symbolic links&hellip;?</p>
+
+<figcaption class="figure">Symbolic links to partial projects on site root level</figcaption>
+<img src="img/fig-006.png"/>
+
+<p>Now the URLs should match the file system again.</p>
+
+<p>A different approach: The symlinks could be placed in their orignial places in the unpartitioned website project:</p>
+
+<figcaption class="figure">Symbolic links to partial projects in their original location</figcaption>
+<img src="img/fig-007.png"/>
+
+<p>That makes more sence from the logical point of view, and is fine if you run your own production web server. However, this will not work if you are going to publish on repository hosters such as Github or Gitlab&hellip;</p>
+
+<!-- Testing Integrated Partial Projects --></div>
+
+<h2 cbc>Publishing on Repository Hosters</h2><div>
+
+<p>A repository hoster, such as Github or Gitlab, is quite attractive for hosting static web sites, because they can not only host the development repository, but can also publish the content. Enabling a project website is just a matter of project configuration, and this is quite attractive for a private person or companies on a small budget.</p>
+
+<p>However, there are some limitations. First and foremost, you cannot decide much on the path of project websites. They are published under</p>
+
+<pre>https://username.github.io/projectname/</pre>
+
+<p>The only other option is to configure a project as account website, which is published under</p>
+
+<pre>https://username.github.io/</pre>
+
+<p>And the homepage is usually served under <tt>https://username.github.io/index.htm</tt>. This is what the average user expects.</p>
+
+<p>The second limitation is that symbolic links don't work, at least not on github.io. In the section above we used symlinks on the root level to make the content of partial projects available to the root project. Fortunately, because we can implement the root project on Github as account website, we don't need these symbolic links on Github, because the partial project folders appear exactly where we want them. For example, the partial project 1 index page has the address</p>
+
+<pre>https://username.github.io/partial-project-1/index.htm</pre>
+
+<p>So the link that we have encoded in the sitemap, </p>
+
+<pre>&lt;a href="/partial-project-1/index.htm"&gt;Partial Project 1&lt;/a&gt;</pre>
+
+<p>works both, locally <em>and</em> online!</p>
+
+<!-- Publishing on Repository Hosters --></div>
+
+<h2 cbc>Conclusion</h2><div>
+
+<p>Certainly there are lots of other possible configurations, but I hope that the ideas outlined above will save many people some serious head-scratching. If it did, drop me a line. I'd be delighted!</p>
+
+<!-- Conclusion --></div>
+
+</div><script type="module" src="/inc/page.js" ></script></body></html>

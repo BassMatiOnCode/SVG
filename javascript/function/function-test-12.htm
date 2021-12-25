@@ -1,0 +1,24 @@
+﻿<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="function-test-12.htm">function-test-12.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+    // A weired add function
+function f ( ) { 
+    console.log( arguments );
+    // Recursion stop condition
+    if ( arguments.length === 1 ) return arguments[ 0 ];
+    // Strip off the first argument
+    const rest = Array.prototype.splice.call( arguments, 1 );
+    // Call f with the remaining arguments spread out to a comma separated list
+    return arguments[ 0 ] + f ( ...rest );
+    }
+debugger;
+console.log( f ( 1, 2, 3 ));
+    // Arguments(3) [1, 2, 3, callee: ƒ, Symbol(Symbol.iterator): ƒ]
+    // Arguments(3) [2, 3, callee: ƒ, Symbol(Symbol.iterator): ƒ]
+    // Arguments(3) [3, callee: ƒ, Symbol(Symbol.iterator): ƒ]
+    // 6
+</script>
+</body></html>

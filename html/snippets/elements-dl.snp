@@ -1,0 +1,1 @@
+The DL element is a container for a description list. It contains terms (DT) and description (DD) elements. They are visually separated by default so that the terms stand out nicely from the description elements.

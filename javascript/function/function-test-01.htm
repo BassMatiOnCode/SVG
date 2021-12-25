@@ -1,0 +1,15 @@
+<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="function-test-01.htm">function-test-01.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+debugger;
+function product ( ) {
+	let result = 1;
+	for ( let i = 0 ; i < arguments. length ; i ++ ) result *= arguments[ i ] ; 
+	return result ; 
+	}
+console.log ( product( 1, 2, 3, 4 )); 
+</script>
+</body></html>

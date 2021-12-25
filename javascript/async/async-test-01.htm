@@ -1,0 +1,53 @@
+<html><head>
+<title>Script Test Page</title>
+<style>
+label { display : inline-block ; width : 7em ; }
+</style>
+</head><body>
+<p><a href="async-test-01.htm">async-test-01.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+
+<script>
+    // Person constructor function
+function Person ( name, jobTitle ) {
+    this.name = name;
+    this.jobTitle = jobTitle;
+    }
+    // Address book constructor function
+function AddressBook ( ) {
+    this.people = [ ] ;
+    }
+    // The find method expexts a callback function
+    // that returns true if a person shall be added
+    // to the result list.
+AddressBook.prototype = {
+    find ( compare ) {
+        const result = [ ] ;
+        for ( let i = 0 ; i < this.people.length ; i ++ ) 
+            if ( compare( this.people[ i ] )) result.push( this.people[ i ] ); 
+        return result ;
+    }	} ;
+
+    // Main Program
+    // Create the address book
+debugger;
+const book = new AddressBook( );
+book.people.push ( 
+    new Person ( "John Smith" , "mechanic" ) ,
+    new Person ( "Joe Doe", "accountant" ) ,
+    new Person ( "Jane Lane" , "manager" ) ,
+    new Person ( "Johnny Walker" , "mechanic" )
+    ) ;
+    // Define the match function
+function identifyMechanic ( person ) { 
+    return person.jobTitle === "mechanic" ;
+    }
+    // Find mechanics in the address book.
+console.log( book.find( identifyMechanic ));
+    // (2) [Employee, Employee]
+    //    0: Employee {name: 'John Smith', jobTitle: 'mechanic'}
+    //    1: Employee {name: 'Johnny Walker', jobTitle: 'mechanic'}
+    //    length: 2
+    //    [[Prototype]]: Array(0)
+</script>
+</body></html>

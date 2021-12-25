@@ -1,0 +1,20 @@
+<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="primer-test-03.htm">primer-test-03.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+function Person ( firstName, lastName ) {
+	this.firstName = firstName; 
+	this.lastName = lastName;
+	}
+debugger;
+const o1 = new Person( "John", "Doe" );
+let o2 = o1 ;
+console.log( o1 );
+console.log( o2 );
+o2.lastName = "Smith" ;
+console.log( o1 );
+console.log( o2 );
+</script>
+</body></html>

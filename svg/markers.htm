@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm"version="2021-08-23" editor-name="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-08-26" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-08-26" />
+<meta name="version" content="1" />
+<meta name="categories" content="Web Technologies > SVG" />
+<meta name="tags" content="web, technology, svg, marker, arrow, line, head" />
+<meta name="description" content="A marker defines a line ends and corners." />
+
+<link rel="stylesheet" href="/inc/page.css" />
+ 
+<title>Web Technologies > SVG > Markers</title>
+
+</head><body><div id="page-header"></div><div id="main-toolbar"></div><div id="content">
+
+<h1>Markers</h1>
+
+<p id="page-abstract"></p>
+
+<p>First, let's draw an arrow head and get it's shape correct:</p>
+<figcaption class="listing">Arrowhead drawing</figcaption><pre>
+&lt;svg width="10" height="10""&gt;
+&lt;g stroke="none" fill="darkorange"&gt;
+    &lt;path d="M 0 0 L 10 5 0 10 z"/&gt;
+    &lt;/g&gt;
+&lt;/svg&gt;
+</pre>
+
+<p>Here it is:</p>
+
+<figcaption class="figure">The arrow head</figcaption>
+<svg class="indent" width="40" height="40" viewbox="-10 -10 30 30" style="border:1px solid silver ; margin-top:10px ; margin-left:10px">
+<g stroke="none" fill="darkorange">
+	<path d="M 0 0 L 10 5 0 10 z"/>
+	</g>
+</svg>
+
+<p>This arrow will be combined with the following line:</p>
+
+<figcaption class="listing">The line definition</figcaption><pre>
+&lt;svg width="50" height="50"&gt;
+&lt;line stroke="darkorange" x1="10" y1="10" x2="40" y2="40"/&gt;
+&lt;/svg&gt;
+</pre>
+
+<figcaption class="figure">The line</figcaption>
+<svg width="50" height="50" style="border:1px solid silver ; margin-top:10px ; margin-left:10px">
+<line stroke="darkorange" x1="10" y1="10" x2="40" y2="40"/>
+</svg>
+
+<p>Now let's add a marker element and combine it with a line:</p>
+
+<figcaption class="listing">Marker definition and test</figcaption><pre>
+&lt;svg width="50" height="50"&gt;
+&lt;defs&gt;
+    &lt;marker id="arrowhead" viewbox="0,0,10,10" 
+        markerWidth="10" markerHeight="10" refX="0" refY="5"
+        orient="auto"&gt;
+        &lt;path fill="darkorange" d="M 0 0 L 10 5 0 10 z"/&gt;
+        &lt;/marker&gt;
+    &lt;/defs&gt;
+&lt;line x1="10" y1="10" x2="40" y2="40"
+    stroke="darkorange" marker-end="url(#arrowhead)"/&gt;
+&lt;/svg&gt;
+</pre>
+
+<figcaption class="figure">Line combined with arrow marker</figcaption>
+<svg width="50" height="50" style="border:1px solid silver ; margin-top:10px ; margin-left:10px">
+<defs>
+	<marker id="arrowhead" viewbox="0,0,10,10" markerWidth="10" markerHeight="10" refX="0" refY="5" orient="auto" fill="darkorange">
+		<path d="M 0 0 L 10 5 0 10 z"/>
+		</marker>
+	</defs>
+<line x1="10" y1="10" x2="40" y2="40" stroke="darkorange" marker-end="url(#arrowhead)"/>
+</svg>
+
+<p>Note that the arrow head extends the length of the line. This is ok, otherwise a wider line could interfer the arrow tip.</p>
+
+</div><script type="module" src="/inc/page.js" ></script></body></html>

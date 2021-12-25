@@ -1,0 +1,24 @@
+<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="function-test-02.htm">function-test-02.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+debugger;
+function counter ( value ) {
+	return function ( ) { return ++ value }
+	}
+const count = counter( 123 );
+console.log ( count( )); 
+	// 124
+console.log ( count( )); 
+	// 125
+console.log ( count( )); 
+	// 126
+const f = new Function( "return this.a + this.b" );
+const o = { a : 1, b : 2 };
+console.log( f.call( o ));
+
+
+</script>
+</body></html>

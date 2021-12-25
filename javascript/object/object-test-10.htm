@@ -1,0 +1,33 @@
+﻿<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="object-test-10.htm">object-test-10.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+class Person {
+    firstName;
+    lastName;
+    constructor ( firstName, lastName ) { 
+        this.firstName = firstName ;
+        this.lastName = lastName ;
+        }
+    greet ( termination = "." ) {
+        return "Hi, my name is " + this.firstName + " " + this.lastName + termination;
+    }   }
+class Employee extends Person {
+    position;
+    constructor ( firstName, lastName, position ) {
+       super( firstName, lastName );
+        this.position = position;
+        }
+    greet ( termination = "." ) {
+        return  super.greet( ", " ) + this.position + termination ;
+    }   }
+const o1 = new Person( "John", "Doe" );
+console.log( o1.greet( ));
+    // Hi, my name is John Doe.
+const o2 = new Employee( "Jane", "Dee", "accountant" );
+console.log( o2.greet( ));
+    // Hi, my name is Jane Dee, accountant.
+</script>
+</body></html>

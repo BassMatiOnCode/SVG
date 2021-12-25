@@ -2,7 +2,7 @@
 <html lang="en-US"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="template-info" file-name="empty.htm"version="2021-08-04" editor-name="usp" />
+<meta name="template-info" file-name="empty.htm"version="2021-08-23" editor-name="usp" />
 <meta name="author" content="usp" />
 <meta name="creation-date" content="2021-08-18" />
 <meta name="editor" content="usp" />
@@ -10,14 +10,23 @@
 <meta name="version" content="1" />
 <meta name="categories" content="Web Development > SVG" />
 <meta name="tags" content="web, development, svg, embed, html." />
-<meta name="description" content="SVG can be embedded into HTML in various ways, as image source, as object source, or inline as native SVG element." />
-<title>Web Development - Embedding SVG into HTML</title>
+<meta name="description" content="SVG can be used into HTML in various ways, as image source, as object source, or inline as native SVG element." />
 
 <link rel="stylesheet" href="/inc/page.css" />
+
+<title>Web Development - Using SVG in HTML Documents</title>
  
-</head><body><div id="content"><h1>Embedding SVG into HTML</h1>
+</head><body><div id="page-header"></div><div id="main-toolbar"></div><div id="content">
+
+<h1>Using SVG in HTML Documents</h1>
 
 <p id="page-abstract"></p>
+
+<p>An external resource must include an XML declaration prolog at the very top of the document if an encoding other than UTF-8 or UTF-16 is used. So it is safe to omit this line in an SVG file:</p>
+
+<figcaption class="listing">XML prolog</figcaption><pre>
+&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+</pre>
 
 <p>An external SVG file can be loaded into an IMG element:</p>
 

@@ -2,7 +2,7 @@
 <html lang="en-US"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="template-info" file-name="empty.htm"version="2021-08-04" editor-name="usp" />
+<meta name="template-info" file-name="empty.htm"version="2021-08-23" editor-name="usp" />
 <meta name="author" content="usp" />
 <meta name="creation-date" content="2021-06-19" />
 <meta name="editor" content="usp" />
@@ -11,41 +11,48 @@
 <meta name="categories" content="Programming > Web Technology > SVG" />
 <meta name="tags" content="web, development, svg, vector, graphics, introduction." />
 <meta name="description" content="This page illustrates some graphics primitives and their usage." />
-<title>Web Development - SVG Drawing Primitives</title>
 
 <link rel="stylesheet" href="/inc/page.css" />
+<style>figcaption.figure + svg { margin: 10px 0 0 10px }</style>
+<title>Web Development - SVG Drawing Primitives Overview</title>
  
-</head><body><div id="content"><h1>SVG Drawing Primitives</h1>
+</head><body><div id="page-header"></div><div id="main-toolbar"></div><div id="content">
+
+<h1>Drawing Primitives Overview</h1>
 
 <p id="page-abstract"></p>
 
-<h2>Line</h2><div>
+<h2 cbc>Line</h2><div>
+
+<p>The <tt>line</tt> element draws a straight line between two coordinates x<sub>0</sub> y<sub>0</sub> and x<sub>1</sub> y<sub>1</sub>.</p>
 
 <figcaption class="listing">Lines example code</figcaption><pre>
-&lt;svg  version="1.1" xmlns="http://www.w3.org/2000/svg" 
-    viewBox="-50 -50 100 100" width="32" height="32"&gt;
-&lt;g stroke="darkorange" stroke-width="8" stroke-linecap="round" fill="white"&gt;
-	&lt;line x1="-20" y1="20" x2="20" y2="-20" /&gt;
-	&lt;line x1="-20" y1="-20" x2="20" y2="20" /&gt;
-	&lt;/g&gt;
+&lt;svg viewBox="-50 -50 100 100" width="32"&gt;
+&lt;g stroke="cornflowerblue" stroke-width="8" stroke-linecap="round" fill="white"&gt;
+    &lt;line x1="-20" y1="20" x2="20" y2="-20" /&gt;
+    &lt;line x1="-20" y1="-20" x2="20" y2="20" /&gt;
+    &lt;/g&gt;
 &lt;/svg&gt;
 </pre>
+
 <figcaption class="figure">Lines</figcaption>
-<svg  version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100" width="32" height="32">
-<g stroke="darkorange" stroke-width="8" stroke-linecap="round" fill="white">
+<svg viewBox="-50 -50 100 100" width="32">
+<g stroke="cornflowerblue" stroke-width="8" stroke-linecap="round" fill="white">
 	<line x1="-20" y1="20" x2="20" y2="-20" />
 	<line x1="-20" y1="-20" x2="20" y2="20" />
 	</g>
 </svg>
 
+<p>More information: <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/line">developer.mozilla.org</a>.</p>
 <!-- Line --></div>
 
-<h2>Circle</h2><div>
+<h2 cbc>Circle</h2><div>
+
+<p>The <tt>circle</tt> element needs the center c<sub>x</sub> c<sub>y</sub> and the radius r:</p>
 
 <figcaption class="listing">Circles example code</figcaption><pre>
-&lt;svg  version="1.1" xmlns="http://www.w3.org/2000/svg" 
-    viewBox="-50 -50 100 100" width="50" height="50"&gt;
-&lt;g stroke="darkorange" stroke-width="8" stroke-linecap="round" fill="transparent"&gt;
+&lt;svg viewBox="-50 -50 100 100" width="50"&gt;
+&lt;g stroke="cornflowerblue" stroke-width="8" stroke-linecap="round" fill="transparent"&gt;
     &lt;circle cx="-20" cy="-20" r="23" /&gt;
     &lt;circle cx="20" cy="-20" r="23" /&gt;
     &lt;circle cx="20" cy="20" r="23" /&gt;
@@ -53,9 +60,10 @@
     &lt;/g&gt;
 &lt;/svg&gt;
 </pre>
+
 <figcaption class="figure">Circles</figcaption>
-<svg  version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100" width="50" height="50">
-<g stroke="darkorange" stroke-width="8" stroke-linecap="round" fill="transparent">
+<svg viewBox="-50 -50 100 100" width="50">
+<g stroke="cornflowerblue" stroke-width="8" stroke-linecap="round" fill="transparent">
     <circle cx="-18" cy="-18" r="28" />
     <circle cx="18" cy="-18" r="28" />
     <circle cx="18" cy="18" r="28" />
@@ -63,42 +71,47 @@
 	</g>
 </svg>
 
+<p>More information: <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/circle">developer.mozilla.org</a>.</p>
+
 <!-- Circle --></div>
 
-<h2>Rectangle</h2><div>
+<h2 cbc>Ellipse</h2><div>
 
-<figcaption class="listing">Rectangle example code</figcaption><pre>
-&lt;svg  version="1.1" xmlns="http://www.w3.org/2000/svg" 
-    viewBox="-50 -50 100 100" width="50" height="50"&gt;
-&lt;g stroke="darkorange" stroke-width="8" stroke-linecap="round" 
-    stroke-linejoin="round" fill="#FFD080"&gt;
-    &lt;rect x="-45" y="-45" width="90" height ="50" rx="10" /&gt;
-&lt;/g&gt;
+<p>The <tt>ellipse</tt> element creates an ellipse around a center point (<tt>cx</tt>, <tt>cy</tt>) with the radii <tt>rx</tt> and <tt>ry</tt>. The <tt>pathLength</tt> attribute delivers the length of the path.</p>
+
+<figcaption class="listing">SVG code for an ellipse</figcaption><pre>
+&lt;svg viewBox="-50 -50 100 100" width="100" 
+    stroke="cornflowerblue" fill="none" stroke-width="5"&gt;
+    &lt;<hi>ellipse</hi> x="0" y="0" rx="40" ry="20" pathLength="2" /&gt;    
+    &lt;/svg&gt;
 </pre>
 
-<figcaption class="figure">Rectangle</figcaption>
-<svg  version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100" width="50" height="50">
-<g stroke="darkorange" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="#FFD080">
-	<rect x="-45" y="-45" width="90" height ="50" rx="10" />
-</g>
-</svg>
+<figcaption class="figure">A ellipse</figcaption>
+<svg viewBox="-50 -25 100 50" width="100" stroke="cornflowerblue" fill="none" stroke-width="5">
+    <ellipse x="0" y="0" rx="45" ry="20" pathLength="2"></ellipse>    
+    </svg>
 
-<!-- Rectangle --></div>
+<p>More information: <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/ellipse">developer.mozilla.org</a>.</p>
 
-<h2>Path</h2><div>
+<!-- h2 Ellipse --></div>
+
+<h2 cbc>Path</h2><div>
+
+<p>The <tt>path</tt> element is most versatile. Its data attribute <tt>d</tt> contains a list of drawing commands (letters) and coordinates (numbers). Allowed separator characters are space, comma, dash, semicolon and maybe others.</p>
+
+<p><tt>d</tt> is a <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/Presentation">presentation attribute</a>, and thus they are CSS properties.</p>
 
 <figcaption class="listing">House of Nicholas example code</figcaption><pre>
-&lt;svg  version="1.1" xmlns="http://www.w3.org/2000/svg" 
-    viewBox="-50 -50 100 100" width="50" height="50"&gt;
-&lt;g stroke="darkorange" stroke-width="8" stroke-linecap="round" 
+&lt;svg viewBox="-50 -50 100 100" width="50&gt;
+&lt;g stroke="cornflowerblue" stroke-width="8" stroke-linecap="round" 
     stroke-linejoin="round" fill="#FFD080"&gt;
     &lt;path d="M -45,45 L 45,45 -45,-5 45,-5 0,-45 -45,-5 -45,45 45,-5 45,45" /&gt;
-&lt;/g&gt;
+    &lt;/g&gt;
 </pre>
 
 <figcaption class="figure">House of Nicholas</figcaption>
-<svg  version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100" width="50" height="50">
-<g stroke="darkorange" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="#FFD080">
+<svg viewBox="-50 -50 100 100" width="50">
+<g stroke="cornflowerblue" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="#FFD080">
 	<path d="M -45,45 L 45,45 -45,-5 45,-5 0,-45 -45,-5 -45,45 45,-5 45,45" />
 </g>
 </svg>
@@ -110,24 +123,193 @@
 <p>Besides of straight lines, bezier curves and elliptical arcs can be drawn:</p>
 
 <figcaption class="listing">House of Nicholas example code</figcaption><pre>
-&lt;svg  version="1.1" xmlns="http://www.w3.org/2000/svg" 
-    viewBox="-50 -50 100 100" width="50" height="50"&gt;
-&lt;g stroke="darkorange" stroke-width="8" stroke-linecap="round" 
+&lt;svg viewBox="-50 -50 100 100" width="50"&gt;
+&lt;g stroke="cornflowerblue" stroke-width="8" stroke-linecap="round" 
     stroke-linejoin="round" fill="#FFD080"&gt;
     &lt;path d="<hi>M</hi> -45,45 <hi>L</hi> 45,45 -45,-1 45,-1 <hi>A</hi> 45,45,0,0,0,-45,-1 <hi>L</hi> -45,45 45,-5 45,45" /&gt;
 &lt;/g&gt;
 </pre>
 
 <figcaption class="figure">House of Nicholas</figcaption>
-<svg  version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100" width="50" height="50">
-<g stroke="darkorange" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="#FFD080">
+<svg viewBox="-50 -50 100 100" width="50">
+<g stroke="cornflowerblue" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="#FFD080">
 	<path d="M -45,45 L 45,45 -45,-1 45,-1 A 45,45,0,0,0,-45,-1 L -45,45 45,-5 45,45" />
 </g>
 </svg>
 
-<p>More on the path commands <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#path_commands">here</a>.</p>
+<p>More inforamtion: <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/path">developer.mozilla.org</a>.</p>
 
+<h3 cbc>Path Drawing Commands</h3><div>
+
+<p>Drawing commands work like <a href="https://en.wikipedia.org/wiki/Turtle_graphics">turtle graphics</a>: The start point (x<sub>0</sub>, y<sub>0</sub>) is the current coordinate, the end point (x<sub>1</sub>, y<sub>1</sub>) is specified in the drawing command. The end point of a drawing command becomes the start point of the following command.</p>
+
+<p>Lowercase letter commands use relative coordinates (dx, dy) to determine the end point.</p>
+
+<p>All parameter sets can be repeated multiple times, the drawing command is then repeated without having to specify the command letter.</p>
+
+<p>More information: <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#path_commands">developer.mozilla.org</a>.</p>
+
+<h4 cbc>Move Commands</h4><div>
+
+<p>The move commands don't draw a line, they only set the start point for the following drawing command.</p>
+
+<p>More information: <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#moveto_path_commands">developer.mozilla.org</a>.</p>
+
+<dl>
+<dt>M x<sub>1</sub> y<sub>1</sub></dt><dd>Move to absolute x, y.</dd>
+<dt>m dx dy</dt><dd>Move relavtive by dx, dy.</dd>
+</dl>
+
+</div>
+
+<h4 cbc>Line Commands</h4><div>
+
+<p>Line commands draw a straight line between start point and end points.</p>
+
+<p>More information: <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#lineto_path_commands">developer.mozilla.org</a></p>
+
+<dl>
+<dt>L x<sub>1</sub> y<sub>1</sub></dt><dd>Line to absolute x, y</dd>
+<dt>l dx dy</dt><dd>Line relative by dx, dy.</dd>
+<dt>H x<sub>1</sub></dt><dd>Horizontal line to absolute x</dd>
+<dt>h dx</dt><dd>Horizontal line relative by dx</dd>
+<dt>V y<sub>1</sub></dt><dd>Vertical line to absolute y</dd>
+<dt>v dy</dt><dd>Vertical line relative by dy</dd>
+</dl>
+
+</div>
+
+<h4 cbc>Cubic Bézier Curves</h4><div>
+
+<p>A Bézier curve has two control points (x<sub>c0</sub>, y<sub>c0</sub> and x<sub>c1</sub>, y<sub>c1</sub>), and an end point (x<sub>1</sub>, y<sub>1</sub>). The control points determine the direction of the curve in the start and end points.</p>
+
+<p>The smooth cubic Bézier curve determines the (omitted) start control point as a reflection of the previous end control point.</p>
+
+<p>More information: <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#cubic_b%C3%A9zier_curve">developer.mozilla.org</a>.</p>
+
+<dl>
+<dt>C x<sub>c0</sub> y<sub>c0</sub> x<sub>c1</sub> y<sub>c1</sub> x<sub>1</sub> y<sub>1</sub></dt><dd>Cubic Bézier curve absolute</dd>
+<dt>c dx<sub>c0</sub> dy<sub>c0</sub> dx<sub>c1</sub> dy<sub>c1</sub> dx<sub>1</sub> dy<sub>1</sub></dt><dd>Cubic Bézier curve relative</dd>
+<dt>S x<sub>c1</sub> y<sub>c1</sub> x<sub>1</sub> y<sub>1</sub></dt><dd>Smooth cubic Bézier curve absolute</dd>
+<dt>x dx<sub>c1</sub> dy<sub>c1</sub> dx<sub>1</sub> dy<sub>1</sub></dt><dd>Smooh cubic Bézier curve relative</dd>
+</dl>
+
+</div>
+
+<h4 cbc>Quadratic Bézier Curves</h4><div>
+
+<p>Quadradic Bézier curves have a start point (x<sub>0</sub>, y<sub>0</sub>), a control point (x<sub>c</sub>, y<sub>c</sub>), and an end point (x<sub>1</sub>, y<sub>1</sub>). The start point is not specified in the command.</p>
+
+<p>Smooth quadratic Bézier curves omit the control point, its coordinates is a reflection of the control point of the previous command.</p>
+
+<p>More information: <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#quadratic_b%C3%A9zier_curve">developer.mozilla.org</a></p>
+
+<dl>
+<dt>Q x<sub>c</sub> y<sub>c</sub> x<sub>1</sub>, y<sub>1</sub></dt><dd>Quadratic Bézier curve absolute</dd>
+<dt>q dx<sub>c</sub> dy<sub>c</sub> dx<sub>1</sub>, dy<sub>1</sub></dt><dd>Quadratic Bézier curve relative</dd>
+<dt>T x<sub>1</sub>, y<sub>1</sub></dt><dd>Smooth quadratic Bézier curve absolute</dd>
+<dt>t dx<sub>1</sub>, dy<sub>1</sub></dt><dd>Smooth quadratic Bézier curve relative</dd>
+</dl>
+
+</div>
+
+<h4 cbc>Elliptical Arcs</h4><div>
+
+<p>Elliptical arcs are portions of an ellipse with the radii r<sub>x</sub> and r<sub>y</sub> and the ellipse rotation angle φ<sub>rot</sub>. The large arc flag F<sub>large</sub> determines whether the small arc (0) or the large arc (1) is painted. The sweep flag F<sub>sweep</sub> determines the direction of turn.</p>
+
+<p>Once again, the start point (x<sub>0</sub>, y<sub>0</sub>) is not specified, and the end point (x<sub>1</sub>, y<sub>1</sub>) becomes the end point of the next drawing command.</p>
+
+<p>More information: <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#elliptical_arc_curve">developer.mozilla.org</a></p>
+
+<dl>
+<dt>A r<sub>x</sub> r<sub>y</sub> φ<sub>rot</sub> F<sub>large</sub> F<sub>sweep</sub> x<sub>1</sub> y<sub>1</sub></dt><dd>Elliptical arc absolute</dd>
+<dt>a r<sub>x</sub> r<sub>y</sub> φ<sub>rot</sub> F<sub>large</sub> F<sub>sweep</sub> dx<sub>1</sub> dy<sub>1</sub></dt><dd>Elliptical arc relative</dd>
+</dl>
+
+</div>
+
+<h4 cbc>Close Path</h4><div>
+
+<p>The Z command draws a straight line between the end point of the previous command and the start point of the first point of the path, and thereby creates a closed shape.</p>
+
+<p>More information: <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#closepath">developer.mozilla.org</a></p>
+
+
+<dl>
+<dt>Z</dt>
+<dt>z</dt><dd>Close path</dd>
+</dl>
+
+</div>
+</div>
 
 <!-- Path --></div>
+
+<h2 cbc>Polygon</h2><div>
+
+<p>Paints a closed shape from a number of connected straight lines. Syntax:</p>
+<pre>&lt;polygon x<sub>1</sub> y<sub>1</sub> &hellip; x<sub>n</sub> y<sub>n</sub> /&gt;</pre>
+
+<p>More information: <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/polygon">developer.mozilla.org</a>.</p>
+
+<!-- h2 Polygon --></div>
+
+<h2 cbc>Polyline</h2><div>
+
+<p>Paints an open shape from a number of connected straight lines. Syntax:</p>
+<pre>&lt;polyline x<sub>1</sub> y<sub>1</sub> &hellip; x<sub>n</sub> y<sub>n</sub> /&gt;</pre>
+
+<p>More information: <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/polyline">developer.mozilla.org</a>.</p>
+
+<!-- h2 Polygon --></div>
+
+<h2 cbc>Rectangle</h2><div>
+
+<p>Rectangles are defined by the coordinates of the upper left corner (x, y), width and height. Optionally, you can specify the corner radii r<sub>x</sub> and r<sub>y</sub>:</p>
+
+<figcaption class="listing">Rectangle example code</figcaption><pre>
+&lt;svg viewBox="-50 -50 100 100" width="50"&gt;
+&lt;g stroke="cornflowerblue" stroke-width="8" stroke-linecap="round" 
+    stroke-linejoin="round" fill="powderblue"&gt;
+    &lt;rect x="-45" y="-45" width="90" height ="50" rx="10" /&gt;
+&lt;/g&gt;
+</pre>
+
+<figcaption class="figure">Rectangle</figcaption>
+<svg viewBox="-50 -50 100 100" width="50">
+<g stroke="cornflowerblue" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="powderblue">
+	<rect x="-45" y="-45" width="90" height ="50" rx="10" />
+</g>
+</svg>
+
+<p>More information: <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/rect">developer.mozilla.org</a>.</p>
+
+<!-- Rectangle --></div>
+
+<h2 cbc id="text-element">Text</h2><div>
+
+<p>Unlike HTML, text must be defined inside the <tt>text</tt> element, otherwise it will not be rendered. The individual glyphs can all be rotated by the same angle φ, or individually with different angles. The text can be stretched or condensed to fit the <tt>textLength</tt> value. The <tt>lengthAdjust</tt> value determines the stretching method, either <tt>spacing</tt>, or <tt>spacingAndGlyphs</tt>.</p>
+
+<p>Syntax:</p>
+<pre>
+&lt;text x="x<sub>1</sub>" y="y<sub>1</sub>" rotate="φ<sub>0</sub> φ<sub>1</sub> &hellip; φ<sub>n</sub>" textLength="len" lengthAdjust="how"&gt;Hello world!&lt;/text&gt;
+&lt;text x="dx" y="dy" rotate="φ<sub>0</sub> φ<sub>1</sub> &hellip; φ<sub>n</sub>" textLength="len" lengthAdjust="how"&gt;Hello world!&lt;/text&gt;
+</pre>
+
+<p>More information: <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text">developer.mozilla.org</a>.</p>
+
+<!-- h2 Text --></div>
+
+<h2 cbc>TSpan</h2><div>
+
+<p>The <tt>tspan</tt> element serves the same purpose as the <tt>span</tt> element in HTML. It appears in the body of the <a href="#text-element">text</a> element.</p>
+
+<figcaption class="listing">TSPAN example</figcaption><pre>
+&lt;text&gt;&lt;tspan&gt;Hello&lt;/tspan&gt; world!&lt;/text&gt;
+</pre>
+
+<p>The <tt>tspan</tt> element allows to apply CSS rules to portions of a text.</p>
+
+<!-- h2 tspan --></div>
 
 </div><script type="module" src="/inc/page.js" ></script></body></html>

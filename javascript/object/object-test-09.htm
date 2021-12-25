@@ -1,0 +1,19 @@
+﻿<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="object-test-09.htm">object-test-09.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+	// Static members
+const Person = class {
+    static #instanceCounter = 0 ;
+    static countInstances ( ) { console.log ( ++ #Person.instanceCounter ) ; }
+    constructor ( ) {
+        Person.countInstances( );
+        } } ;
+
+const o1 = new Person( );
+const o2 = new Person( );
+const o3 = new Person( );
+</script>
+</body></html>

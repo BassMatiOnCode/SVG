@@ -1,0 +1,15 @@
+<html><body>
+<p><a href="primer-test-02.htm" target="_blank">primer-test-02.htm</a></p>
+<p>Launch the F10 developer tools or press ctrl-shift-i and single-step through the script code.</p>
+<script type="module">
+function a ( ) { 
+	for ( let i = 0 ; i < 3 ; i ++ ) {
+		document.body.innerHTML += ( "<br/>" + "a:" + i );
+		for ( let i = 0 ; i < 3 ; i ++ ) { 
+			document.body.innerHTML += ( " b:" + i + " " );
+	}	}	}
+
+document.body.innerHTML += "Starting..." ;
+a( );
+document.body.innerHTML += "<br/>Finished." ;
+</script></body></html>

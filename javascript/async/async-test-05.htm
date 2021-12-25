@@ -1,0 +1,19 @@
+﻿<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="async-test-05.htm">async-test-05.htm</a></p>
+<p>This document must be served over the HTTP(S) protocol. The FILE protocol will not work!</p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+debugger;
+const xhr = new XMLHttpRequest( );
+xhr.addEventListener( "load", function loadHandler ( evt ) { 
+	console.log( this.responseText );
+	}	) ;
+xhr.addEventListener( "error", function errorHandler ( evt ) {
+	console.log( evt );
+	}	) ;
+xhr.open( "GET", "resource-1.txt" );
+xhr.send( );
+</script>
+</body></html>

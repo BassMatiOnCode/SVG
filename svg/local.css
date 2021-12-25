@@ -1,0 +1,5 @@
+/*
+ *  .../svg/local.css
+ */
+
+figcaption.figure+* { margin : 10px 0 0 10px }

@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm"version="2021-08-23" editor-name="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-09-10" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-09-10" />
+<meta name="version" content="1" />
+<meta name="categories" content="Web Technologies > JavaScript" />
+<meta name="tags" content="programming, JavaScript, async, callback" />
+<meta name="description" content="A callback function is passed into and called by another function to provide some user-defined behaviour. This pattern is commonly called \"inversion of control\"." />
+
+<link rel="stylesheet" href="/inc/page.css" />
+ 
+<title>Web-Technlologies > JavaScript > Callback Function</title>
+
+</head><body><div id="page-header"></div><div id="main-toolbar"></div><div id="path-bar"><a href="/index.htm">Home</a> > <a href="/web-technologies/index.htm">Web Technologies</a> > <a href="JavaScript">JavaScript</a></div><div id="content">
+
+<h1>Callback Function</h1>
+
+<p id="page-abstract"></p>
+
+<h2 cbc>Example 1</h2><div>
+
+<p>The following example demonstrates how a generic <tt>find</tt> method searches an array for entries that match user-defined criteria:</p>
+
+<figcaption class="listing">Address book search example (<a href="async-test-01.htm">async-test-01.htm</a>)</figcaption><pre>
+    <cc>// Person constructor function</cc>
+function Person ( name, jobTitle ) {
+    this.name = name;
+    this.jobTitle = jobTitle;
+    }
+    <cc>// Address book constructor function</cc>
+function AddressBook ( ) {
+    this.people = [ ] ;
+    }
+    <cc>// The find method expexts a callback function</cc>
+    <cc>// that returns true if a person shall be added</cc>
+    <cc>// to the result list.</cc>
+AddressBook.prototype = {
+    find ( compare ) {
+        const result = [ ] ;
+        for ( let i = 0 ; i < this.people.length ; i ++ ) 
+            if ( <hi>compare</hi>( this.people[ i ] )) result.push( this.people[ i ] ); 
+        return result ;
+    }	} ;
+
+    <cc>// Main Program</cc>
+    <cc>// Create the address book</cc>
+const book = new AddressBook( );
+book.people.push ( 
+    new Person ( "John Smith" , "mechanic" ) ,
+    new Person ( "Joe Doe", "accountant" ) ,
+    new Person ( "Jane Lane" , "manager" ) ,
+    new Person ( "Johnny Walker" , "mechanic" )
+    ) ;
+    <cc>// Define the match function</cc>
+function <hi>identifyMechanic</hi> ( person ) { 
+    return person.jobTitle === "mechanic" ;
+    }
+    <cc>// Find mechanics in the address book.</cc>
+console.log( book.find( identifyMechanic ));
+    <cc>// (2) [Employee, Employee]</cc>
+    <cc>//    0: Employee {name: 'John Smith', jobTitle: 'mechanic'}</cc>
+    <cc>//    1: Employee {name: 'Johnny Walker', jobTitle: 'mechanic'}</cc>
+    <cc>//    length: 2</cc>
+    <cc>//    [[Prototype]]: Array(0)</cc>
+</pre>
+
+<p>The <tt>AddressBook</tt> provides the generic search algorithm, but is ignorant of the entry match criteria. An address book user passes a custom match function to the <tt>AddressBook.find( )</tt> method which is called in the loop inside the <tt>find</tt> method. If the function returns true, the current address book entry is added to the result list.</p>
+
+<!-- h2 Example 1 --></div>
+
+<h2 cbc>Example 2</h2><div>
+
+<p>A more advanced example provides input elements to the user. The code is as follows:</p>
+
+<figcaption class="listing">Address book search example (<a href="async-test-02.htm">async-test-02.htm</a>)</figcaption><pre>
+const o1 = { match ( person ) { 
+    return person [ this.propertyName ] === this.matchValue ; 
+    }  }
+    <cc>// Register an event handler with the find button to fill</cc>
+    <cc>// the search parameters into the match object, then</cc>
+    <cc>// call the address book find method:</cc>
+document.getElementById( "findButton" ).addEventListener( "click", ( ) => { 
+    o1.propertyName = document.getElementById( "propertyName" ).value ;
+    o1.matchValue = document.getElementById( "matchValue" ).value ;
+    console.log( book.find ( o1.match.<hi>bind</hi>( o1 ))) 
+    } ) ;
+</pre>
+
+<p>The page provides some HTML elements for user input:</p>
+
+<figcaption class="listing">Related user input elements</figcaption><pre>
+&lt;input id="propertyName" type="text" value="jobTitle"&gt;&lt;br/&gt;
+&lt;input id="matchValue" type="text" value="mechanic"&gt;&lt;br/&gt;
+&lt;button id="findButton"&gt;Find&lt;/button&gt;
+</pre>
+
+<p>The difference to the previous example not big. Worth to note is that the <tt>match</tt> method has to be bound to its object explicitly, otherwise <tt>this</tt> inside the match function body would point to <tt>globalThis</tt> &ndash; which clearly is not what we want.</p>
+
+<!-- h2 Example 2 --></div>
+
+<h2 cbc>Example 3</h2><div>
+
+<p>Callbacks are perfect for asynchronous operations. For example, the window interval timer:</p>
+
+<figcaption class="listing">Address book search example (<a href="async-test-03.htm">async-test-03.htm</a>)</figcaption><pre>
+const ticker = { count : 0 ,  start ( ) { 
+	window.setInterval ( ( ) => { this.count += 1 ; console.log ( this.count ) } , 1000 ) } 
+	}
+ticker.start( );
+	<cc>// 1
+	// 2
+	// 3
+	// &hellip;</cc>
+</pre>
+
+<p>The problem starts when you have to control a <em>sequence</em> of asynchronous operations, such as this:</p>
+
+<pre>startSequence( ) then step2( ) then step3( )</pre>
+
+<p>And so on. But things can get pretty much complicated very fast. Consider error handling:</p>
+
+<figcaption class="figure">A more complex procedure</figcaption>
+<object data="async/fig-001.svg" type="text/svg+xml" style="margin-top: 10px;"></object>
+
+<p>In essence, you are designing a <a href="https://en.wikipedia.org/wiki/Finite-state_machine">state machine</a> this way.</p>
+
+<p></p>
+
+<!-- h2 Example 3 --></div>
+
+</div><script type="module" src="/inc/page.js" ></script></body></html>

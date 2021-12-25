@@ -1,0 +1,43 @@
+<html>
+<body>
+<p>Many attributes like <tt>stroke</tt> and <tt>fill</tt> are inherited from a parent, except attributed that define the core geometry of an element.</p>
+<p>Many styles are inherited from parent to children. Geometry attributes are usually not inherited.</p>
+<p>Predefined elements can be used with the <tt>defs</tt> and <tt>use</tt> keywords.Define an element in the defs body and give it an <tt>id</tt> attribute. It will not be rendered. An instance is created with <tt>&lt;use href="#elementId" /&gt;</tt>. The referenced element doesn't have to be defined in the <tt>defs</tt> body, any element will do.</p>
+<p>You may have to namespace-prefix the href attribute for older hosts:</p>
+<pre>
+&lt;svg xmlns="http://www.w3.org/2000/svg" xml:lang="en"
+xmlns:xlink="http://www.w3.org/1999/xlink"
+&hellip;&gt;
+&hellip;
+&lt;xlink:href="&hellip;
+</pre>
+
+<h2 cbc>Style Sheets</h2><div>
+<p>An SVG element may contain CSS <tt>style</tt> elements. They are usually kept near the top, before or after the <tt>defs</tt> element</p>
+<p>Inline SVG can be styled with external stylesheets.</p>
+<p></p>
+</div>
+
+<h2 cbc>Text</h2><div>
+<p>Text is created with <tt>text</tt> elements.The <tt>text-anchor</tt> attribute defines the reference ooibt for positioning. Possible values are <tt>left</tt>, <tt>right</tt> and <tt>center</tt>.</p>
+<p>Text colors are set with <tt>stroke</tt> and <tt>fill</tt> attributes. The stroke color is usually set to <tt>none</tt>, although it can be used for an outline effect. Note that the CSS attribute <tt>color</tt> doesn't work.</p>
+</div>
+
+<h2 cbc>Radial Gradients</h2><div>
+<p>The <tt>radialGradient</tt> element creates (you might have guessed it) a radial gradient. Just put a number of stop color elements in the body. <tt>fx</tt> and <tt>fy</tt> attributes define the center of the effect.</p>
+</div>
+
+<h2 cbc>Linear Gradients</h2><div>
+<p>Put a number of stop color elements in the body to define the effect.</p>
+</div>
+
+<h2 cbc>SMIL Animations</h2><div>
+<p>Are not suported by Microsoft, and therefore other browser developers don't much effort into <a href="https://en.wikipedia.org/wiki/Synchronized_Multimedia_Integration_Language">SMIL</a>.</p>
+</div>
+
+<h2 cbc>CSS Animations</h2><div>
+<p>CSS animations are not a full replacement for SMIL, but better supprted by browser manufacturers. Presentation attributes can be overridden by CSS rules. Inline CSS cannot be overridden by stylesheet rules. No all CSS attributes can be animated.</p>
+</div>
+
+
+</body></html> 

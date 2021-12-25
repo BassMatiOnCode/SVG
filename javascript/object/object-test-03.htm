@@ -1,0 +1,121 @@
+﻿<html><head>
+<title>Script Test Page</title>
+</head><body>
+<p><a href="object-test-03.htm">object-test-03.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<script>
+		// The person factory creates person instances and
+		// initializes their own members.
+const PersonFactory = function ( firstName, lastName ) {
+		// Create a new person instance and initialize properties 
+	const o = Object.create ( PersonFactory.prototype, {
+		firstName : { enumerable : true , writable : true , value : firstName } ,
+		lastName : { enumerable : true , writable : true , value : lastName }
+		} ) ;
+	return o ;
+	} ;
+
+		// The person prototype inherits from Object.prototype, and 
+		// provides members shared between person instances.
+PersonFactory.prototype = Object.create ( Object.prototype , {
+	constructor : { enumerable : true, value : PersonFactory } ,
+	greet : { enumerable : true , value : function ( termination = "." ) { 
+		return "Hi, my name is " + this.firstName + " " + this.lastName + termination } } , 
+	farewell : { enumerable : true , value : function ( ) { 
+		return "Goodbye!" } }
+	} ) ; 
+
+		// The employee factory creates employee instances and
+		// initializes their own members.
+const EmployeeFactory = function ( firstName, lastName, position ) {
+		// Call the parent class constructor first. 
+	const o = Object.getPrototypeOf( EmployeeFactory.prototype ).constructor( firstName, lastName );
+		// Change the prototype from person prototype to employee prototype.
+	Object.setPrototypeOf( o, EmployeeFactory.prototype );
+		// Create and initialize employee instance members.
+	Object.defineProperties ( o, {
+		position : { enumerable : true , writable : true , value : position }
+		} ) ;
+	return o ;
+	} ;
+
+		// The employee prototype inherits from the person prototype, and 
+		// provides members shared between employee instances.
+EmployeeFactory.prototype = Object.create ( PersonFactory.prototype , {
+	constructor : { value : EmployeeFactory, enumerable : true } , 
+	greet : { enumerable : true , value : function ( termination = "." ) { 
+		return Object.getPrototypeOf( EmployeeFactory.prototype )
+			.greet.call( this, ", " ) + this.position + termination } }
+	} ) ;
+
+		// The manager factory creates manager instances and
+		// initializes their own members.
+const ManagerFactory = function ( firstName, lastName, department ) {
+		// Call the parent class constructor first. 
+	const o = Object.getPrototypeOf( ManagerFactory.prototype ).constructor( firstName, lastName, "manager" );
+		// Change the prototype from employee prototype to manager prototype.
+	Object.setPrototypeOf( o, ManagerFactory.prototype );
+		// Create and initialize manager instance members.
+	Object.defineProperties ( o, {
+		department : { enumerable : true , writable : true , value : department }
+		} ) ;
+	return o ;
+	} ;
+
+		// The employee prototype inherits from the person prototype, and 
+		// provides members shared between employee instances.
+ManagerFactory.prototype = Object.create ( EmployeeFactory.prototype , {
+	constructor : { value : ManagerFactory, enumerable : true } , 
+	greet : { enumerable : true , value : function ( termination = " department." ) { 
+		return Object.getPrototypeOf( ManagerFactory.prototype )
+			.greet.call( this, " of the " ) + this.department + termination } }
+	} ) ;
+
+debugger;
+const o1 = new ManagerFactory ( "John", "Doe", "accounting" );
+console.log( o1.greet( ));
+	// Hi, my name is John Doe, manager of the accounting department.
+
+console.log( o1 );
+	// ManagerFactory {firstName: 'John', lastName: 'Doe', position: 'manager', department: 'accounting'}
+console.log( o1 instanceof ManagerFactory );
+	// true
+console.log( o1 instanceof EmployeeFactory );
+	// true
+console.log( o1 instanceof PersonFactory );
+	// true
+console.log( o1 instanceof Object );
+	// true
+console.log( o1.constructor.name );
+	// ManagerFactory
+
+const p1 = Object.getPrototypeOf( o1 );
+console.log( p1 );
+	// EmployeeFactory {constructor: ƒ, greet: ƒ}
+console.log( p1.constructor.name );
+	// ManagerFactory
+
+const p2 = Object.getPrototypeOf( p1 );
+console.log( p2 );
+	// PersonFactory {constructor: ƒ, greet: ƒ}
+console.log( p2.constructor.name );
+	// EmployeeFactory
+
+const p3 = Object.getPrototypeOf( p2 );
+console.log( p3 );
+	// {constructor: ƒ, greet: ƒ, farewell: ƒ}
+console.log( p3.constructor.name );
+	// PersonFactory
+
+const p4 = Object.getPrototypeOf( p3 );
+console.log( p4 );
+	// {constructor: ƒ, __defineGetter__: ƒ, __defineSetter__: ƒ, hasOwnProperty: ƒ, __lookupGetter__: ƒ, …}
+console.log( p4.constructor.name );
+	// Object
+
+const p5 = Object.getPrototypeOf( p4 );
+console.log( p5 );
+	// null
+
+</script>
+</body></html>

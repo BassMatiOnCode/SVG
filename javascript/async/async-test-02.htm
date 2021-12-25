@@ -1,0 +1,62 @@
+<html><head>
+<title>Script Test Page</title>
+<style>
+label { display : inline-block ; width : 7em ; }
+</style>
+</head><body>
+<p><a href="async-test-02.htm">async-test-02.htm</a></p>
+<p>Press ctrl-shift-i to open the developer tools and debug the script in this document!</p>
+<p style="line-height : 180%">
+<label>Property name:</label> <input id="propertyName" type="text" value="jobTitle"><br/>
+<label>Match value:</label> <input id="matchValue" type="text" value="mechanic"><br/>
+<label> </label> <button id="findButton">Find</button>
+</p>
+
+<script>
+    // Person constructor function
+function Person ( name, jobTitle ) {
+    this.name = name;
+    this.jobTitle = jobTitle;
+    }
+    // Address book constructor function
+function AddressBook ( ) {
+    this.people = [ ] ;
+    }
+    // The find method expexts a callback function
+    // that returns true if a person shall be added
+    // to the result list.
+AddressBook.prototype = {
+    find ( compare ) {
+        const result = [ ] ;
+        for ( let i = 0 ; i < this.people.length ; i ++ ) 
+            if ( compare( this.people[ i ] )) result.push( this.people[ i ] ); 
+        return result ;
+    }	} ;
+
+    // Main Program
+    // Create the address book
+debugger;
+const book = new AddressBook( );
+book.people.push ( 
+    new Person ( "John Smith" , "mechanic" ) ,
+    new Person ( "Joe Doe", "accountant" ) ,
+    new Person ( "Jane Lane" , "manager" ) ,
+    new Person ( "Johnny Walker" , "mechanic" )
+    ) ;
+
+    // Main program: Use a configurable match object
+    // with a match function:
+debugger;
+const o1 = { match ( person ) { 
+    return person [ this.propertyName ] === this.matchValue ; 
+    }  }
+    // Register an event handler with the find button to fill
+    // the search parameters into the match object, then
+    // call the address book find method:
+document.getElementById( "findButton" ).addEventListener( "click", ( ) => { 
+    o1.propertyName = document.getElementById( "propertyName" ).value ;
+    o1.matchValue = document.getElementById( "matchValue" ).value ;
+    console.log( book.find ( o1.match.bind( o1 ))) 
+    } ) ;
+</script>
+</body></html>
