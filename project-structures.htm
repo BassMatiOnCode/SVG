@@ -1,0 +1,315 @@
+﻿<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm" version="2022-01-17" editor="usp" />
+<meta name="author" content="USP" />
+<meta name="creation-date" content="2022-01-27" />
+<meta name="editor" content="USP" />
+<meta name="change-date" content="2022-01-27" />
+<meta name="version" content="1" />
+<meta name="categories" content="Programming > Web Design > Technologies" />
+<meta name="tags" content="programming, web design, technologies, project, structure" />
+<meta name="description" content="Websites can easily grow to an extent where development and maintanance cannot be efficiently done by a single team. The project files and code repositories must be structured in a way that multiple teams can work effectively without interference." />
+
+<link rel="stylesheet" href="/inc/page.css" />
+<style>
+.no-bullets li { list-style-type : none }
+.no-bullets ul { padding-left : 15px }
+</style>
+ 
+<title>Web Design - Project Structures</title>
+
+</head><body><header id="page-header"></header><div id="main-toolbar"></div><main id="page-content">
+
+<h1>Project Structures and Organisation</h1>
+
+<p id="page-abstract"></p>
+
+<h2 cbc>Website and Project Repository Structures</h2><div>
+
+<p>A typical website has the following structure:</p>
+
+<ul class="collapsible">
+<li>root
+	<ul>
+	<li>include
+		<ul>
+		<li>script</li>
+		<li>css</li>
+		<li>images</li>
+		</ul></li>
+	<li>index.htm</li>
+	<li>section-1
+		<ul>
+		<li>section-1 files</li>
+		</ul></li>
+	<li>&hellip;</li>
+	<li>section-n
+		<ul>
+		<li>section-n files</li>
+		</ul></li>
+	</ul></li>
+</ul>
+
+<p>Each website has a certain structure to organize the content. The following schema has proved to be useful:</p>
+
+<dl>
+<dt>https://website-1.github.io</dt>
+<dd>This is the website root address. The root folder holds the top-level resources, such as index.htm, logo.svg, colors.css, other web pages, et cetera.</dd>
+<dt>https://website-1.github.io/inc</dt>
+<dd>The /inc subfolder contains shared resources for the entire website, such as stylesheets, script and image files.</dd>
+<dt>https://website-1.github.io/subproject-1</dt>
+<dd>Subfolders hold content and resources for a partition of a website and are used to structurize content.</dd>
+</dl>
+
+<p>The structure and names were not chosen incidentally, they reflect different projects on Github or Gitlab (or any other code repository hoster). The website root project, github.com/website-1.git, is configured as Github Account Pages. The resources within are published directly under the root address "website-1.github.io".</p>
+
+<p>The inc folder is a separate project, "github.com/website-1/inc.git", and configured as Github Project Pages. The content appears under the url "website-1.github.io/inc".</p>
+
+<p>If a website grows large, it is advisable to organize the content into subprojects. Subprojects can be maintained and developed individually, while using shared resources from the /inc subproject. Every first-level subfolder lends itself to a subproject in its own repository on Github. For example, the content in "github.com/website-1/subproject-1.git" appears under the url "website-1.github.io/subproject-1". The content in each project is accessible throughout the entire site.</p>
+
+<p>Unfortunately, subprojects cannot be divided into smaller parts in the same manner, because each project website is published in a first-level folder, and there cannot be two projects with the same name. However, the logical structure of a website does not necessarily have to correspond to the file-system folder structure. A table-of-contents can present subproject contents in a completely different manner!</p>
+
+<!-- h2 --></div>
+
+<h2 cbc>Github Example</h2><div>
+
+<h3 cbc>Website Root Project</h3><div>
+
+<p>Let's examine a "website-1" project. First, you create a user account on Github named "website-1". The account URL is "https://github.com/website-1/". Then you add a project named "website-1.github.io" and enable Github pages for this project. The special name makes it the "user account website". The repository-url is "https://github.com/website-1/website-1.git". Its content will be accessible under the url "https://website-1.github.io". Add a simple <tt>index.htm</tt> and verify that the file is served as expected under the address "https://website-1.github.io/index.htm".</p>
+
+<p>Each website project must have its own account on Github.</p>
+
+<p>Configure the project for Github Pages. Make sure the website is published under the correct address.</p>
+
+<p>Now create a Github access token. Go to <tt>https://github.com/settings/tokens</tt> and click the button <tt>Generate new access token</tt>, provide the required information and configuration, then click on <tt>Generate token</tt>. Copy the generated token string and store it in a safe place. You will later need it as password to get write-access to your projects.</p>
+
+<p>Then you clone this repository to the developer machine. Open a console window, and execute the following commands:</p>
+
+<pre>
+$ md \github\website-1
+</pre>
+
+<p>This folder will contain the (partial) projects for <tt>website-1</tt>. The next step clones the site root project:</p>
+
+<pre>
+$ cd \github\website-1
+$ git clone https:\\github.com\website-1.git site-root
+</pre>
+
+<p>Note the local target folder name "site-root". The name is not important, if you ommit it, the root project will be stored in <tt>\github\website-1\website-1</tt> instead.</p>
+
+<p>To make work with multiple Github accounts easier, integrate user name and access token into the repository url:</p>
+
+<pre>
+$ git remote set-url origin https://github.com/website-1/website-1:access-token@website-1.git
+</pre>
+
+<p>Then modify <tt>index.htm</tt>, commit and push the change to the remote repository on Github: </p>
+
+<pre>
+$ git add index.htm
+$ git commit -m "Git push test"
+$ git push
+</pre>
+
+<p>After a while, navigate a web browser to <tt>https://website-1.github.io</tt>. Verify that the changes are correctly served from Github.</p>
+
+<!-- h3 --></div>
+
+<h3 cbc>Inc Subproject</h3><div>
+
+<p>In this step we will create the repository for the shared resources in the <tt>/inc</tt> subfolder. Goto to github, create a new empty project named "inc", and configure it for Github Pages. Make sure that it is served under the address <tt>https://website-1.github.io/inc</tt>.</p>
+
+<p>Then clone the project to your workstation and integrate username and access token into the remote url:</p>
+
+<pre>
+$ cd \github\website-1
+$ git clone https://github.com/website-1/inc.git
+cd inc
+$ git remote set-url origin https://github.com/website-1/website-1:access-token@inc.git
+</pre>
+
+<p>Add the file <tt>page.css</tt> and provide some content, such as </p>
+
+<pre>
+body {
+    font-family : "Segoe UI", Calibri, Verdana, Arial, Hevetica ;
+    font-size : 14px ;
+    line-height : 180% ;
+    }
+</pre>
+
+<p>Then add the changes and push them to the remote repository:</p>
+
+<pre>
+$ git add page.css
+$ git commit -m "page.css added for git push test"
+$ git push
+</pre>
+
+<p>Edit the file <tt>\github\website-1\site-root\index.htm</tt>, and add the following line inside the <tt>head</tt> element:</p>
+
+<pre>
+&lt;link rel="stylesheet" href="/inc/page.css" /&gt;
+</pre>
+
+<p>Commit the change and push it to the remote repository:</p>
+
+<pre>
+$ git add index.htm
+$ git commit -m "Link to page.css added."
+$ git push
+</pre>
+
+<p>After a while, navigate a web browser to <tt>https://website-1.github.io</tt>. Verify that index.htm is served correctly from Github with the styles in /inc/page.css applied.</p>
+
+<!-- h3 --></div>
+
+<h3 cbc>Creating a Subproject</h3><div>
+
+<p>In this step, we will create a partial project for the legal stuff. It is the same procedure as for the <tt>inc</tt> project, but the pages should appear in the <tt>/legal</tt> subfolder.</p>
+
+<p>Goto to github, create a new empty project named "legal", and configure it for Github Pages. Make sure that it is served under the address <tt>https://website-1.github.io/legal</tt>.</p>
+
+<p>Then clone the project to your workstation and integrate username and access token into the remote url:</p>
+
+<pre>
+$ cd \github\website-1
+$ git clone https://github.com/website-1/legal.git
+cd legal
+$ git remote set-url origin https://github.com/website-1/website-1:access-token@legal.git
+</pre>
+
+<p>Add the file <tt>contact.htm</tt> and provide some content, such as your email address. Make shure to provide a link to the home page:</p>
+
+<pre>
+&lt;p&gt;&lt;a href="\index.htm"&gt;Home&lt;/a&gt;&lt;/p&gt;
+</pre>
+
+
+<p>Add the following line inside the <tt>head</tt> element:</p>
+
+<pre>
+&lt;link rel="stylesheet" href="/inc/page.css" /&gt;
+</pre>
+
+<p>Then add the changes and push them to the remote repository:</p>
+
+<pre>
+$ git add contact.htm
+$ git commit -m "contact.htm added for link test."
+$ git push
+</pre>
+
+<p>Edit the file <tt>\github\website-1\site-root\index.htm</tt>, and add the following line inside the <tt>body</tt> element:</p>
+
+<pre>
+&lt;p&gt;&lt;a href="/legal/contact.htm"&gt;Contact&lt;/a&gt;&lt;/p&gt;
+</pre>
+
+<p>Commit the change and push it to the remote repository:</p>
+
+<pre>
+$ git add index.htm
+$ git commit -m "Link to /legal/contact.htm added."
+$ git push
+</pre>
+
+<p>After a while, navigate a web browser to <tt>https://website-1.github.io</tt>. Verify that index.htm is served correctly from Github. Click on the link. It should carry you to the contact form. Verify that the page is styled correctly. Then click the link to the homepage. As you can see, the content from partial projects on github pages are perfectly integrated and accessible.</p>
+
+<!-- h3 --></div>
+
+<h3 cbc>Local Webserver</h3><div>
+
+<p>Chances are that you may not want to push every change to the public webserver. For this purpose, we use a local webserver. A small, light-weight thing such as <tt>Deno</tt> works perfectly for this purpose. Make sure you have <tt>Deno</tt> installed and included in the <tt>path</tt> environment variable. Then execute the following commands:</p>
+
+<pre>
+$ deno install --allow-net --allow-read https://deno.land/std/http/file_server.ts
+$ cd \github\website-1\site-root
+$ file_server
+</pre>
+
+<p>The first line installs the file_server.ts module locally and creates some command wrappers. This has to be done only once. The third line actually starts the server, which will then listen on port 4507 on the local machine for incoming requests. The current directory serves as website root folder. Resources outside this directory tree won't be served.</p>
+
+<p>Now navigate a web browser to "localhost:4507/index.htm", and you should be able to view the index page. Unfortunately, the styles in <tt>/inc/page.css</tt>, and the link to the contact page doesn't work. Of course, they are on a completely different path.</p>
+
+<p>Fortunately, we have hard links and symbolic links since ages. Even Windows NT 3.1. had it. For git, a hard link to a file appears just like a "regular" file. Indeed, a regular file is a hard link is a data file with a directory reference count of 1, a hard link is a data file with a reference count of 2 or more. Quite similar, directory hard links (called "junctions" in Windows lingo) appear as regular directories to git. A symbolic link to a file is a "regular" file with the path to the target file in the data block. The operating system knows to follow the path and server the target file content. Git stores a symlink like a regular file. Similarly, directory symlinks are also just files with a link in the data block, but the link points to a directory. Git stores the symlink in the repository like a regular file, but ignores the files in the link target folder.</p>
+
+<p>So  a directory symlink seems to be the method of choice to make subprojects available in the root project:</p>
+
+<pre>
+$ cd \github\website-1\site-root
+$ mklink /D inc d:\github\website-1\inc
+$ mklink /D legal d:\github\website-1\legal
+git add -f inc
+git add -f legal
+</pre>
+
+<p>The commands above create the symbolic links to the subproject folders. Because the link points outside the site-root folder tree, the -f flag is required to force git to add the symlink to the repository.</p>
+
+<p>Now refresh the web browser. The <tt>index.htm</tt> should now be styled properly, which means that the <tt>/inc</tt> folder is available. Also, the link to the contact page works, and the document is styled correctly.</p>
+
+<p>One last step is to commit and push the changes to the remote repository and verify that the symbolic links don't interfer with the (already existing) subproject folders. Fortunately, everything works fine.</p>
+
+<!-- h3 --></div>
+<!-- h2 --></div>
+
+<h2 cbc>Sharing Resources Between Website Projects</h2><div>
+
+<p>Chances are that many resources, components, script files and stylesheets can be shared among different website projects. To achieve this, we can use a similar technique as for subproject in the example above. But the situation is different: Because we are going to share files between different github accounts, we must <em>copy</em> them. We can live with that, just for the benefit of keeping different website project independent from each other.</p>
+
+<p>On the other hand, duplication causes maintenance headache: If a file changes, the change must also be performed on <em>every</em> copy of the file. Failure is inevitable.</p>
+
+<p>Fortunatly, hard links come to the rescue. But first, we will setup a new github account for our company. Then create an access token as shown before. Then <em>fork</em> the <tt>github.com/website-1/inc.git</tt> repository with the git web fork tool. Give it a name like <tt>https://github.com/my-company/web-components.git</tt>. In the project settings, cut the link to the source project.</p>
+
+<p>Then we clone this project to the workstation:</p>
+
+<pre>
+$ md \github\my-company
+cd \github\my-company
+git clone https:\\github.com\my-company\web-components.git
+</pre>
+
+<p>Don't delete the <tt>github.com/website-1/inc.git</tt> project, otherwise the website is broken. From now on, develompment is made on the <tt>github.com/my-company/web-components.git</tt>. Changes are distributed (selectively) to the <tt>github.com/website-1/inc.git</tt> project, and to any other projects that uses the web components.</p>
+
+<p>Now we have two copies of the inc folder on the workstation:</p>
+
+<pre>
+\github\my-company\web-components
+\github\website-1\inc
+</pre>
+
+<p>And here come the hard-links into play. First, <em>delete</em> the content files in the <tt>website-1</tt> folder. Then create hardlinks for each deleted file or folder:</p>
+
+<pre>
+$ cd \github\website-1\inc
+$ del page.css
+$ mklink /H page.css \github\my-company\web-components\page.css
+$ del page.js
+$ mklink /H page.js \github\my-company\web-components\page.js
+$ del collapsible/
+$ mklink /J collapsible \github\my-company\web-components\collapsible
+</pre>
+
+<p>And so on. Symbolic links cannot be used, we need git to see real (hard-linked) files. When done, we have no longer copies of the web components file on the workstation.</p>
+
+<p>This method is used to selectively used resources from <tt>web-components</tt> in a website project.</p>
+
+<p>Now let's assume we add some changes to the <tt>...my-company\web-components\page.css</tt> file. The change is added, committed and pushed to the remote repository as usual. Because the website project(s) hard-link to the files in the <tt>web-components</tt> folder, the changes are immediately visible locally:</p>
+
+<pre>
+$ cd \github\website-1\inc
+$ git status
+Changed file(s):
+	page.css
+</pre>
+
+<p>If you run a local web server for this project, the change should already be visible in the browser. Now we only have to add, commit and push the changes to the remote repository of <tt>website-1</tt> to make the changes go online. I must admit that this method includes manual steps. Firstly, the <tt>web-components</tt> project must be switched to the main branch before dependent website projects are updated. Secondly, every dependent project repositories must be updated manually to deploy the changes to the live server.</p>
+
+<p>I can think of other ways to distribute the changes, for example by pulling changes from the web components project into the dependend website project. I'll investigate that later.</p>
+
+<!-- h2 --></div>
+
+</main><footer id="page-footer"></footer><script type="module" src="/inc/page.js" ></script></body></html>
