@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en-US"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +17,10 @@
 .no-bullets li { list-style-type : none }
 .no-bullets ul { padding-left : 15px }
 </style>
+
+<style>
+.dense { margin-top : 0px ; margin-bottom : 0px }
+</style>
  
 <title>Web Design - Project Structures</title>
 
@@ -26,6 +30,74 @@
 
 <p id="page-abstract"></p>
 
+
+
+<h2 cbc>Website and Project Repository Structures</h2><div>
+
+<p>A typical website has the following structure:</p>
+
+<ul class="collapsible dense">
+<li>root
+	<ul>
+	<li>inc
+		<ul>
+		<li>script</li>
+		<li>css</li>
+		<li>icons</li>
+		</ul></li>
+	<li>index.htm</li>
+	<li>img
+    <ul>
+    <li>image files</li>
+	  </ul></li>
+	<li>logo.svg</li>
+	<li>section-1
+		<ul>
+		<li>section-1 files</li>
+		</ul></li>
+	<li>&hellip;</li>
+	<li>section-n
+		<ul>
+		<li>section-n files</li>
+		</ul></li>
+	</ul></li>
+</ul>
+
+<p>Let's call it the "website-1" project. The structure can be easily divided into partial projects:</p>
+
+<ul>
+<li>the site roor project contains the index.htm and the files and folder directly related to the entire website.</li>
+<li>the include files project</li>
+<li>the partial projects for the website sections</li>
+</ul>
+
+<p>This structure can be mapped to a code hoster account named "website-1". Typical code hosters are Github or gitlab, they provide a service named "Github Pages" or "Gitlab Pages" which allows to serve static web sites from their servers. The site root project must be named in a specific way so that it can be served from the root url ("website-1.github.io" or "website-1.gitlab.io"). The other projects are named "inc", "section-1", "section-2", and so on, so that they are served under the correct subfolder url.</p>
+
+<p>The following sections explain the setup procedure in detail.</p>
+
+<!-- h2 --></h2>
+
+<h2 cbc>Github Setup</h2><div>
+
+<ol class="instructions collapsible">
+<li>Create an account on Github named "website-1".</li>
+<li>Create an access token.</li>
+<li>Create a new empty project named "website-1".</li>
+<li>Create a new file named "docs/index.htm". This file will contain the home page of your web site. This implicitly creates the "docs" folder in your project. </li>
+<li>Enable Github Pages.
+  <ol>
+  <li>Select "main" as source branch.</li>
+  <li>Select "docs/" as source folder. The files will appear under "https://website-1.github.io/".</li>
+  </ol></li>
+<li>Create a new project named "inc".</li>
+<li>Create a new file named "docs/page.css". This file will provide the default style rules for the web pages. This implicitly creates the "docs" folder.</li>
+<li>Enable Github Pages for the project.
+  <ol>
+  <li>Select "main" as source branch.</li>
+  <li>Select "docs/" as source folder. The files will appear under the adress "https://website-1.github.io/inc/".</li>
+  </ol></li>
+<li></li>
+</ol>
 <h2 cbc>Website and Project Repository Structures</h2><div>
 
 <p>A typical website has the following structure:</p>
