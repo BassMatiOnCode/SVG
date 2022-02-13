@@ -39,8 +39,6 @@ div.code {
 
 <p id="page-abstract"></p>
 
-
-
 <h2 cbc>Website and Project Repository Structures</h2><div>
 
 <p>A typical website has the following structure:</p>
@@ -162,7 +160,20 @@ div.code {
 		</div>
 		If you work with Visual Studio, exclude the .vs folder. Files with a .bak extension will also be excluded from the repository. Depending on your preferences, you might want to supply slightly different content. When done, type control-c to close the input stream. As an alternative, you can create the file with notepad.exe:
 		<div class="code">$ notepad .gitignore</div></li>
-	<li>If not already present, create the <tt>docs</tt> subfolder:
+	<li>If not already present, create the <tt>.gitattributes</tt> file in the project root folder with the following content:
+        <div class="code">$ copy con .gitattributes
+        * text=auto
+        *.bat text eol=crlf
+        *.css text eol=crlf
+        *.htm text eol=crlf
+        *.js text eol=crlf
+        *.sh text eol=lf
+        *.svg text eol=crlf*.jpg -text
+        *.jpg -text
+        *.png -text
+        </div>
+		The purpose of this file is to ensure consistent line endings over all operating system platforms and in the remote repository. This avoids unnecessary update noise and conflicts in the repositories. The file list may have to be adjusted/expanded according to the specific needs of the project. More information at <a href="https://www.git-scm.com/docs/gitattributes">git-scm.com</a>.</li>
+    <li>If not already present, create the <tt>docs</tt> subfolder:
 		<div class="code">$ mkdir docs</div></li>
 	<li>If not already present, create the default styleheet file for the pages in the docs folder:
 		<div class="code">$ copy nul docs\page.css
@@ -326,7 +337,7 @@ $ mklink /h counter-1.css d:\github\my-company\web-components\nested-list-counte
 <pre>
 $ cd /d d:\github\website-1\inc
 $ git status
-Unobserved file(s):
+Untracked file(s):
     counter-1.css
 $ git add counter-1.css
 $ git commit -m "Nested ordered list counter component added to the project"
