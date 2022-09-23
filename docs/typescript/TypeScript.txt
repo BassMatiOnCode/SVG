@@ -1,0 +1,74 @@
+
+
+Const Declaration of Objects
+	Consider the following:
+		const o: { a: number } = { a : 123 } ;
+	This pretty much looks like a type literal declaration:
+		const a: number = 123 ;
+	In contrast to a variable declaration:
+		let a: number = 123;
+	But this time we are dealing with objects, not primitive types as above. The type of the right-hand operand clearly is an object with the member 'a' of type number, which was inferred from the number literal '123': 
+		{ a : 123 }
+	The type declaration specifies an object with a member named 'a' of type number, which matches the right hand side of the assignment operator.
+	Now what does the 'const' do in the object declaration? Short answer: You cannot assign a different value to the variable 'o'.
+	A class instance with the same structure is assignable to o:
+		class O {
+			contructor ( public a : number, public b : number ) { }
+			}
+		o = new O( 234, 345);
+	
+
+Optional Members
+	To declare that a member is optional, decorate it with a question mark:
+		let o: { a: number, b?: number };
+	The member 'b' is optional and may be undefined.
+
+Read-Only Members
+	...are declared with the keyword <tt>readonly</tt>:
+		let o: { readonly a: number };
+
+Empty Object Literal Assignment
+	The following is potentionally dangerous:
+		let o = { } ;
+	The assignment of an empty object declares a type that accepts nearly everything &mdash; except <tt>null</tt> and <tt>undefined</tt>. Avoid if possible.
+
+Type Alias
+	A type alias has the following syntax:
+		type type-name-2 = type-name-1
+	This makes most sence with objects:
+		type Person = { firstName: string, lastName: string };
+		let employee: person = { firstName : "John" , lastName : "Smith" };
+	A type alias is block-scoped.
+
+Type Operations
+Type Union
+	Like in set theory, the union of types is the sum of all members:
+		type t1 = { a: number, b: number };
+		type t2 = { b: number, c: number };
+		type t3 = t1 | t2;  // union, contains a, b and c
+		type t4 = t1 & t2;  // intersection, contains b only
+
+
+
+
+
+
+
+
+
+
+
+	
+Type Literals
+	A type that represents a single value. They provide extra safety.
+	const a: number = 123;
+	const b = 234;
+	let c: 1234 = 1234;
+	let d: true = true;
+	
+Configuration Flags
+noImplicitAny
+	strict
+	Warns if an inferred type is "any".
+	
+	

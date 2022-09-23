@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm" version="2022-02-09" editor="USP" />
+<meta name="author" content="USP" />
+<meta name="creation-date" content="2022-07-28" />
+<meta name="editor" content="USP" />
+<meta name="change-date" content="2022-07-28" />
+<meta name="version" content="1" />
+<meta name="categories" content="Web Technologies > SVG" />
+<meta name="tags" content="web, technology, SVG, animation" />
+<meta name="description" content="" />
+
+<link rel="stylesheet" href="/inc/page.css" />
+ 
+<title>SVG - Animation</title>
+
+</head><body><header id="page-header"></header><div id="main-toolbar"></div><main id="page-content">
+
+<h1>SVG Animation</h1>
+
+<p id="page-abstract"></p>
+
+<p>The animation element animates its parent element.</p>
+
+<h2 cbc>AnimateMotion</h2><div>
+
+<p>Moves an element along a path.</p>
+
+<dl class="syntax-list">
+<dt>path</dt>
+<dd>string, mandatory, defines the path of movement.</dd>
+<dd>The motion path can also be defined by an <tt>&lt;mpath&gt;</tt> child element.</dd>
+
+</dl>
+
+<svg viewBox="0 0 200 100" width="200" xmlns="http://www.w3.org/2000/svg">
+  <path id="the-motion-path" fill="none" stroke="lightgrey"
+    d="M20,50 C20,-50 180,150 180,50 C180-50 20,150 20,50 z" />
+  <circle r="5" fill="red">
+    <animateMotion dur="10s" repeatCount="indefinite" path="M20,50 C20,-50 180,150 180,50 C180,-50 20,150 20,50 z">
+		<mpath href="#the-motion-path"/>
+		</animateMotion>
+	</circle>
+</svg>
+
+<!--h2--></div>
+
+</main><footer id="page-footer"></footer><script type="module" src="/inc/page.js" ></script></body></html>

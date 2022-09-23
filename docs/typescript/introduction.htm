@@ -1,0 +1,421 @@
+﻿<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm" version="2022-01-17" editor="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-10-21" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-10-21" />
+<meta name="version" content="1" />
+<meta name="categories" content="Programming > Typescript" />
+<meta name="tags" content="programming, language, TypeScript, introduction, tutorial" />
+<meta name="description" content="This chapter will get you started with TypeScript. Simpe examples explain the concept provide the knowledge required to dive deeper into the TypeScript language. " />
+
+<link rel="stylesheet" href="/inc/page.css" />
+ 
+<title>Programming - Typescript - Introduction</title>
+
+</head>;<body><header id="page-header"></header><div id="main-toolbar"></div><main id="page-content">
+
+<h1>Introduction</h1>
+
+<p id="page-abstract"></p>
+
+<h2 cbc>Common Problems with JavaScript</h2><div>
+
+<p>Consider the following JavaScript:</p>
+
+<pre>
+let a = 3;
+a = "Hello world";
+</pre>
+
+<p>A variable in JavaScript can store values of different types.</p>
+
+<p>A simple addition of numbers:</p>
+
+<pre>
+let a = 1;
+let b = 2;
+console.log( a + b );
+<cc>// 3</cc>
+</pre>
+
+<p>The same operator applied to strings results in a concatenation:</p>
+
+<pre>
+let a = "Hello " ;
+let b = "world" ;
+console.log( a + b );
+<cc>// Hello world</cc>
+</pre>
+
+<p>The following code assumes two HTML input elements on a web page, where you can supply numeric values to be added:</p>
+
+<pre>
+let a = document.querySelector( "input#001").value;
+let b = document.querySelector( "input#002").value;
+console.log( a + b );
+<cc>// 12</cc>
+</pre>
+
+<p>Ooops. Input elements return strings, not numbers!</p>
+
+<p>Consider the following code:</p>
+
+<pre>
+let a = 1;
+let b ="2";
+console.log( a + b );
+<cc>// 12</cc>
+</pre>
+
+<p>While other programming languages consider this an error, JavaScript's coercion rules convert the first operand to a string type and then apply the plus operator. Which results in string concatenation.<p>
+
+<p>More options to fail: Accessing non-existing object members:</p>
+
+<pre>
+let o = { firstName : "John" , lastName : "Doe" };
+console.log( o.middleName );
+<cc>// TS2339 [ERROR]: Property 'middleName' does not exist 
+   on type '{ firstName: string; lastName: string; }'.</cc>
+</pre>
+
+<p>Now let's consider teamwork on projects. John Doe writes a library routine "add" which returns the sum of a sequence of numbers:</p>
+
+<pre>
+function add ( ...numbers ) {
+    let result = 0 ;
+    for ( let i = 0 ; i < numbers.length ; i ++ )
+        result += numbers[ i ];
+    return result;
+    }
+console.log( add( "1", "2", "3" ));
+<cc>// 123</cc>
+</pre>
+
+<p>Then his colleague John Smith uses that function, unaware of the fact that the functions expects a sequence of numbers, not strings:</p>
+
+<pre>
+console.log( add( "1", "2", "3" ));
+<cc>// 123</cc>
+</pre>
+
+<p>All these errors in JavaScript can only be detected at runtime.</p>
+
+<p>Now let's see what TypeScript can do for us:</p>
+
+<!--h2--></div>
+
+<h2 cbc>Type Annotations</h2><div>
+
+<p>The following TypeScript code decorates the variable a with a type annotation, a colon, followed by the type name:</p>
+
+<pre>
+let a<hi>:number</hi> = 3;
+a = "Hello world";
+<cc>// TS2322 [ERROR]: Type 'string' is not
+   assignable to type 'number'.</cc>
+</pre>
+
+<p>If you then try to change the value to some other type, you get an error &ndash; at <em>compile time</em>, not at run time at the customer!</p>
+
+<p>Similarly, function arguments can be decorated to indicate which types are expected:</p>
+
+<pre>
+function add ( a:number, b:number ) {
+   return a + b;
+    }
+console.log( add( 1, "2" ));
+<cc>// TS2345 [ERROR]: Argument of type 'string' is not assignable 
+   to parameter of type 'number'.</cc></pre>
+
+<p>Similarly, if we have a rest parameter, we can annotate a type. Here we have an array of numbers:</p>
+
+<pre>
+function add ( ...numbers<hi>:number[]</hi> ) {
+    let result = 0 ;
+    for ( let i = 0 ; i < numbers.length ; i ++ )
+        result += numbers[ i ];
+    return result;
+    }
+console.log( add( 1, 2, 3 ));
+<cc>// 6</cc>
+console.log( add( "1", "2", "3" ));
+<cc>// TS2345 [ERROR]: Argument of type 'string'
+   is not assignable to parameter of type 'number'.</cc>
+</pre>
+
+<p>In someone supplies something different than number, TypeScript will complain.</p>
+
+<!--h2--></div>
+
+<h2 cbc>Type Inference</h2><div>
+
+<p>TypeScript can <em>infer</em> the type of a variable upon initialization. In fact, it is recommended <em>not to annotate the typename</em> manually if the compiler can infer the correct type:</p>
+
+<pre>
+let a:number = 123;  // explicit type annotation
+let a = 123;   // inferred type is correct
+</pre>
+
+<p>Similarly, the function return type can be inferred:</p>
+
+<pre>
+function add ( a:number, b:number ) <hi>: number</hi> {
+    return a + b;
+    }
+</pre>
+
+<p>Here, the function return type has been annotated explicitly, but can be inferred by TypeScript from the return statement. However, for the purpose of clarity, it might be better to indicate the return type explicitly as shown above.</p>
+
+<!--h2--></div>
+
+<h2 cbc>Objects</h2><div>
+
+<p>In JavaScript, objects are quite dynamic. You can add and remove members at any time. This can be quite handy, but functions operating on objects usually <em>depend</em> on the existence of certain members. This can be enforced in TypeScript with the declaration of an <em>interface</em>. An interface defines the "shape" of an object. The interface name can then be used in a type decoration:</p>
+
+<pre>
+<hi>interface Person</hi> {
+    firstName : string ,
+    lastName : string,
+    dateOfBirth : Date
+    }
+
+let o1<hi>:Person</hi> = {
+    firstName : "John" ,
+    lastName : "Doe" ,
+    dateOfBirth : new Date( 1949, 12, 24 )
+    }
+
+let o2<hi>:Person</hi> = {
+    firstName : "Dave" ,
+    lastName : "Dee" ,
+    }
+<cc>// TS2741 [ERROR]: Property 'dateOfBirth' is missing 
+   in type '{ firstName: string; lastName: string; }' 
+   but required in type 'Person'.</cc>
+
+let o3<hi>:Person</hi> = {
+    firstName : "Max" ,
+    lastName : "Miller" ,
+    dateOfBirth : new Date( 1949, 12, 24 ),
+    address : "25 Main Street, Maine"
+    }
+<cc>// TS2322 [ERROR]: Type '{ firstName: string; lastName: string; 
+   dateOfBirth: Date; address: string; }' is not assignable 
+   to type 'Person'. Object literal may only specify known 
+   properties, and 'address' does not exist in type 'Person'.</cc>
+</pre>
+
+<p>TypeScript examines the "shape" of an assignment value and complains if there are missing or additional members.</p>
+
+<p>An object type can also be defined by using a <em>type alias</em>: </p>
+
+<pre>
+type Person = {
+    firstName : string ,
+    lastName : string,
+    dateOfBirth : Date
+    }
+</pre>
+
+<p>The difference between interface and type alias declaration is that a type alias cannot be redeclared or "reopened" to add members, an interface can:</p>
+
+<pre>
+interface Person {
+    firstName : string ,
+    lastName : string,
+    }
+
+let o1:Person = {
+    firstName : "John" ,
+    lastName : "Doe" ,
+    }
+<cc>// TS2741 [ERROR]: Property 'dateOfBirth' is missing 
+   in type '{ firstName: string; lastName: string; }' 
+   but required in type 'Person'.</cc>
+
+interface Person {
+    dateOfBirth : Date
+    }
+</pre>
+
+<p>Note that the member declaration <tt>dateOfBirth</tt> appears <em>after</em> first use above.</p>
+
+<p>NOTE that an interface declaration or a type alias is <em>not equivalent</em> to a JavaScript class declaration!</p>
+
+<!--h2--></div>
+
+<h2 cbc>Arrays</h2><div>
+
+<p>TypeScript supports two types of arrays: the <em>homogenuous list</em>, and the <em>fixed-length tuple</em>. Let's start with the list:</p>
+
+<pre>
+let a<hi>:number[]</hi> = [];
+a.push( 1 );
+a.push( "2" );
+<cc>// TS2345 [ERROR]: Argument of type 'string'
+   is not assignable to parameter of type 'number'.</cc>
+</pre>
+
+<p>The typename followed by the square brackets to declare an array is a shorthand for the generic array type</p>
+
+<pre>let a:Array&lt;number&gt; = [];</pre>
+
+<p>If the array variable is initialized with members, TypeScript can infer the element type, and it is recommended to write</p>
+
+<pre>let a = [ 1, 2, 3 ];</pre>
+
+<p>A <em>tuple</em> is declared by enumerating the typenames of fields in square brackets:</p>
+
+<pre>
+let a<hi>:[string, string]</hi> = ["John", "Doe"];
+a[1] = "Smith" ;
+a[2] = new Date(1949, 12, 24);
+<cc>// TS2322 [ERROR]: Type 'Date' 
+   is not assignable to type 'undefined'.</cc>
+<cc>// TS2493 [ERROR]: Tuple type '[string, string]' 
+   of length '2' has no element at index '2'.</cc>
+</pre>
+
+<p>Interestingly, you still can push additional elements:</p>
+
+<pre>
+a.push( "Max" );
+a.push( "Miller" );
+console.log( a );
+<cc>// [ "John", "Smith", "Max", "Miller" ]</cc>
+</pre>
+
+<p>Even if we change or add types to the tuple declaration.</p>
+
+<!--h2--></div>
+
+<h2 cbc>Functions</h2><div>
+
+<p>A type-annotated declaration has the following form:</p>
+
+<pre>
+function add (a:number, b:number) : number {
+    return a + b;
+    }
+console.log( add( 1, 2 ));
+console.log( add( "1", "2" ));
+<cc>// TS2345 [ERROR]: Argument of type 'string'
+   is not assignable to parameter of type 'number'.</cc>
+</pre>
+
+<p>Functions parameters are declared like variables, and the function return type is specified after the closing parenthesis. If a function does not return a value, the typename <tt>void</tt> is specified.</p>
+
+<p>The return type can usually be inferred by TypeScript, but it is not a mistake to declare it explicitly.</p>
+
+<p>Anonymous functions and arrow functions are often called in a specific context, where TypeScript can infer the parameter types:</p>
+
+<pre>
+const persons = [ 
+    { firstName : "John" , lastName : "Doe" } ,
+    { firstName : "John" , lastName : "Smith" } ,
+    { firstName : "Max" , lastName : "Miller" }
+    ] ;
+persons.forEach( function (p) { 
+    console.log( p.fistName, p.lastName ) 
+    } ) ; 
+<cc>// TS2551 [ERROR]: Property 'fistName' does not exist 
+   on type '{ firstName: string; lastName: string; }'. 
+   Did you mean 'firstName'?</cc>
+
+persons.forEach( (p) => { 
+    console.log( p.firstName, p.lastName ) 
+    } ) ; 
+</pre>
+
+<p>TypeScript recognizes the array's forEach method and infers that the parameter p is a person type, and thus finds the typo in the code.</p>
+
+<p>Arrow functions are declared similarly:</p>
+
+<pre>
+interface Person {
+    firstName:string , 
+    lastName:string
+    }
+const test = ( person:Person) : boolean => {
+    return person.firstName === "John" ;
+    }
+</pre>
+
+<p>The function parameters are annotated as usual, the return type annotation appears after the parameter list, followed by the arrow and the function block.</p>
+
+<h3>Optional Parameters</h3><div>
+
+<p>Optional function parameters have a question mark suffix:</p>
+
+<pre>
+function addPerson ( firstName:string, 
+    lastName:string, <hi>age?</hi>:number ) : void {
+    &hellip;
+    }
+</pre>
+
+<!--h3--></div>
+
+<h3>Default Parameters</h3><div>
+
+<p>JavaScript already defines the syntax for default parameter values:</p>
+
+<pre>
+function greet ( phrase:string <hi>= "Hi!"</hi> ) { &hellip; }
+</pre>
+
+<p>Add the default value after the equal sign. The parameter type can usually be omitted, because TypeScript can infer it.</p>
+
+<!--h3--></div>
+
+<h3>Rest Parameters</h3><div>
+
+<p>The type of rest parameters must be an array type:</p>
+
+<pre>
+function add( ...numbers<hi>:number[]</hi> ) {
+    let result = 0;
+    for ( const n of numbers ) { result += n ; }
+    return result;
+    }
+</pre>
+
+<p>It can also be a tuple type:</p>
+
+<pre>
+function log ( p<hi>:[string, string, integer]</hi> ) {
+    const [firstName, lastName, age] = p;
+    console.log( `{$firstName} {$lastName}, age {$age}` ); 
+    }
+</pre>
+
+<!--h3--></div>
+
+<!--h2--></div>
+
+<h2 cbc>Union Types</h2><div>
+
+<p>A union type variable accepts two or more types:</p>
+
+<pre>
+let a : <hi>string | number</hi>;
+a = "42";  <cc>// ok</cc>
+a = 42 ;   <cc>// ok</cc>
+a = true ; <cc>// not ok</cc>
+</pre>
+
+<p>The vertical bar combines two types and is read "OR".</p>
+
+<!--h2--></div>
+
+<h2 cbc>Enums</h2><div>
+
+<p>The enumeration type "Enum" is one of TypeScript's additions to JavaScript. </p>
+
+<!--h2--></div>
+
+</main><script type="module" src="/inc/page.js" ></script></body></html>

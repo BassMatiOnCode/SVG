@@ -1,0 +1,1182 @@
+﻿<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="template-info" file-name="empty.htm" version="2022-01-17" editor="usp" />
+<meta name="author" content="usp" />
+<meta name="creation-date" content="2021-10-21" />
+<meta name="editor" content="usp" />
+<meta name="change-date" content="2021-10-21" />
+<meta name="version" content="1" />
+<meta name="categories" content="Programming > Typescript" />
+<meta name="tags" content="programming, language, typescript" />
+<meta name="description" content="" />
+
+<link rel="stylesheet" href="/inc/page.css" />
+ 
+<title>Programming - Typescript</title>
+
+</head>;<body><header id="page-header"></header><div id="main-toolbar"></div><main id="page-content">
+
+<h1>Typescript</h1>
+
+<p id="page-abstract"></p>
+
+<p>The first important feature to note is that JavaScript is actually valide TypeScript code. So if you rename a JS file to TS and compile it, the exact same JS file is produced. This means that you can start using TypeScript with very little knowledge.</p>
+
+<p>To enable static type checks, JavaScript variables are decorated with type information. The TypeScript compiler removes these decorations and produces valid JavaScript. This is the whole idea of TypeScript.</p>
+
+<p>You don't need much to work with TypeScript. The <a href="installation.htm">installation chapter</a> outlines some options for different operating systems and scripting hosts.</p>
+
+<p>The <a href="intro.htm">introduction chapter</a> walks you through some basic examples to get you right on the track. The <a href="advanced-typescript.htm">advanced TypeScript</a> chapter, as the name suggests, explores more advanced concepts. Finally we have the <a href="references.htm">references section</a>, which guides to to additional material and the official Typescript documentation.</p>
+
+<h2 cbc>Installation</h2><div>
+
+<h3 cbc>Integration in Visual Studio</h3><div>
+
+<p>On the "Individual Components" page of the Visual Studio Installer, in the <tt>SDKs, libraries and framewords</tt> section, make sure to select the <tt>TypeScript SDK</tt> and <tt>TypeScript Server</tt> components. The installion can be found in <tt>C:\Users\user-name\AppData\Local\Microsoft\TypeScript\ESLint\node_modules\bin</tt>. Add this folder to the <tt>Path</tt> environment variable, and you are set up for TypeScript.</p>
+
+<!--h3--></div>
+
+<h3 cbc>Node</h3><div>
+
+<p>Node is a stand-alone JavaScript engine host that can execute JavaScript files. The TypeScript compiler also runs under Node:</p>
+
+<pre>
+node tsc demo.ts  <cc>// comiple</cc>
+node demo.js  <cc>// execute</cc>
+</pre>
+
+<p>Detailed instructions to install the toolchain can be found in the following sections.</p>
+
+<!--h3--></div>
+
+<h3 cbc>Deno</h3><div>
+
+<p><tt>Deno</tt>, the successor of <tt>Node</tt>, is a JavaScript and TypeScript engine host for multiple operating systems and allows to execute JavaScript and TypeScript files out of the box:</p>
+
+<pre>deno run script.ts</pre>
+
+<p>TypeScript files are checked before run, so you don't need to install the TypeScript compiler separately. Unfortunately, Deno does not yet (2022-04-19) run on Termux for Android.</p>
+
+<p>Instructions to install deno on your platform can be found in the <a href="deno.land">deno.land</a>.</p>
+
+<!--h3--></div>
+
+<h3 cbc>Android </h3><div>
+
+<p>TypeScript runs on Android! Although, there are a few steps to be made to get it set up properly:</p>
+
+<ol>
+<li>Install <a href="https://f-droid.org/en/">F-Droid</a>, an alternative package repository. This is required because Termux in Google Play Store does no longer receive updates.</li>
+<li>Open F-Droid, search for and install <a href="https://f-droid.org/en/packages/com.termux/">Termux</a>, a terminal emulator and host for Linux distribution.</li>
+<li>Run termux and install your favorite Linux distribution.</li>
+<li>Make sure to have the lates updates by running <tt>pkg update</tt>.</li>
+<li>Run <tt>termux-setup-storage</tt> to get access to storage on your device. This creates the folders dcim, external-1, music, shared, downloads, movies and pictures in the ~/storage folder. The contents of your internal device storage appears in ~/storage/shared, the folder Android/com.termux/files on your SD card appears in ~/storage/external-1. Without rooting, other folders on the SD card are not accessible from termux.</li>
+<li>Then follow the instructions for <a href="#linux">Linux</a>.</li>
+</ol>
+
+<!--h3--></div>
+
+<h3 cbc>Termux Alternatives on Android</h3><div>
+
+<p><a href="https://alm-tools.gitbooks.io/alm/content/"><tt>ALM tools</tt></a> is an IDE for TypeScript</p>
+
+<!--h3--></div>
+
+<h3 id="linux" cbc>Linux</h3><div>
+
+<p>Depending on your distribution, the package manager commands may vary slightly. In Termux, it is <tt>pkg</tt>.</p>
+
+<ol>
+<li>Install Node.js with <tt>pkg install nodejs</tt>.</li>
+<li>Run <tt>node --version</tt> to verify that Node runs correctly.</li>
+<li>Install TypeScript with <tt>npm install typescript</tt>.</li>
+<li>Run <tt>tsc --version</tt> to verify that the TypeScript compiler runs correctly.</li>
+</ol>
+
+<!--h3--></div>
+
+<h3 cbc>File Encoding</h3><div>
+
+<p>If you have international characters in your source files, make sure to save with "UTF-8 with encoding". Otherwise the compiler will complain about "Error in data".</p>
+
+<!--h3--></div>
+
+<h3 cbc>Testing the Installation</h3><div>
+
+<p>To test the installation, open a console window and execute the following command:</p>
+
+<pre>tsc --version</pre>
+
+
+
+<!--h3--></div>
+
+<!--h2--></div>
+
+<h2 cbc>Project Configuration</h2><div>
+
+<p>Open a console window, navigate to the project directory, and run the following command:</p>
+
+<pre>tsc --init</pre>
+
+<p>This creates a file named <tt>tscconfig.json</tt>. Open it in an editor and browse it. Comments supply the necessary information for editing.</p>
+
+<p>By default, tsc compiles to ECMA Script 2015 (ES5), which is understood by pretty much any browser. To change the target version.
+
+<!--h2--></div>
+
+<h2 cbc>The Type System</h2><div>
+
+<h3 cbc>Primitive Types and Objects</h3><div>
+
+<p>JavaScript knows the following types:</p>
+
+<ul>
+<li>Undefined</li>
+<li>Null</li>
+<li>Boolean</li>
+<li>Number</li>
+<li>BigInt</li>
+<li>Symbol</li>
+<li>Object</li>
+</ul>
+
+<p>TypeScript adds the following:</p>
+
+<ul>
+<li>any</li>
+<li>Unknown</li>
+<li>Never</li>
+<li>Enum</li>
+</ul>
+ 
+<!--h3--></div>
+
+<h3 cbc>Type Annotations</h3><div>
+
+<p>Types are declared in TypeScript by the following syntax:</p>
+
+<pre>
+let variable-name : type-name;
+let variable-name as type-name;
+</pre>
+
+<p>where <tt>type-name</tt> is one of the types as described in the following sections. TypeScript adds some new types and concepts to the JavaScript portfolio, as we will see shortly. </p>
+
+<!--h3--></div>
+
+<p>The following sections will introduce you to TypeScript's type system from a pragmatic point of view. To get hold of the full details, refert to the <a href="https://www.typescriptlang.org/docs/">TypeScript</a> and JavaScript documentation at <a href="https://developer.mozilla.org/en-US/docs/web/javascript">Mozilla</a> or <a href="https://docs.microsoft.com/en-us/javascript/">Microsoft</a>.</p>
+
+<h3 cbc>any</h3><div>
+
+<p>The type <tt>any</tt> is equivalent to omitting a type declaration entirely. As the name suggests, a variable of this "type" can receive anything, which is not very helpful in general. Avoid <tt>any</tt> wherever possible.</p>
+
+<p>The flag <tt>noImplicitAny</tt> in <tt>tsconfig.json</tt> should be set to make TypeScript complain about inferred <tt>any</tt>.</p>
+
+<pre>
+let a ;
+let b:any ;
+</pre>
+
+<!--h3--></div>
+
+<h3 cbc>unknown</h3><div>
+
+<p>The type cannot be known ahead of time, and the developer must specify the actual type before use. The operations defined on <tt>unknown</tt> are few. Comparison is one of them. Assignment of a value does not change the type:</p>
+
+<pre>
+let a: unknown;
+a = 3; 
+console.log( a === 3 );
+let b = a + 3;
+</pre>
+
+<p>Error TS2365: Operator '+' cannot be applied to types 'unknown' and '3'.</p>
+
+<p>The value must be cast to a type that permits the desired operation:</p>
+
+<pre>
+if ( typeof a === "number" ) b = a as number + 3;
+if ( typeof a === "number" ) b = &lt;number&gt; a + 3;
+</pre>
+
+<!--h3--></div>
+
+<h3 cbc>null and undefined</h3><div>
+
+<p><tt>null</tt> and<tt>undefined</tt> in TypeScript are both a value and a type. <tt>undefined</tt> indicates the absense of a variable or object member, null indicates the absense of a value. The setting <tt>"strictNullChecks": true</tt> in <tt>tsconfig.json</tt> lets TypeScript flag the untested use of a possibly null or undefined object:</p>
+
+<pre>
+function log( s: string | undefined | null ) {
+    console.log( s.toUpperCase( ));
+    }
+<cc>TS2531 [ERROR]: Object is possibly 'null'.
+    console.log( s.toUpperCase( ));
+                 ^</cc>
+</pre>
+
+<p>So let's add a test:</p>
+
+<pre>
+function log( s: string | undefined | null ) {
+    if ( s ) console.log( s.toUpperCase( ));
+    }
+</pre>
+
+<p>It is recommended to leave <tt>strictNullChecks</tt> true.</p>
+
+<p>If you know that an expression cannot be null, you can use the <tt>!</tt> postfix, a non-null assertion:</p>
+
+<pre>
+function log( s: string | undefined | null ) {
+    console.log( s!.toUpperCase( ));
+    }
+</pre>
+
+<p>In this case, TypeScript will not check the preceding expression for null and undefined.</p>
+
+<!--h3--></div>
+
+<h3 cbc>void</h3><div>
+
+<p>The keyword <tt>void</tt> declares the return type of functions to be none or undefined:</p>
+
+<!--h3--></div>
+
+<h3 cbc>never</h3><div>
+
+<p>Indicates a functions that never returns.</p>
+
+<!--h3--></div>
+
+<h3 cbc>boolean</h3><div>
+
+<p><tt>boolean</tt> is a type that consists of exactly two values: <tt>true</tt>, and <tt>false</tt>.</p>
+
+<pre>
+let a:boolean = true;
+console.log( a );  <cc>// true</cc>
+let b:boolean = !a;
+console.log( b );  <cc>// false</cc>
+</pre>
+
+<p><tt>Boolean</tt> is a <em>primitive type</em>.</p>
+
+<!--h3--></div>
+
+<h3 cbc>number</h3><div>
+
+<p><tt>Number</tt> is the type for floating point numbers. Before the introduction of <tt>bigint</tt>, there was no representation for integers. They had to be stored as floating point values. At first sight, this seems to be ok, but <tt>numbers</tt> don't (always) provide an exact representation for integer values. This might cause unexpected behavior, especially when comparing large numbers for equality &mdash; tiny rounding errors may occur and prevent to obtain the expected result. Of course, a developer knows how to deal with that issue.</p>
+
+<p>Anyway, here are some examples:</p>
+
+<pre>
+let a:number = 123;
+a = 2.34;
+a = Infinity;
+a = NaN;  <cc>// not a number is a number. Really. It is.</cc>
+a = 1_000_000;  <cc>// Use numeric separators to make reading easier</cc>
+a = 1e6;  <cc>// Or use exponent notation</cc>
+</pre>
+
+<p><tt>Number</tt> is a <em>primitive type</em>.</p>
+
+<!--h3--></div>
+
+<h3 cbc>bigint</h3><div>
+
+<p>A 64 bit integer type with <em>exact</em> representation. No rounding erros as with <tt>number</tt>. The suffix n is used to declare a bigint literals:</p>
+
+<pre>let:bigint a = 123n;</pre>
+
+<p><tt>Bigint</tt> is a <em>primitive type</em>.</p>
+
+<!--h3--></div>
+
+<h3 cbc>string</h3><div>
+
+<p>A string is sequence of characters. Single or double quotes can be used to declare string literals.</p>
+
+<pre>
+let a:string = "abc";
+a = 'cde';
+a = "They call him 'kermit the frog'. " ;
+a = 'They call him "kermit the frog". ' ;
+</pre>
+
+<p><tt>String</tt> is a <em>primitive type</em>.</p>
+
+<!--h3--></div>
+
+<h3 cbc>symbol</h3><div>
+
+<p>A value that is guaranteed to be immutable and unique. Symbols are often used to add unique property keys (members) to an object to avoid collision with other code that adds members to the object. Even if you call the constructor with the same name again, the constructor will return a different value.</p>
+
+<pre>
+let a:symbol = Symbol( "key" );
+let b:symbol = Symbol( "key" );
+console.log( a === b );
+</pre>
+
+<p><tt>Symbol</tt> is a <em>primitive type</em>.</p>
+
+<p>More information at <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol">MDN</a> and <a href="https://www.typescriptlang.org/docs/handbook/symbols.html">typescriptlang.org</a>.</p>
+
+<!--h3--></div>
+
+<h3 cbc>object</h3><div>
+
+<p>The object type is the most common non-primitive type in JavaScript. Even the primitive types number, boolean, string and symbol are derived from <tt>Object</tt> prototype. An object is a container for <em>members</em> which can store individual values. In other words, an object is a container for key-value pairs:</p>
+
+<pre>
+let p : { firstName:string, lastName:string };
+p = {  firstName: "John", lastName: "Doe" };
+</pre>
+
+<p>Access to object members is obtained with the help of a <em>key</em> supplied to a member-access operator:</p>
+
+<pre>
+console.log( p.firstName, p.lastName );
+console.log( p["firstName"], p["lastName"] );
+</pre>
+
+<p>The "type" of an object is defined by its members, and commonly refered to as <em>shape</em>. If two objects have the same shape, i. e.  member names and member types, they are considered to be of the the same type. This is different from strongly typed languages, where the type name decides whether two objects are of the same type, or not. Even if they have the same member signature.</p>
+
+<p>Additionally, the type of JavaScript objects is <em>volatile</em>, as members can be deliberately added and deleted at runtime. This is a common source of errors, and one of the primary reasons TypeScript has been created.</p>
+
+<p>An example:</p>
+
+<pre>
+let o:object = { firstName: "John", lastName: "Doe" };
+console.log( o );
+console.log( o.firstName, o.lastName );
+<cc>TS2339 [ERROR]: Property 'firstName' does not exist on type 'object'.
+TS2339 [ERROR]: Property 'lastName' does not exist on type 'object'.</cc>
+</pre>
+
+<p>What the...?</p>
+
+<p>TypeScript complains about the console.log instruction. Let's inspect the code more closely. The first instruction declares a variable <tt>o</tt> of type <tt>object</tt>. That is equivalent of the empty object literal <tt>{ }</tt>, an empty object with no members. The right hand side of the assigment operator is an object with two string members named "firstName" and "lastName". Due to the dynamic nature of objects in JavaScript, this assignment is okay, but if you want to <em>use</em> a generic object like a specific type of object, you will have to give TypeScript a hint:</p>
+
+<pre>
+console.log ( 
+  (o as { firstName:string }).firstName, 
+  (o as { lastName:string }).lastName );
+<cc>John Doe</cc>
+</pre>
+
+<p>A similar way of guiding TypeScript is known as "<a href="narrowing">type narrowing</a>".</p>
+        
+<!--h3--></div>
+
+<h3 cbc>Array</h3><div>
+
+<p>An homogenous array of elements, where all elemets have the same type, is defined as</p>
+
+<pre>
+let a : number[ ] = [ ] ;
+let a : Array&lt;number&gt; = [ } ;
+</pre>
+
+<p>The length of the array is unbounded. If initialze an array with members of the same type, TypeScript can infer the element type:</p>
+
+<pre>let a = [ 1, 2, 3 ]; </pre>
+
+<p>In this case, we have an array of numbers.</p>
+
+<p>An array can be used to create a tuple type. </p>
+
+<pre>
+let a : [number, string, string] ; 
+a = [ 123 , "John" , "Doe" ];
+</pre>
+
+<p>In this case, the length of the array is fixed, the elements have a specified order and type.</p>
+
+<p>Both array types are mapped to the JavaScript array type.</p>
+
+<p>The <tt>Array</tt> type is derived from <tt>Object</tt>, and like <tt>Object</tt>, is a container for key-value pairs, but with a numeric index key type. Values can be of any type, different values can be of different types. Such arrays are called <em>heterogeneous</em>. In practice, arrays are often <em>homogeneous</em>, which means that all values are of the same type. TypeScript supports arrays with type annotations. For example, a heterogeneous array:</p>
+
+<pre>
+let a : Array&lt;any&gt; ;
+a = [1, "two", {name: "three", value: 3} ];
+</pre>
+
+<p>The array element type is declared in angular brackets, following the keyword <tt>Array</tt>. An alternative way is to use bracket notation, the element type followed by an empy set of square brackets:</p>
+
+<!--h3--></div>
+
+<h3 cbc>Object Index Signature</h3><div>
+
+<p><tt>Object</tt> is a container for key-value pairs commonly known as <em>members</em>. Another term is <em>associative array</em>. So it is not surprising that there are <em>two</em> member access operators, the dot, and the pair of square brackets:</p>
+
+<pre>
+console.log( o.firstName );
+console.log( o[ "firstName" ] );
+</pre>
+
+<p>The square bracket notation has the advantage that member names can be <em>computed</em>, the index expression may contain variables. This is not possible with the dot operator. Additionally, member names don't have to suffice the JavaScript name rules. JavaScript names must start with a letter or underline, followed by numbers, letters, or underlines. But the index expression may contain otherwise illegal characters such a dash ( "first-name" ), or start with a number:</p>
+
+<pre>
+let o = { firstName: "John", lastName: "Doe" };
+o[ "full-name" ] = "John Doe" ;
+o[ "age" ] = 42;
+o[ 0 ] = "This" ;
+o[ 1 ] = "is" ;
+o[ 2 ] = "strange..." ;
+console.log( o );
+<cc>{
+  "0": "This",
+  "1": "is",
+  "2": "strange...",
+  firstName: "John",
+  lastName: "Doe",
+  age: 42,
+  "full-name": "John Doe"
+}</cc>
+</pre>
+
+<p>As you can see, the bracket member-access operator of JavaScript is quite flexible, if not dangerous. To tame that, TypeScript lets us define the object index signature:</p>
+
+<pre>let o : { [key: key-type-name]: value-type-name }</pre>
+
+<p>A conservative example:</p>
+
+<pre>
+let o : { [ key:string ] : string | number };
+o = { firstName: "John", lastName: "Doe", age: 42 };
+console.log( o );
+<cc>{ firstName: "John", lastName: "Doe", age: 42 }</cc>
+console.log( o.firstName );
+<cc>John</cc>
+console.log( o["lastName"]);
+<cc>Doe</cc>
+</pre>
+
+<p>The code above declares a type with any number of members, which are indexed (addressed) by a key of type string, the value may be a string or a number.</p>
+
+<p>The following example creates a type that is similar to the JavaScript <tt>Array</tt> type:</p>
+
+<pre>
+let o : { [ key:number ] : string | number };
+o = { 0: "red", 1: "green", 2: "blue" };
+console.log( o );
+<cc>{ "0": "red", "1": "green", "2": "blue" }</cc>
+</pre>
+
+<p>Let's see whether such an object is assignable from an array type:</p>
+
+<pre>
+let p : { [ key:number ] : string };
+p = ["red", "green", "blue" ];
+console.log( p );
+<cc>[ "red", "green", "blue" ]</cc>
+</pre>
+
+<p>And indeed, an array is an object with a numeric key type, and as such is compatible with the object p.</p>
+
+<p>Let's push the limits further: How about a mixed key-type?</p>
+
+<pre>
+let q : { [ key:string|number ] : string };
+p = ["red", "green", "blue" ];
+<cc>TS2322: Type 'string[]' is not assignable to type 
+  '{ [key: string]: string; [key: number]: string; }'.
+  Index signature for type 'string' is missing in type 'string[]'.</cc>
+</pre>
+
+<p>Not quite there. But if we assign an object type, like so:</p>
+
+<pre>
+let q : { [ key:string|number ] : string|number };
+q = {0:"red", 1:"green", 2:"blue", red:0, green:1, blue:2};
+console.log( q );
+<cc>{ "0": "red", "1": "green", "2": "blue", red: 0, green: 1, blue: 2 }</cc>
+</pre>
+
+<p>Although not perfect, this pattern works quite well as enum replacement.</p>
+
+<!--h3--></div>
+
+<h3 cbc>Enums</h3><div>
+
+<p>TypeScript adds two enum types to JavaScript: numeric and string enums. Both are const types with const members, which means that you cannot add or delete members, or change a member value.</p>
+
+<p>Let's start with numeric enums.</p>
+
+<h4 cbc>Numeric Enums</h4><div>
+
+<figcaption class="listing">Enums in TypeScript</figcaption>
+<pre>
+enum Color { Red, Green, Blue };
+console.log( Color );
+<cc>> { "0": "Red", "1": "Green", "2": "Blue", Red: 0, Green: 1, Blue: 2 }</cc>
+
+</pre>
+
+<p>A look into the generated JavaScript code shows how tsc creates the enum variable:</p>
+
+<figcaption class="listing">The compiled JavaScript code</figcaption>
+<pre>var Color;
+(function (Color) {
+    Color[Color["Red"] = 0] = "Red";
+    Color[Color["Green"] = 1] = "Green";
+    Color[Color["Blue"] = 2] = "Blue";
+})(Color || (Color = {}));
+</pre>
+
+<p>As you can see, an enum generates a real object at run-time. Additionally, enums can be used in two ways, <em>forward</em> to translate names to numbers, and <em>reverse</em> to translate numbers to names.</p>
+
+<p>Enum declarations can be split into partial declarations. At runtime, the declarations are merged. That softens the "const" attribute of an enum type to some degree. In this case it is strongly recommended to explicitly assign values to the members:</p>
+
+<pre>
+enum Color { Red = 0 } ;
+enum Color { Green = 1 } ;
+enum Color { Blue = 2 } ;
+</pre>
+
+<p>Note that initializer expressions can contain functions!</p>
+
+<p>&hellip; is equivalent to </p>
+
+<pre>enum Color { Red, Green, Blue } ;</pre>
+
+<!--h4--></div>
+
+<h4 cbc>String Enums</h4><div>
+
+<p>String enums have string-type values:</p>
+
+<pre>
+enum Color { Red = "R", Green = "G", Blue = "B" };
+</pre>
+
+<p>This is translated to</p>
+
+<pre>
+var Color;
+(function (Color) {
+    Color["Red"] = "R";
+    Color["Green"] = "G";
+    Color["Blue"] = "B";
+})(Color || (Color = {}));
+;
+</pre>
+
+<p>&hellip;which pretty much boils down to</p>
+
+<pre>
+var Color = { Red: "R", Green: "G", Blue: "B" };
+</pre>
+
+<p>Note that this object does not allow reverse lookup of member names. However, the values can be made "readable", so that debugging is easier compared to numeric enums.</p>
+
+<!--h4--></div>
+
+<h4 cbc>Const Enums</h4><div>
+
+<p>While non-const enums can have computed members, const enums can only have const values that can be compute at compile time. The benefit is that the complete enum overhead for the enum variable is eliminated:</p>
+
+<pre>
+const enum Color { Red, Green, Blue };
+console.log( Color.Green );
+</pre>
+
+<p>This translates into</p>
+
+<pre>console.log(1 /* Green */);</pre>
+
+<!--h4--></div>
+
+<!--h3--></div>
+
+<h3 cbc id="functions">Functions</h3><div>
+
+<p>TypeScript allows parameter and function return type annotation:</p>
+
+<pre>
+function-declaration ::= function( parameter-type-list ) : return-type-name { 
+    statements } ;
+parameter-type-list ::= [ parameter-name : parameter-type ]...
+</pre>
+
+<p>Note that <tt>Function</tt> are derived from <tt>Object</tt>. A function parameters, a statement block, is callable and returns a value. Like objects, a function can have additional members:</p>
+
+<pre>
+function concat ( a : any[ ] , b : any[ ] ) : {
+    return a.concat( b );
+    }
+concat.description = "Concatenates two arrays into a new array" ;
+console.log( concat.description );
+<cc>Concatenates two arrays into a new array</cc>
+</pre>
+
+<!--h3--></div>
+
+<h3 cbc id="Advanced Functions">Advanced Functions</h3><div>
+
+<p>A <em>function type expression</em> has the following form:</p>
+
+<pre>
+function-type-expression ::=
+    ( [parameter-list] ) => return-type
+parameter-list ::= 
+    parameter-name : type-name [, parameter-list ]
+</pre>
+
+<p>The syntax looks like an arrow (lambda) function declaration, but when used in a type declaration, it it acutally a function type expression. It can be used to declare and use functions as parameter or member type.  Example:</p>
+
+<pre>
+type GreetFunction = ( s : string ) => void ;
+type Person = {
+    firstName : string ,
+    lastName : string ,
+    greet : GreetFunction 
+    } ;
+let p = { 
+    firstName: "John", 
+    lastName: "Doe",
+    greet: function() {
+        console.log( `Hi, I am ${this.firstName} ${this.lastName}.` ) ;
+    } } ;
+p.greet( );
+<cc>Hi, I am John Doe.</cc>
+</pre>
+
+<p>The example above declares a function type with a single parameter s of type string, which returns nothing.</p>
+
+<p>Another variant is the <em>function call signature</em>, which allows to add properties to a callable function:</p>
+
+<pre>
+type function-type-name = {
+    property-name : property-type ;
+    ( fn-parameter-list ) : fn-return-type ;
+    }
+</pre>
+
+<p>Next thing in the row is the <em>construct signature</em>:</p>
+
+<pre>
+type constructor-fn-name = {
+    new ( ctor-parameter-list ) : ctor-return-type ;
+    }
+</pre>
+
+<p>Such a function type is intended to be used with the <tt>new</tt> operator, but not to be called:</p>
+
+<pre>
+!TODO!
+</pre>
+
+<p>Side Note: <a href="https://stackoverflow.com/questions/32043487/difference-between-call-signature-and-function-type">Stackoverflow</a>.</p>
+
+<p>The introduction of types leads to a situation where the exact same code has to be repeated for different types. For example, a function that operates on (homogeneous) arrays of different types. This is why <em>generics</em> have been introduced:</p>
+
+<pre>
+function fn-name&lt;type-names&gt;( parm-name : type-name ) : type-name {
+    statements
+    }
+</pre>
+
+<p>A number of type names are supplied in angle brackets. They are used in the function declaration. They are replaced by the actual types supplied as arguments at run-time.</p>
+<p>Example:</p>
+
+<pre>
+function first<Type>(a : Type[ ]) : Type | undefined {
+  return a [ 0 ];
+}
+</pre>
+
+<p>These generics work on any type. To narrow the usable types, we can use <em>constraints</em>:</p>
+
+<pre>
+function longer<Type extends { length: number }>(a: Type, b: Type) {
+    if (a.length >= b.length) return a;
+    else return b;
+    }
+</pre>
+
+<p>You can call this function with any type that has a <tt>length</tt> member. Note that the return type is <em>infered</em> by TypeScript.</p>
+
+<p>NOTE: A generic function declaration <em>relates types</em> to each other. For example, an input type to an output type. Or the types of parameters. As a result, there must be at least two occurrences of a declared type name in the generic function declaration body.</p>
+
+<h4 cbc>Parameter Type Constraints</h4><div>
+
+<p><em>Constraints</em> are an effective way to describe compatible function argument types:</p>
+
+<pre>
+function longest&lt;Type extends { length: number }&gt;( a : Type, b : Type ) {
+    return b.length &lt; b.length ? b : a ;
+    }
+</pre>
+
+<p>The function above expects arguments to have a numeric member named "length". Tyepscript infers the function return type.</p>
+
+</div>
+
+<!--h3--></div>
+
+<h3 id="type-alias" cbc>Type Alias</h3><div>
+
+<p>When working with object types and class instances, repeating type specifications can quickly become cumbersome and errorprone. To follow the DRY principle, TypeScript has the type alias:</p>
+
+<pre>type-alias-name = type-declaration ;</pre>
+
+<p>For example: </p>
+
+<pre>
+type Person = { firstName:string, lastName:string, age:number };
+let a:Person ; 
+a = { firstName: "John", lastName: "Doe", age: 42 };
+</pre>
+
+<!--h3--></div>
+
+<h3 cbc>Literal Types</h3><div>
+
+<p>A type can be narrowed to a single value:</p>
+
+<pre>let color : "Green" = "Green" ;</pre>
+
+<p>Which seems to be nonsense at first sight. But in combination with a union type:</p>
+
+<pre>
+let color : "Red" | "Green" | "Blue";
+color = "Green" ;
+color = "blue" ;
+<cc>TS2820: Type '"blue"' is not assignable to type '"Red" | "Green" | "Blue"'. 
+Did you mean '"Blue"'?</cc>
+color = "black" ;
+<cc>TS2322: Type '"black"' is not assignable to type '"Red" | "Green" | "Blue"'.</cc>
+</pre>
+
+<p>Note: The type "boolean" is just an alias for the type <tt>true | false</tt>.</p>
+
+<p>Not so obious is the following:</p>
+
+<pre>
+let color : "Red" | "Green" | "Blue";  <cc>// a union of string literals</cc>
+let blue = "Blue" ;  <cc>// a string value</cc>
+let color = blue ;
+<cc>TS2322: Type 'string' is not assignable to type '"Red" | "Green" | "Blue"'.</cc>
+</pre>
+
+<p>Makes sense. Somehow. A value is not a literal. So we have to assert that "Blue" is a string literal instead of a (mutable) string value:</p>
+
+<pre>
+let blue = "Blue" as const ;  <cc>// a string literal</cc>
+let color = blue ;
+console.log( color );
+<cc>Blue</cc>
+</pre>
+
+<!--h3--></div>
+
+<h3 cbc>Type Union</h3><div>
+
+<p>A type union provides an "alternative" of two or more types. The union operator can be read as "or", so the type <tt>a | b</tt> can be the type a, or b.</p>
+
+<p>An example:</p>
+
+<pre>
+type StringOrNumber = string |  number ;
+let b : StringOrNumber ;
+b = 123;
+console.log( b.valueOf( ));  <cc>// 123</cc>
+b = "abc" ;
+console.log( b.toUpperCase( ));  <cc>// ABC</cc>
+</pre>
+
+<p>Another example:</p>
+
+<pre>
+type Point = { x:number, y:number };
+type Circle = { x:number, y:number, radius:number };
+let p : Point | Circle;
+p = { x: 1, y: 2 };
+console.log ( p );
+<cc>{ x: 1, y: 2 }</cc>
+p = { x: 1, y: 2, radius: 3 };
+console.log ( p );
+<cc>{ x: 1, y: 2, radius: 3 }</cc>
+</pre>
+
+<!--h3--></div>
+
+<h3 cbc>Type Intersection</h3><div>
+
+<p>The result of a type intersection <tt>a & b</tt> is a new type that comprises of members that are common to both types, a <em>and</em> b:</p>
+
+<pre>
+type Point = { x:number, y:number };
+type Circle = { x:number, y:number, radius:number };
+let o : Point & Circle;
+o = { x : 1, y : 2 };
+<cc>TS2322: Type '{ x: number; y: number; }' is not assignable
+to type 'Point & Circle'. Property 'radius' is missing in type 
+'{ x: number; y: number; }' but required in type 'Circle'.</cc>
+</pre>
+
+<p>So let's correct that:</p>
+
+<pre>
+o = { x : 1, y : 2, radius : 3 };
+console.log ( o );
+<cc>{ x: 1, y: 2, radius: 3 }</cc>
+</pre>
+
+<p>The intersection can be use to create extended types:</p>
+
+<pre>
+type Square = Point & { length : number } ;
+let s : square;
+s = { x : 1, y : 2, length : 3 };
+console.log( s );
+<cc>{ x: 1, y: 2, radius: 3 }</cc>
+</pre>
+
+<!--h3--></div>
+
+<h3 cbc>Interface</h3><div>
+
+<p><tt>Interface</tt> is another way to name an object type:</p>
+
+<pre>
+interface Person { firstName:string, lastName:string, age:number };
+let o : Person ;
+o = { firstName: "John", lastName: "Doe", age: 42 };
+console.log( o );
+<cc>{ firstName: "John", lastName: "Doe", age: 42 }</cc>
+</pre>
+
+<p>But in contrast to the type alias, an interface is extensible:</p>
+
+<pre>
+interface Employee extends Person { department: string };
+let p : Employee;
+p = { firstName: "John", lastName: "Doe", age: 42, department: "Accounting" };
+console.log( p );
+<cc>{ firstName: "John", lastName: "Doe", age: 42, department: "Accounting" }</cc>
+</pre>
+
+<p>Another feature of <tt>interface</tt> is the distributed declaration:</p>
+
+<pre>
+interface Person { firstName:string, lastName:string };
+interface Person { age:number };
+let o : Person ;
+o = { firstName: "John", lastName: "Doe", age: 42 };
+console.log( o );
+<cc>{ firstName: "John", lastName: "Doe", age: 42 }</cc>
+</pre>
+
+<p>The declarations are <em>merged</em> together.</p>
+
+<!--h3--></div>
+
+<h3 id="narrowing" cbc>Type Narrowing, Type Guards</h3><div>
+
+<p>TypeScript complains about unsafe variable usage. For instance:</p>
+
+<pre>
+type Person = { firstName : string, lastName : string };
+function log ( o:Person | null | undefined ) : void {
+    console.log( o.firstName, o.lastName );
+        }
+<cc>TS2533 [ERROR]: Object is possibly 'null' or 'undefined'.
+        console.log( o.firstName, o.lastName );
+                     ^
+TS2533 [ERROR]: Object is possibly 'null' or 'undefined'.
+        console.log( o.firstName, o.lastName );
+                                  ^</cc>
+</pre>
+
+<p>You must do in TypeScript what you would to in plain JavaScript: Test the value before using it:</p>
+
+<pre>
+type Person = { firstName : string, lastName : string };
+function log ( o:Person | null | undefined ) : void {
+    if ( o ) console.log( o.firstName, o.lastName );
+    }
+</pre>
+
+<p>This is called a "type guard". TypeScript analyzes the code and recognizes a number of type guards autometically.</p>
+
+<p>You cannot simply test for the type <tt>Person</tt> at runtime, because the type annotations will not make it to the generated JavaScript. In other words, there is no way to check the annotated type of an object at runtime. (Checking for a certain prototype function in an object's prototype chain is an entirely different thing.)</p>
+
+<p>The checks must be correct, of course. For example the following doesn't work:</p>
+
+<pre>
+if ( typeof o === "object" ) console.log( o.firstName, o.lastName );
+<cc>TS2533 [ERROR]: Object is possibly 'null' or 'undefined'.</cc>
+</pre>
+
+<p>It doesn't work because <tt>typeof null</tt> is also "object". TypeScript reads the code an can "understand" to a certain degree what you are trying to do (type narrowing), and can recognize if there are logical errors.</p>
+
+<p>Another example:</p>
+
+<pre>
+type Person = { firstName : string, lastName : string };
+type Company = { name : string };
+function log ( o : Person | Company ) : void {
+    if ( "firstName" in o ) console.log( o.firstName, o.lastName );
+    else if ( "name" in o ) console.log( o.name );
+    }
+</pre>
+
+<p>The type <tt>never</tt> can be use to determine if type narrowing was exhaustive. Consider the following example:</p>
+
+<pre>
+interface Circle { kind: "circle", radius:number };
+interface Square { kind:"square", length:number };
+interface Rectangle { kind: "rectangle", length:number, width:number };
+
+type Shape = Circle | Square | Rectangle ;
+
+function getArea(shape: Shape) : number {
+    switch(shape.kind) {
+    case "circle" :
+        return Math.PI * shape.radius ** 2 ;
+    case "square" :
+        return shape.length ** 2 ;
+    default :
+        const n:never = shape ;  <cc>// a safeguard against non-exhaustiveness</cc>
+        return 0;
+    }   }
+<cc>TS2322 [ERROR]: Type 'Rectangle' is not assignable to type 'never'.
+    const n:never = shape ;
+          ^</cc>
+</pre>
+
+<p>The code above fails to test the rectangle shape. As a result, the default branch is reachable. This branch contains an illegal assignment: The type <tt>never</tt> can only be assigned <tt>never</tt>. If we add that missing branch, the error goes away:</p>
+
+<pre>
+    case "rectangle" :
+        return shape.length * shape.width ;
+</pre>
+
+<!--h3--></div>
+
+<h3 cbc>Type Assertion</h3><div>
+
+<p>Sometimes TypeScript cannot infer the type of an object, but the developer knows and can give the appropriate hint:</p>
+
+<pre>
+const e = document.getElementById( "input-element-123" ) as HTMLInputElement;
+const e = &lt;HTMLInputElement&gt;document.getElementById( "input-element-123" );
+</pre>
+
+<p>Type assertions are removed entirely by the compiler. You as a developer are responsible to make the <em>correct</em> assertions. If you are wrong, your code might be invalid and/or throw runtime errors.</p>
+
+<!--h3--></div>
+
+<!--h2--></div>
+
+<h2 cbc>Generics Types</h2><div>
+
+<p>Working with types made the world a little bit more safe. But also more unconvenient: If you wrote an algorithm that worked on a specific type, that algorithm must be <em>duplicated</em> to work with another type. But we want to avoid code duplication as it easily leads to maintenance problems.</p>
+
+<p>In TypeScript, types can be used as <em>parameters</em> in type, class or interface declarations. Generics are especially beneficial with containter types, such as arrays, where no array element members (properties) are accessed in an algorithm.</p>
+
+<p>An example. Let's consider a function that returns a reversed array:</p>
+
+<pre>
+function reverse ( a ) { 
+    const b = []; 
+    for ( let i = 0 ; i &lt; a.length ; i++ ) b.unshift( a[ i ] ); 
+    return b;	
+    };
+</pre>
+
+<p>We know that parameter a is an array of some type or another, and we know that we want to return the same array type to the caller, but we don't know the type of array ahead of time. This can be expressed with a type parameter in angle brackets after the function name:</p>
+
+<pre>
+function reverse &lt;<hi>SomeType</hi>&gt; ( a:<hi>SomeType</hi>[] ):<hi>SomeType</hi>[] { 
+    const b:<hi>SomeType</hi>[] = []; 
+    for ( let i = 0 ; i &lt; a.length ; i++ ) b.unshift( a[ i ] ); 
+    return b;	
+    };
+</pre>
+
+<p>This tells the compiler that "SomeType" is used as a "source-code variable" in the current declaration. This type variable is used on the parameter a, declaring it as an "array of SomeType". Then it is used to declare the function's return type, also an "array of SomeType". And it is used to declare the local variable b as an "array of SomeType".</p>
+
+<p>The code inside works with the array elements, but is completely ignorant of what the actual element type will be at run-time. No array element members are accessed in any way.</p>
+
+<p>Things become interesting when we actually declare an arry of some type&hellip;</p>
+
+<pre>
+let a:string[] = [ 
+    "John",
+    "Joe",
+    "James",
+    "Jay"
+    ] ;
+console.log( a );
+<cc>[ "John", "Joe", "James", "Jay" ]</cc>
+</pre>
+
+<p>&hellip; and then call the function:</p>
+
+<pre>
+let b:string[] = reverse( a );
+console.log( b );
+<cc>[ "Jay", "James", "Joe", "John" ]</cc>
+</pre>
+
+<p>We can create an array of a different type and call the <tt>revert</tt> function on it as well:</p>
+
+<pre>
+let c:number[] = [ 123, 234, 345, 456 ] ;
+console.log( c );
+<cc>[ 123, 234, 345, 456 ]</cc>
+let d:number[] = reverse( c );
+console.log( d );
+<cc>[ 456, 345, 234, 123 ]</cc>
+</pre>
+
+<p>A different example. Let's consider a square  and a circle type:</p>
+
+<pre>
+type Square = { x:number, y:number, w:number };
+type Circle = { x:number, y:number, d:number };
+</pre>
+
+<p>Both have coordinate members, so we should be able to move them around:</p>
+
+<pre>
+function move &lt;SomeType&gt; ( o:SomeType, 
+    dx:number, dy:number ):SomeType { 
+    o.x += dx ;
+    o.y += dy ;
+    return o ;
+    };
+</pre>
+
+<p>But&hellip;</p>
+
+<pre><hi>
+TS2339 [ERROR]: Property 'x' does not exist on type 'SomeType'.
+    o.x += dx ;
+      ^
+TS2339 [ERROR]: Property 'y' does not exist on type 'SomeType'.
+    o.y += dy ;
+      ^
+</hi></pre>
+
+<p>The problem here is that we want to actually <em>use</em> the variable of <tt>SomeType</tt> &ndash; which is not exactly a perfect use case for generics. The variable can be any type at run-time, and must be treated as such.</p>
+
+<!--h2--></div>
+
+<h2 cbc>Generic Function Type Expressions</h2><div>
+
+<p>Syntax:</p>
+
+<pre>
+generic-function-type-expression ::=
+    &lt; type-name-list &gt; ( parameter-list ) =&gt; return-type-name
+type-name-list ::=
+    type-name [, type-name-list]
+parameter-list ::=
+    parameter-name : type-name [, parameter-list]
+return-type-name ::=
+    type-name
+</pre>
+
+<p>The generic function call signature can be used as variable name, parameter type name, or as interface type member:</p>
+
+<pre>
+function rearrange &lt;<hi>SomeType</hi>&gt; ( a:<hi>SomeType</hi>[] ):<hi>SomeType</hi>[] 
+    { &hellip; };
+type RearrangeFunction = &lt;T&gt; ( a : T ) =&gt; T ;
+function doOrDoNot( a:string[], b:boolean, f:RearrangeFunction ) 
+    { &hellip; };
+interface someInterface {
+    &lt;T&gt; ( a : T ) =&gt; T
+    } ;
+interface someInterface {
+    RearrangeFunction 
+    } ;
+interface anotherInterface &lt; T &gt; {
+    &lt;T&gt; ( a : T ) =&gt; T
+    } ;
+let rearrangeStrings = anotherInterface&lt;string&gt; = rearrange ;
+</pre>
+
+<!--h2--></div>
+
+<h2 cbc>Generic Classes</h2><div>
+
+<p>Generic type names can also be used in class declarations:</p>
+
+<pre>
+generic-class-declaration ::=
+    class class-name &lt; generic-type-name &gt; { class-declaration-body } ;
+</pre>
+
+<p>The </p>
+
+<!--h2--></div>
+
+<h2 cbc>Classes</h2><div>
+
+<p>TypeScript has some neat features to write classes. Firstly, optional parameters. A question mark behind the parameter name indicates an optional parameter. Secondly, access modifiers like private or public in front of the parameter name indicate private or public members that are initialized with the arguments supplied at run-time:</p>
+
+<figcaption class="listing">Optional constructor parameters</figcaption>
+<pre>
+class Point {
+  constructor ( <hi>private</hi> x<hi>?</hi>: number, <hi>private</hi> y<hi>?</hi>:number ) { 
+    }
+  log ( ) { 
+    console.log ( `x=${this.x} y=${this.y}` ) ;
+  } }
+</pre>
+
+<p>This is compiled into the following JavaScript:</p>
+
+<figcaption class="listing">Generated JavaScript</figcaption>
+<pre>var Point = /** @class */ (function () {
+  function Point(x, y) {
+    this.x = x;
+    this.y = y;
+    }
+  Point.prototype.log = function () {
+    console.log("x=" + this.x + " y=" + this.y);
+    };
+  return Point;
+}());
+</pre>
+
+<p>This could have been streamlined into</p>
+
+<figcaption class="listing">Generated JavaScript</figcaption>
+<pre>var Point = function(x, y) {
+    this.x = x;
+    this.y = y;
+    }
+Point.prototype.log = function( ) {
+  console.log("x=" + this.x + " y=" + this.y);
+  };
+</pre>
+
+<p>To create property getters for the coordinates, add <tt>get x</tt> and <tt>get x</tt> methods that return the corresponding property values. Similarly, setters are created with <tt>set x( value )</tt> and <tt>set x( value )</tt>. They can be used like <tt>p.x = 123;</tt>.</p>
+
+<!--h2--></div>
+
+<h2 cbc>References</h2><div>
+
+<dl class="link-list">
+<dt><a href="https://basarat.gitbook.io/typescript/getting-started">Typescript Deep Dive</a> by Basarat</dt>
+<dt><a href="https://www.typescriptlang.org/docs/">TypeScriptLand.org</a></dt>
+<dt><a href="https://www.youtube.com/watch?v=BwuLxPH8IDs">TypeScript Course for Beginners 2021</a></dt>
+<dd> by Academind on Youtube</dd>
+
+<dt><a href="https://www.youtube.com/watch?v=BCg4U1FzODs">TypeScript Crash Course</a></dt>
+<dd>by Traversy Media on Youtube</dd>
+</dl>
+
+
+<!-- h2 Links --></div>
+
+</main><script type="module" src="/inc/page.js" ></script></body></html>
